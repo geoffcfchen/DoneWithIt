@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, StyleSheet, Platform } from "react-native";
+import { Text, StyleSheet } from "react-native";
 
 function AppText({ children }) {
   return <Text style={styles.text}>{children}</Text>;
@@ -8,8 +8,8 @@ function AppText({ children }) {
 const styles = StyleSheet.create({
   text: {
     color: "tomato",
-    fontSize: 20,
-    fontFamily: "Avenir",
+    fontSize: 18,
+    fontFamily: "Roboto",
   },
 });
 
