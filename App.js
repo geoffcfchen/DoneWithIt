@@ -1,53 +1,17 @@
+import React from "react";
 import {
-  StyleSheet,
-  Text,
   View,
+  ImageBackground,
   Image,
-  Alert,
   SafeAreaView,
-  Button,
-  Platform,
-  StatusBar,
+  Text,
+  StyleSheet,
 } from "react-native";
-import {
-  useDimensions,
-  useDeviceOrientation,
-} from "@react-native-community/hooks";
+import ViewImageScreen from "./app/screens/ViewImageScreen";
+import WelcomeScreen from "./app/screens/WelcomeScreen";
+
+const image = require("./app/assets/background.jpg");
 
 export default function App() {
-  return (
-    <View
-      style={{
-        backgroundColor: "white",
-        flex: 1,
-      }}
-    >
-      <View
-        style={{
-          backgroundColor: "dodgerblue",
-          flex: 2,
-        }}
-      ></View>
-      <View
-        style={{
-          backgroundColor: "gold",
-          flex: 1,
-        }}
-      ></View>
-      <View
-        style={{
-          backgroundColor: "tomato",
-          flex: 1,
-        }}
-      ></View>
-    </View>
-  );
+  return <ViewImageScreen></ViewImageScreen>;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-  },
-});
