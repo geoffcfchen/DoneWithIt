@@ -7,7 +7,7 @@ function WelcomeScreen(props) {
     <ImageBackground
       blurRadius={10}
       style={styles.background}
-      source={require("../assets/background.jpg")}
+      source={require("../assets/login-page.jpeg")}
     >
       <View style={styles.logoContainer}>
         <Image
