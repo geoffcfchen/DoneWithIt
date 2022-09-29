@@ -33,7 +33,7 @@ import ListingEditScreen from "./app/screens/ListingEditScreen";
 
 export default function App() {
   const [category, setCategory] = useState();
-  return <MessagesScreen></MessagesScreen>;
+  return <ListingEditScreen></ListingEditScreen>;
 }
 
 //
