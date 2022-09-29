@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import * as Yup from "yup";
-import AppPicker from "../components/AppPicker";
 
 import {
   AppForm,
@@ -38,28 +37,30 @@ function ListingEditScreen(props) {
         validationSchema={validationSchema}
       >
         <AppFormField
-          maxLenght={255}
+          maxLength={255}
           name="title"
           placeholder="Title"
         ></AppFormField>
         <AppFormField
           keyboardType="numeric"
-          maxLenght={8}
+          maxLength={8}
           name="title"
           placeholder="Price"
         ></AppFormField>
-        <AppPicker
+        <AppFormPicker
           items={categories}
           name="category"
           placeholder="Category"
-        ></AppPicker>
+        ></AppFormPicker>
+
         <AppFormField
           multiline
-          maxLenght={255}
+          maxLength={255}
           name="description"
           numberOfLines={3}
           placeholder="Description"
         ></AppFormField>
+        <SubmitButton title="Post" />
       </AppForm>
     </Screen>
   );
