@@ -23,7 +23,7 @@ import MessagesScreen from "./app/screens/MessagesScreen";
 import AccountScreen from "./app/screens/AccountScreen";
 import Screen from "./app/components/Screen";
 import Icon from "./app/components/Icon";
-import ListItem from "./app/components/ListItem";
+import ListItem from "./app/components/lists/ListItem";
 import ListingsScreen from "./app/screens/ListingsScreen";
 import AppTextInput from "./app/components/AppTextInput";
 import AppPicker from "./app/components/AppPicker";
@@ -33,7 +33,7 @@ import ListingEditScreen from "./app/screens/ListingEditScreen";
 
 export default function App() {
   const [category, setCategory] = useState();
-  return <ListingEditScreen></ListingEditScreen>;
+  return <MessagesScreen></MessagesScreen>;
 }
 
 //
