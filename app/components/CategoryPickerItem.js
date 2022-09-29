@@ -4,7 +4,6 @@ import AppText from "./AppText";
 import Icon from "./Icon";
 
 function CategoryPickerItem({ item, onPress }) {
-  console.log(item.backgroundColor);
   return (
     <View style={styles.container}>
       <Icon
