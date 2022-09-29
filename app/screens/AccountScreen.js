@@ -1,12 +1,10 @@
 import React from "react";
-import { Text, View, StyleSheet, FlatList, Alert } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { View, StyleSheet, FlatList } from "react-native";
 
 import ListItem from "../components/lists/ListItem";
 import Screen from "../components/Screen";
 import colors from "../config/colors";
 import Icon from "../components/Icon";
-import ListItemDeleteAction from "../components/lists/ListItemDeleteAction";
 import ListItemSeparator from "../components/lists/ListItemSeparator";
 
 const menuItems = [
