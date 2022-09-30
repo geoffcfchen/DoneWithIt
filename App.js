@@ -1,39 +1,37 @@
-import React, { useState } from "react";
-import {
-  View,
-  ImageBackground,
-  Image,
-  SafeAreaView,
-  Text,
-  StyleSheet,
-  TextInput,
-  Switch,
-} from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import ViewImageScreen from "./app/screens/ViewImageScreen";
-import WelcomeScreen from "./app/screens/WelcomeScreen";
+import React, { useState, useEffect } from "react";
+import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
 
-import AppText from "./app/components/AppText";
-import AppButton from "./app/components/AppButton";
-
-import colors from "./app/config/colors";
-import Card from "./app/components/Card";
-import ListingDetailsScreen from "./app/screens/ListingDetailsScreen";
-import MessagesScreen from "./app/screens/MessagesScreen";
-import AccountScreen from "./app/screens/AccountScreen";
 import Screen from "./app/components/Screen";
-import Icon from "./app/components/Icon";
-import ListItem from "./app/components/lists/ListItem";
-import ListingsScreen from "./app/screens/ListingsScreen";
-import AppTextInput from "./app/components/AppTextInput";
-import AppPicker from "./app/components/AppPicker";
-import LoginScreen from "./app/screens/LoginScreen";
-import RegisterScreen from "./app/screens/RegisterScreen";
-import ListingEditScreen from "./app/screens/ListingEditScreen";
+import { Button, Image } from "react-native";
+import ImageInput from "./app/components/ImageInput";
 
 export default function App() {
-  const [category, setCategory] = useState();
-  return <ListingEditScreen></ListingEditScreen>;
-}
+  const [imageUri, setImageUri] = useState();
 
-//
+  const requestPermission = async () => {
+    const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!granted) alert("You need to enable permission to access the libary.");
+  };
+  useEffect(() => {
+    requestPermission();
+  }, []);
+
+  const selectImage = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync();
+      if (!result.cancelled) setImageUri(result.uri);
+    } catch (error) {
+      console.log("Error reading an image", error);
+    }
+  };
+
+  return (
+    <Screen>
+      <ImageInput
+        onChangeImage={(uri) => setImageUri(uri)}
+        imageUri={imageUri}
+      ></ImageInput>
+    </Screen>
+  );
+}
