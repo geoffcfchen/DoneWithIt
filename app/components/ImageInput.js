@@ -4,7 +4,6 @@ import {
   Image,
   TouchableWithoutFeedback,
   View,
-  Text,
   Alert,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
@@ -44,34 +43,33 @@ function ImageInput({ imageUri, onChangeImage }) {
   };
 
   return (
-    <Screen>
-      <TouchableWithoutFeedback onPress={handlePress}>
-        <View style={styles.container}>
-          {!imageUri && (
-            <MaterialCommunityIcons
-              name="camera"
-              size={40}
-              color={colors.medium}
-            />
-          )}
-          {imageUri && (
-            <Image source={{ uri: imageUri }} style={styles.image}></Image>
-          )}
-        </View>
-      </TouchableWithoutFeedback>
-    </Screen>
+    <TouchableWithoutFeedback onPress={handlePress}>
+      <View style={styles.container}>
+        {!imageUri && (
+          <MaterialCommunityIcons
+            name="camera"
+            size={40}
+            color={colors.medium}
+          />
+        )}
+        {imageUri && (
+          <Image source={{ uri: imageUri }} style={styles.image}></Image>
+        )}
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    alignItems: "center",
     borderRadius: 15,
     backgroundColor: colors.light,
-    width: 100,
     height: 100,
     justifyContent: "center",
-    alignItems: "center",
+    marginVertical: 10,
     overflow: "hidden",
+    width: 100,
   },
   image: {
     height: "100%",
