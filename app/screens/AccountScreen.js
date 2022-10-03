@@ -21,6 +21,7 @@ const menuItems = [
       name: "email",
       backgroundColor: colors.secondary,
     },
+    targetScreen: "Messages",
   },
 ];
 
@@ -47,7 +48,7 @@ const initialMessages = [
   },
 ];
 
-function AccountScreen(props) {
+function AccountScreen({ navigation }) {
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
@@ -71,6 +72,7 @@ function AccountScreen(props) {
                   backgroundColor={item.icon.backgroundColor}
                 ></Icon>
               }
+              onPress={() => navigation.navigate(item.targetScreen)}
             ></ListItem>
           )}
         ></FlatList>
