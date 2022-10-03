@@ -3,51 +3,15 @@ import { View, Text, Button } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Screen from "./app/components/Screen";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import LoginScreen from "./app/screens/LoginScreen";
-import RegisterScreen from "./app/screens/RegisterScreen";
-import AuthNavigator from "./app/navigation/AuthNavigator";
-import navigationTheme from "./app/navigation/navigationTheme";
+
 import AppNavigator from "./app/navigation/AppNavigator";
-
-function Link() {
-  const navigation = useNavigation();
-  return (
-    <Button
-      title="Click"
-      onPress={() => navigation.navigate("TweetDetails")}
-    ></Button>
-  );
-}
-
-function Tweets({ navigation }) {
-  return (
-    <Screen>
-      <Text>Tweets</Text>
-      <Button
-        title="View Tweet"
-        onPress={() => navigation.navigate("TweetDetails", { id: "1" })}
-      ></Button>
-    </Screen>
-  );
-}
-
-function TweetDetails({ route }) {
-  return (
-    <Screen>
-      <Text>Tweet Details {route.params.id}</Text>
-    </Screen>
-  );
-}
-
-function Account({ navigation }) {
-  return (
-    <Screen>
-      <Text>Account</Text>
-    </Screen>
-  );
-}
+import AuthNavigator from "./app/navigation/AuthNavigator";
+import LoginScreen from "./app/screens/LoginScreen";
+import navigationTheme from "./app/navigation/navigationTheme";
+import RegisterScreen from "./app/screens/RegisterScreen";
+import routes from "./app/navigation/routes";
+import Screen from "./app/components/Screen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
