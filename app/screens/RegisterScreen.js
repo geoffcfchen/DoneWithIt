@@ -9,16 +9,18 @@ import Screen from "../components/Screen";
 import usersApi from "../api/users";
 import useAuth from "../auth/useAuth";
 import authApi from "../api/auth";
+import useApi from "../hooks/useApi";
+import ActivityIndicator from "../components/ActivityIndicator";
 
 function RegisterScreen(props) {
+  const registerApi = useApi(usersApi.register);
+  const loginApi = useApi(authApi.login);
+
   const auth = useAuth();
   const [error, setError] = useState();
 
   const handleSubmit = async (userInfo) => {
-    console.log(userInfo);
-    const result = await usersApi.register(userInfo);
-    console.log(result.ok);
-    console.log(result.data);
+    const result = await registerApi.request(userInfo);
 
     if (!result.ok) {
       if (result.data) setError(result.data.error);
@@ -29,7 +31,7 @@ function RegisterScreen(props) {
       return;
     }
 
-    const { data: authToken } = await authApi.login(
+    const { data: authToken } = await loginApi.request(
       userInfo.email,
       userInfo.password
     );
@@ -37,6 +39,9 @@ function RegisterScreen(props) {
   };
   return (
     <Screen>
+      <ActivityIndicator
+        visible={registerApi.loading || loginApi.loading}
+      ></ActivityIndicator>
       <AppForm
         initialValues={{ name: "", email: "", password: "" }}
         onSubmit={handleSubmit}
