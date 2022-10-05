@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import "expo-dev-menu";
-import jwtDecode from "jwt-decode";
+
 import * as SplashScreen from "expo-splash-screen";
 
 import navigationTheme from "./app/navigation/navigationTheme";
@@ -15,16 +15,15 @@ export default function App() {
   const [user, setUser] = useState();
   const [isReady, setIsReady] = useState(false);
 
-  const restoreToken = async () => {
-    const token = await authStorage.getToken();
-    if (!token) return;
-    setUser(jwtDecode(token));
+  const restoreUser = async () => {
+    const userInfo = await authStorage.getUser();
+    if (userInfo) setUser(userInfo);
   };
 
   const prepare = async () => {
     try {
       await SplashScreen.preventAutoHideAsync();
-      await restoreToken();
+      await restoreUser();
     } catch (error) {
       console.log("Error loading app", error);
     } finally {
