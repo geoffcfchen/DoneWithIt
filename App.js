@@ -1,24 +1,33 @@
-import * as React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React, { useEffect, useState } from "react";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import "expo-dev-menu";
+import jwtDecode from "jwt-decode";
 
-import AppNavigator from "./app/navigation/AppNavigator";
 import navigationTheme from "./app/navigation/navigationTheme";
+import AppNavigator from "./app/navigation/AppNavigator";
 import OfflineNotice from "./app/components/OfflineNotice";
 import AuthNavigator from "./app/navigation/AuthNavigator";
-
-const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
+import AuthContext from "./app/auth/context";
+import authStorage from "./app/auth/storage";
 
 export default function App() {
+  const [user, setUser] = useState();
+
+  const restoreToken = async () => {
+    const token = await authStorage.getToken();
+    if (!token) return;
+    setUser(jwtDecode(token));
+  };
+  useEffect(() => {
+    restoreToken();
+  }, []);
+
   return (
-    <>
+    <AuthContext.Provider value={{ user, setUser }}>
       <OfflineNotice></OfflineNotice>
       <NavigationContainer theme={navigationTheme}>
-        <AuthNavigator></AuthNavigator>
+        {user ? <AppNavigator></AppNavigator> : <AuthNavigator></AuthNavigator>}
       </NavigationContainer>
-    </>
+    </AuthContext.Provider>
   );
 }
