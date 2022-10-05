@@ -7,6 +7,7 @@ import "expo-dev-menu";
 import AppNavigator from "./app/navigation/AppNavigator";
 import navigationTheme from "./app/navigation/navigationTheme";
 import OfflineNotice from "./app/components/OfflineNotice";
+import AuthNavigator from "./app/navigation/AuthNavigator";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -16,7 +17,7 @@ export default function App() {
     <>
       <OfflineNotice></OfflineNotice>
       <NavigationContainer theme={navigationTheme}>
-        <AppNavigator></AppNavigator>
+        <AuthNavigator></AuthNavigator>
       </NavigationContainer>
     </>
   );
