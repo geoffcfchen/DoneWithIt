@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import * as Notifications from "expo-notifications";
 
 import expoPushTokensApi from "../api/expoPushTokens";
-import navigation from "../navigation/rootNavigation";
 
 export default useNotifications = (notificationListener) => {
   useEffect(() => {
