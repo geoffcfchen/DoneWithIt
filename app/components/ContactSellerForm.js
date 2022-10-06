@@ -2,6 +2,7 @@ import React from "react";
 import * as Notifications from "expo-notifications";
 import { Alert, Keyboard } from "react-native";
 import * as Yup from "yup";
+import logger from "../utility/logger";
 
 import { AppForm, AppFormField, SubmitButton } from "./forms";
 import messagesApi from "../api/messages";
@@ -13,7 +14,7 @@ function ContactSellerForm({ listing }) {
     const result = await messagesApi.send(message, listing.id);
 
     if (!result.ok) {
-      console.log("Error", result);
+      logger.log("Error", result);
       return Alert.alert("Error", "Could not send the message to the seller.");
     }
 

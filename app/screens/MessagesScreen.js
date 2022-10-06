@@ -5,6 +5,7 @@ import ListItemDeleteAction from "../components/lists/ListItemDeleteAction";
 import ListItemSeparator from "../components/lists/ListItemSeparator";
 
 import Screen from "../components/Screen";
+import logger from "../utility/logger";
 
 const initialMessages = [
   {
@@ -38,7 +39,7 @@ function MessagesScreen(props) {
             title={item.title}
             subTitle={item.description}
             image={item.image}
-            onPress={() => console.log("message selected", item)}
+            onPress={() => logger.log("message selected", item)}
             renderRightActions={() => (
               <ListItemDeleteAction
                 onPress={() => handleDelete(item)}

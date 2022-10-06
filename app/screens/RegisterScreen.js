@@ -11,6 +11,7 @@ import useAuth from "../auth/useAuth";
 import authApi from "../api/auth";
 import useApi from "../hooks/useApi";
 import ActivityIndicator from "../components/ActivityIndicator";
+import logger from "../utility/logger";
 
 function RegisterScreen(props) {
   const registerApi = useApi(usersApi.register);
@@ -26,7 +27,7 @@ function RegisterScreen(props) {
       if (result.data) setError(result.data.error);
       else {
         setError("An unexpected error occurred.");
-        console.log(result);
+        logger.log(result);
       }
       return;
     }

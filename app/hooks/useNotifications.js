@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import * as Notifications from "expo-notifications";
-
+import logger from "../utility/logger";
 import expoPushTokensApi from "../api/expoPushTokens";
 
 // Required
@@ -29,7 +29,7 @@ export default useNotifications = () => {
     // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response.notification.request.content.body);
+        logger.log(response.notification.request.content.body);
       });
 
     return () => {
@@ -46,16 +46,16 @@ export default useNotifications = () => {
       if (!permissions.granted) {
         const finalPermissions = await Notifications.requestPermissionsAsync();
         if (!finalPermissions.granted) {
-          console.log("permissions NOT granted!");
+          logger.log("permissions NOT granted!");
           return;
         }
       }
-      console.log("permissions granted!");
+      logger.log("permissions granted!");
 
       const token = await Notifications.getExpoPushTokenAsync();
       expoPushTokensApi.register(token.data);
     } catch (error) {
-      console.log("Error getting a push token", error);
+      logger.log("Error getting a push token", error);
     }
   };
 };
