@@ -26,7 +26,7 @@
     "android": {
       "useNextNotificationsApi": true,
       "adaptiveIcon": {
-        "foregroundImage": "./app/assets/adaptive-icon.png",
+        "foregroundImage": "./app/assets/icon.png",
         "backgroundColor": "#FFFFFF"
       }
     },
