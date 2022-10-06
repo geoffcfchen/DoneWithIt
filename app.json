@@ -20,7 +20,11 @@
     "ios": {
       "supportsTablet": true
     },
+    "notification": {
+      "iosDisplayInforeground": true
+    },
     "android": {
+      "useNextNotificationsApi": true,
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
