@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "DoneWithIt",
-    "slug": "DoneWithIt",
+    "name": "Vetcation",
+    "slug": "Vetcation",
+    "platforms": ["ios", "android", "web"],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
@@ -19,16 +20,6 @@
     ],
     "ios": {
       "supportsTablet": true
-    },
-    "notification": {
-      "iosDisplayInforeground": true
-    },
-    "android": {
-      "useNextNotificationsApi": true,
-      "adaptiveIcon": {
-        "foregroundImage": "./app/assets/icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
     },
     "web": {
       "favicon": "./app/assets/favicon.png"
