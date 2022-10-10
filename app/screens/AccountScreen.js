@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet, FlatList } from "react-native";
+import { useContext } from "react";
 
 import ListItem from "../components/lists/ListItem";
 import Screen from "../components/Screen";
@@ -7,10 +8,12 @@ import colors from "../config/colors";
 import Icon from "../components/Icon";
 import ListItemSeparator from "../components/lists/ListItemSeparator";
 import useAuth from "../auth/useAuth";
+import { auth } from "../../firebase";
+import AuthContext from "../auth/context";
 
 const menuItems = [
   {
-    title: "My Listings",
+    title: "My Questions",
     icon: {
       name: "format-list-bulleted",
       backgroundColor: colors.primary,
@@ -50,7 +53,14 @@ const initialMessages = [
 ];
 
 function AccountScreen({ navigation }) {
-  const { user, logOut } = useAuth();
+  const { user, setUser } = useContext(AuthContext);
+  // const { user, logOut } = useAuth();
+
+  const signOutUser = () => {
+    auth.signOut().then(() => {
+      setUser(null);
+    });
+  };
 
   return (
     <Screen style={styles.screen}>
@@ -83,7 +93,7 @@ function AccountScreen({ navigation }) {
       <ListItem
         title="Log out"
         IconComponent={<Icon name="logout" backgroundColor="#ffe66d"></Icon>}
-        onPress={() => logOut()}
+        onPress={signOutUser}
       ></ListItem>
     </Screen>
   );

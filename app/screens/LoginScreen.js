@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Image } from "react-native";
 import * as Yup from "yup";
+import AuthContext from "../auth/context";
+import { useContext } from "react";
 
 import Screen from "../components/Screen";
 import {
@@ -9,8 +11,10 @@ import {
   AppFormField,
   SubmitButton,
 } from "../components/forms";
-import authApi from "../api/auth";
-import useAuth from "../auth/useAuth";
+// import authApi from "../api/auth";
+// import useAuth from "../auth/useAuth";
+import { auth } from "../../firebase";
+import { signUp, signIn } from "../../firebase";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -18,15 +22,32 @@ const validationSchema = Yup.object().shape({
 });
 
 function LoginScreen(props) {
-  const auth = useAuth();
+  const { user, setUser } = useContext(AuthContext);
+  // const auth = useAuth();
   const [loginFailed, setLoginFailed] = useState(false);
 
+  async function handlePressSignIn() {
+    await signIn(email, password);
+  }
+
   const handleSubmit = async ({ email, password }) => {
-    const result = await authApi.login(email, password);
-    if (!result.ok) return setLoginFailed(true);
-    setLoginFailed(false);
-    auth.logIn(result.data);
+    await signIn(email, password);
+    // const result = await authApi.login(email, password);
+    // console.log(result);
+    // if (!result.ok) return setLoginFailed(true);
+    // setLoginFailed(false);
+    // auth.logIn(result.data);
   };
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        console.log(authUser);
+        setUser(authUser);
+      }
+    });
+    return unsubscribe;
+  }, []);
 
   return (
     <Screen style={styles.container}>
