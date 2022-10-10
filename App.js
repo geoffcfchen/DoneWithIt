@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import "expo-dev-menu";
-
+import { onAuthStateChanged } from "firebase/auth";
 import * as SplashScreen from "expo-splash-screen";
+import { LogBox } from "react-native";
 
+import { auth } from "./firebase";
 import navigationTheme from "./app/navigation/navigationTheme";
 import AppNavigator from "./app/navigation/AppNavigator";
 import OfflineNotice from "./app/components/OfflineNotice";
@@ -13,30 +15,32 @@ import authStorage from "./app/auth/storage";
 import { navigationRef } from "./app/navigation/rootNavigation";
 import logger from "./app/utility/logger";
 
+LogBox.ignoreLogs([
+  "Setting a timer",
+  "AsyncStorage has been extracted from react-native core and will be removed in a future release.",
+]);
+
 logger.start();
 
 export default function App() {
   const [user, setUser] = useState();
   const [isReady, setIsReady] = useState(false);
 
-  const restoreUser = async () => {
-    const userInfo = await authStorage.getUser();
-    if (userInfo) setUser(userInfo);
-  };
-
-  const prepare = async () => {
-    try {
-      await SplashScreen.preventAutoHideAsync();
-      await restoreUser();
-    } catch (error) {
-      logger.log("Error loading app", error);
-    } finally {
-      // Tell the application to render
-      setIsReady(true);
-    }
-  };
-
   useEffect(() => {
+    async function prepare() {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+          if (user) {
+            setUser(user);
+          }
+        });
+      } catch (error) {
+        logger.log("Error loading app", error);
+      } finally {
+        setIsReady(true);
+      }
+    }
     prepare();
   }, []);
 

@@ -50,12 +50,13 @@ export default useNotifications = () => {
           return;
         }
       }
-      logger.log("permissions granted!");
+      // logger.log("permissions granted!");
 
       const token = await Notifications.getExpoPushTokenAsync();
       expoPushTokensApi.register(token.data);
     } catch (error) {
       logger.log("Error getting a push token", error);
+      console.log(error);
     }
   };
 };
