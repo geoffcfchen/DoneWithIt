@@ -55,6 +55,7 @@ const initialMessages = [
 function AccountScreen({ navigation }) {
   const { user, setUser } = useContext(AuthContext);
   // const { user, logOut } = useAuth();
+  const { currentUser } = auth;
 
   const signOutUser = () => {
     auth.signOut().then(() => {
@@ -68,7 +69,7 @@ function AccountScreen({ navigation }) {
         <ListItem
           title={user.name}
           subTitle={user.email}
-          image={require("../assets/mosh.jpg")}
+          image={{ uri: currentUser.photoURL }}
         ></ListItem>
       </View>
       <View style={styles.container}>
