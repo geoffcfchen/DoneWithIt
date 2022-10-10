@@ -15,7 +15,7 @@ function WelcomeScreen({ navigation }) {
           style={styles.logo}
           source={require("../assets/icon.png")}
         ></Image>
-        <Text style={styles.tagline}>A better life</Text>
+        <Text style={styles.tagline}>Vetcation</Text>
       </View>
       <View style={styles.buttonsContainer}>
         <AppButton
@@ -48,8 +48,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fc5c65",
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
   },
   logoContainer: {
     position: "absolute",
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   tagline: {
-    fontSize: 25,
+    fontSize: 40,
     fontWeight: "600",
     paddingVertical: 20,
     color: "white",
