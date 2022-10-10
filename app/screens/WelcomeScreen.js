@@ -15,7 +15,7 @@ function WelcomeScreen({ navigation }) {
           style={styles.logo}
           source={require("../assets/icon.png")}
         ></Image>
-        <Text style={styles.tagline}>Sell What you don't need</Text>
+        <Text style={styles.tagline}>A better life</Text>
       </View>
       <View style={styles.buttonsContainer}>
         <AppButton
@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "600",
     paddingVertical: 20,
+    color: "white",
   },
 });
 
