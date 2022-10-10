@@ -23,8 +23,15 @@ const initialMessages = [
 ];
 
 function MessagesScreen(props) {
+  const { currentUser } = auth;
+  const { rooms, setRooms, setUnfilteredRooms } = useContext(GlobalContext);
   const [messages, setMessages] = useState(initialMessages);
   const [refreshing, setRefreshing] = useState(false);
+
+  const chatsQuery = query(
+    collection(db, "rooms"),
+    where("participantsArray", "array-contains", currentUser.email)
+  );
 
   const handleDelete = (message) => {
     setMessages(messages.filter((m) => m.id !== message.id));

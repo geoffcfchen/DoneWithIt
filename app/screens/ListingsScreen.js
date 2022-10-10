@@ -16,21 +16,21 @@ const listings = [
     id: 1,
     title: "Skin discharge or oozing?",
     description:
-      "Clear, sticky, wound-like spots on your dogs skin would describe something colloquially called a “hot spot”, or acute moist dermatitis. Hot Spots develop from a bacterial or fungal skin infection that occurs from damage to the skin. The discharge is often clear and sticky. The skin damage is caused by your dog themselves: licking, chewing, scratching or gnawing.",
+      "Clear, sticky, wound-like spots on your dogs skin would describe something colloquially called a “hot spot”, or acute moist dermatitis. Hot Spots develop from a bacterial or fungal skin infection that occurs from",
     image: require("../assets/dog-head.jpeg"),
   },
   {
     id: 2,
     title: "Skin Ulcers and Draining Lesions?",
     description:
-      "With skin ulcers and draining lesions, the first sign of a problem may be a crusty area on the skin, nose or foot. In other cases, skin problems may start out small and progress into more extensive lesions. They may open, drain and then develop a crusty surface. In some instances, there may be hair loss and the surface of the skin can become red and oozing, and ulcers may develop. Skin ulceration and draining lesions can be caused by a variety of underlying problems. Certain conditions are more common in specific populations of dogs or in some geographic locations.",
+      "With skin ulcers and draining lesions, the first sign of a problem may be a crusty area on the skin, nose or foot. In other cases, skin problems may start out small and progress into more extensive lesions.",
     image: require("../assets/dog-leg.jpeg"),
   },
   {
     id: 3,
     title: "Itchy-scratchy?",
     description:
-      "Dogs with dry skin can be suffering for a number of reasons, including parasites and allergies. Itchy skin is not only unpleasant for your dog but can result in skin problems over time. If your dog is scratching more than normal, they may have dry skin and a possible health condition that contributes to it. ",
+      "Dogs with dry skin can be suffering for a number of reasons, including parasites and allergies. Itchy skin is not only unpleasant for your dog but can result in skin problems over time. If your dog is scratchin. ",
     image: require("../assets/dog-itch.jpeg"),
   },
 ];
