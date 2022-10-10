@@ -22,6 +22,9 @@ LogBox.ignoreLogs([
 
 logger.start();
 
+// https://docs.expo.dev/versions/latest/sdk/splash-screen/
+SplashScreen.preventAutoHideAsync();
+
 export default function App() {
   const [user, setUser] = useState();
   const [isReady, setIsReady] = useState(false);
@@ -29,8 +32,7 @@ export default function App() {
   useEffect(() => {
     async function prepare() {
       try {
-        await SplashScreen.preventAutoHideAsync();
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, (user) => {
           if (user) {
             setUser(user);
           }
