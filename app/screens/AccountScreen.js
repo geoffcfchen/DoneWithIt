@@ -62,14 +62,15 @@ function AccountScreen({ navigation }) {
       setUser(null);
     });
   };
-
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
         <ListItem
           title={user.name}
           subTitle={user.email}
-          image={{ uri: currentUser.photoURL }}
+          image={{
+            uri: currentUser.photoURL,
+          }}
         ></ListItem>
       </View>
       <View style={styles.container}>
