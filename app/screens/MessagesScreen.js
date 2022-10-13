@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { auth, db } from "../../firebase";
 import ListItem from "../components/lists/ListItem";
 import ListItemDeleteAction from "../components/lists/ListItemDeleteAction";
 import ListItemSeparator from "../components/lists/ListItemSeparator";
-import {
-  collection,
-  onSnapshot,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 
+import GlobalContext from "../context/Context";
 import Screen from "../components/Screen";
 import logger from "../utility/logger";
+import ListItemMessages from "../components/lists/ListItemMessages";
+import ContactsFloatingIcon from "../components/ContactsFloatingIcon";
+import useContacts from "../hooks/useHooks";
+import AppText from "../components/AppText";
 
 const initialMessages = [
   {
@@ -32,31 +31,17 @@ const initialMessages = [
 
 function MessagesScreen(props) {
   const { currentUser } = auth;
+  const [rooms, setRooms] = useState([]);
+  const [unfilteredRooms, setUnfilteredRooms] = useState([]);
   // const { rooms, setRooms, setUnfilteredRooms } = useContext(GlobalContext);
+
   const [messages, setMessages] = useState(initialMessages);
+  const contacts = useContacts();
   const [refreshing, setRefreshing] = useState(false);
-  console.log(currentUser);
-  console.log("collection", collection(db, "rooms"));
-  console.log(
-    "where",
-    where("participantsArray", "array-contains", currentUser.email)
-  );
   const chatsQuery = query(
     collection(db, "rooms"),
     where("participantsArray", "array-contains", currentUser.email)
   );
-  console.log("chatsQuery", chatsQuery);
-
-  // async function getCities(db) {
-  //   const citiesCol = collection(db, "rooms");
-  //   const citySnapshot = await getDocs(citiesCol);
-  //   // console.log("citySnapshot", citySnapshot);
-  //   const cityList = citySnapshot.docs.length;
-  //   // .map((doc) => doc.data());
-  //   return cityList;
-  // }
-  // const test = getCities(db);
-  // console.log("test", test);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(chatsQuery, (querySnapshot) => {
@@ -69,25 +54,44 @@ function MessagesScreen(props) {
             .data()
             .participants.find((p) => p.email !== currentUser.email),
         }));
-      console.log("parsedChats", parsedChats);
-      // setUnfilteredRooms(parsedChats);
-      // setRooms(parsedChats.filter((doc) => doc.lastMessage));
+      setUnfilteredRooms(parsedChats);
+      setRooms(parsedChats.filter((doc) => doc.lastMessage));
     });
     return () => unsubscribe();
   }, []);
 
+  function getUserB(user, contacts) {
+    const userContact = contacts.find((c) => c.email === user.email);
+    if (userContact && userContact.contactName) {
+      return { ...user, contactName: userContact.contactName };
+    }
+    return user;
+  }
+
   const handleDelete = (message) => {
     setMessages(messages.filter((m) => m.id !== message.id));
   };
+
   return (
-    <Screen>
-      <FlatList
-        data={messages}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
+    <View style={{ flex: 1, padding: 5, paddingRight: 10 }}>
+      {rooms.map((room) => (
+        <ListItemMessages
+          type="chat"
+          description={room.lastMessage.text}
+          key={room.id}
+          room={room}
+          time={room.lastMessage.createdAt}
+          user={getUserB(room.userB, contacts)}
+        ></ListItemMessages>
+      ))}
+      <ContactsFloatingIcon></ContactsFloatingIcon>
+      {/* <FlatList
+        data={rooms}
+        keyExtractor={(room) => room.id.toString()}
+        renderItem={({ room }) => (
           <ListItem
             title={item.title}
-            subTitle={item.description}
+            subTitle={room.lastMessage.text}
             image={item.image}
             onPress={() => logger.log("message selected", item)}
             renderRightActions={() => (
@@ -109,8 +113,8 @@ function MessagesScreen(props) {
             },
           ]);
         }}
-      ></FlatList>
-    </Screen>
+      ></FlatList> */}
+    </View>
   );
 }
 
