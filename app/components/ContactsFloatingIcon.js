@@ -12,7 +12,7 @@ export default function ContactsFloatingIcon() {
 
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate("contacts")}
+      onPress={() => navigation.navigate("Contacts")}
       style={{
         position: "absolute",
         right: 20,

@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AccountScreen from "../screens/AccountScreen";
 import MessagesScreen from "../screens/MessagesScreen";
 import MessagesDetailsScreen from "../screens/MessagesDetailScreen.js";
+import ContactsScreen from "../screens/ContactsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +16,7 @@ function AccountNavigator() {
         name="MessagesDetail"
         component={MessagesDetailsScreen}
       ></Stack.Screen>
+      <Stack.Screen name="Contacts" component={ContactsScreen}></Stack.Screen>
     </Stack.Navigator>
   );
 }

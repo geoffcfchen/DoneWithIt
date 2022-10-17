@@ -29,12 +29,11 @@ function ListingDetailsScreen({ route }) {
       ></Image>
       <View style={styles.detailContainer}>
         <AppText style={styles.title}>{listing.title}</AppText>
-        <AppText style={styles.price}>{listing.description}</AppText>
+        <AppText style={styles.description}>{listing.description}</AppText>
         <View style={styles.userContainer}>
           <ListItem
             image={require("../assets/mosh.jpg")}
-            title="Mosh"
-            subTitle="5 Listings"
+            title="Thomas Lai (Pet owner)"
           ></ListItem>
         </View>
         <ContactSellerForm listing={listing}></ContactSellerForm>
@@ -49,18 +48,18 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 300,
   },
-  price: {
+  description: {
     color: colors.secondary,
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 15,
     marginVertical: 10,
   },
   title: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "500",
   },
   userContainer: {
-    marginVertical: 40,
+    marginVertical: 0,
   },
 });
 

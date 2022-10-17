@@ -17,7 +17,7 @@ function AppNavigator() {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Feed"
+        name="Questions"
         component={FeedNavigator}
         options={{
           headerShown: false,
