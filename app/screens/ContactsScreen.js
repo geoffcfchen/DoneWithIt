@@ -14,7 +14,7 @@ export default function Contacts() {
   // const contacts = [{ contactName: "Kate Bell", email: "kate-bell@mac.com" }];
   const route = useRoute();
   const image = route.params && route.params.image;
-  console.log("contacts", contacts);
+  // console.log("contacts", contacts);
   // console.log("route", route);
   // console.log("image", image);
   return (
@@ -52,14 +52,14 @@ function ContactPreview({ contact, image }) {
     });
     return () => unsubscribe();
   }, []);
-  console.log("contact.email", contact.email);
-  console.log(
-    "unfilteredRooms",
-    unfilteredRooms.find((room) =>
-      room.participantsArray.includes(contact.email)
-    )
-  );
-  console.log("user", user);
+  // console.log("contact.email", contact.email);
+  // console.log(
+  //   "unfilteredRooms",
+  //   unfilteredRooms.find((room) =>
+  //     room.participantsArray.includes(contact.email)
+  //   )
+  // );
+  // console.log("user", user);
   return (
     <ListItemMessages
       style={{ marginTop: 7 }}

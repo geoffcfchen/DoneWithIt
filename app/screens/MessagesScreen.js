@@ -43,7 +43,7 @@ export default function MessagesScreen() {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(chatsQuery, (querySnapshot) => {
-      querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
+      // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
       const parsedChats = querySnapshot.docs
         //
         .map((doc) => ({

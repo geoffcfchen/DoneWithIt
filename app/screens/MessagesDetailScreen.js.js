@@ -49,8 +49,8 @@ export default function MessagesDetailsScreen({ route }) {
   const selectedImage = route.params.image;
   const userB = route.params.user;
   // console.log("route", route);
-  console.log("room", room);
-  console.log("userB", userB);
+  // console.log("room", room);
+  // console.log("userB", userB);
 
   const senderUser = currentUser.photoURL
     ? {
@@ -62,15 +62,15 @@ export default function MessagesDetailsScreen({ route }) {
   // console.log("senderUser = ", senderUser);
 
   const roomID = room ? room.id : uuid.v4();
-  console.log("roomID = ", roomID);
+  // console.log("roomID = ", roomID);
 
   const roomRef = doc(db, "rooms", roomID);
   // console.log("roomRef = ", roomRef);
   const roomMessagesRef = collection(db, "rooms", roomID, "messages");
   // console.log("roomMessageRef = ", roomMessagesRef);
-  if (!room) {
-    console.log("no room");
-  }
+  // if (!room) {
+  //   console.log("no room");
+  // }
 
   useEffect(() => {
     (async () => {
