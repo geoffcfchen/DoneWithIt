@@ -29,15 +29,15 @@ const initialMessages = [
   },
 ];
 
-function MessagesScreen(props) {
+export default function MessagesScreen() {
   const { currentUser } = auth;
-  const [rooms, setRooms] = useState([]);
-  const [unfilteredRooms, setUnfilteredRooms] = useState([]);
-  // const { rooms, setRooms, setUnfilteredRooms } = useContext(GlobalContext);
+  // const [rooms, setRooms] = useState([]);
+  // const [unfilteredRooms, setUnfilteredRooms] = useState([]);
+  const { rooms, setRooms, setUnfilteredRooms } = useContext(GlobalContext);
 
-  const [messages, setMessages] = useState(initialMessages);
+  // const [messages, setMessages] = useState(initialMessages);
   const contacts = useContacts();
-  const [refreshing, setRefreshing] = useState(false);
+  // const [refreshing, setRefreshing] = useState(false);
   const chatsQuery = query(
     collection(db, "rooms"),
     where("participantsArray", "array-contains", currentUser.email)
@@ -45,6 +45,7 @@ function MessagesScreen(props) {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(chatsQuery, (querySnapshot) => {
+      // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
       const parsedChats = querySnapshot.docs
         //
         .map((doc) => ({
@@ -54,11 +55,17 @@ function MessagesScreen(props) {
             .data()
             .participants.find((p) => p.email !== currentUser.email),
         }));
+      console.log(
+        "parsedChats",
+        parsedChats.filter((doc) => doc.lastMessage)
+      );
       setUnfilteredRooms(parsedChats);
       setRooms(parsedChats.filter((doc) => doc.lastMessage));
     });
     return () => unsubscribe();
   }, []);
+
+  console.log("rooms", rooms);
 
   function getUserB(user, contacts) {
     const userContact = contacts.find((c) => c.email === user.email);
@@ -68,9 +75,9 @@ function MessagesScreen(props) {
     return user;
   }
 
-  const handleDelete = (message) => {
-    setMessages(messages.filter((m) => m.id !== message.id));
-  };
+  // const handleDelete = (message) => {
+  //   setMessages(messages.filter((m) => m.id !== message.id));
+  // };
 
   return (
     <View style={{ flex: 1, padding: 5, paddingRight: 10 }}>
@@ -119,5 +126,3 @@ function MessagesScreen(props) {
 }
 
 const styles = StyleSheet.create({});
-
-export default MessagesScreen;

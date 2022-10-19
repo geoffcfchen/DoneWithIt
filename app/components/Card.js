@@ -52,11 +52,13 @@ const styles = StyleSheet.create({
     height: 200,
   },
   title: {
+    fontSize: 17,
     marginBottom: 7,
+    fontWeight: "500",
   },
   subTitle: {
-    color: colors.secondary,
+    color: colors.primary,
     fontWeight: "bold",
-    fontSize: 15,
+    fontSize: 14,
   },
 });

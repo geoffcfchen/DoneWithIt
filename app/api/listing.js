@@ -7,7 +7,7 @@ const getListings = () => client.get(endpoint);
 const addListing = (listing, onUploadProgress) => {
   const data = new FormData();
   data.append("title", listing.listing);
-  data.append("price", listing.price);
+  data.append("price", "30");
   data.append("categoryId", listing.category.value);
   data.append("description", listing.description);
 

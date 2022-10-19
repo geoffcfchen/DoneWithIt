@@ -12,13 +12,13 @@ import { auth } from "../../firebase";
 import AuthContext from "../auth/context";
 
 const menuItems = [
-  {
-    title: "My Questions",
-    icon: {
-      name: "format-list-bulleted",
-      backgroundColor: colors.primary,
-    },
-  },
+  // {
+  //   title: "My Questions",
+  //   icon: {
+  //     name: "format-list-bulleted",
+  //     backgroundColor: colors.primary,
+  //   },
+  // },
   {
     title: "My Messages",
     icon: {

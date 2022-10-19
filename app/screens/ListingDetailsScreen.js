@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     height: 300,
   },
   description: {
-    color: colors.secondary,
+    color: colors.primary,
     fontWeight: "bold",
     fontSize: 15,
     marginVertical: 10,
