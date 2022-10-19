@@ -68,9 +68,13 @@ function AccountScreen({ navigation }) {
         <ListItem
           title={user.name}
           subTitle={user.email}
-          image={{
-            uri: currentUser.photoURL,
-          }}
+          image={
+            currentUser.photoURL
+              ? {
+                  uri: currentUser.photoURL,
+                }
+              : require("../assets/icon-square.png")
+          }
         ></ListItem>
       </View>
       <View style={styles.container}>

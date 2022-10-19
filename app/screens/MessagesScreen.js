@@ -31,13 +31,11 @@ const initialMessages = [
 
 export default function MessagesScreen() {
   const { currentUser } = auth;
-  // const [rooms, setRooms] = useState([]);
-  // const [unfilteredRooms, setUnfilteredRooms] = useState([]);
   const { rooms, setRooms, setUnfilteredRooms } = useContext(GlobalContext);
 
-  // const [messages, setMessages] = useState(initialMessages);
+  const [messages, setMessages] = useState(initialMessages);
   const contacts = useContacts();
-  // const [refreshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const chatsQuery = query(
     collection(db, "rooms"),
     where("participantsArray", "array-contains", currentUser.email)
@@ -45,7 +43,7 @@ export default function MessagesScreen() {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(chatsQuery, (querySnapshot) => {
-      // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
+      querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
       const parsedChats = querySnapshot.docs
         //
         .map((doc) => ({
@@ -55,17 +53,11 @@ export default function MessagesScreen() {
             .data()
             .participants.find((p) => p.email !== currentUser.email),
         }));
-      console.log(
-        "parsedChats",
-        parsedChats.filter((doc) => doc.lastMessage)
-      );
       setUnfilteredRooms(parsedChats);
       setRooms(parsedChats.filter((doc) => doc.lastMessage));
     });
     return () => unsubscribe();
   }, []);
-
-  console.log("rooms", rooms);
 
   function getUserB(user, contacts) {
     const userContact = contacts.find((c) => c.email === user.email);

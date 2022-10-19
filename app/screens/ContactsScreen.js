@@ -10,8 +10,8 @@ import useContacts from "../hooks/useHooks";
 import AppText from "../components/AppText";
 
 export default function Contacts() {
-  // const contacts = useContacts();
-  const contacts = [{ contactName: "Kate Bell", email: "kate-bell@mac.com" }];
+  const contacts = useContacts();
+  // const contacts = [{ contactName: "Kate Bell", email: "kate-bell@mac.com" }];
   const route = useRoute();
   const image = route.params && route.params.image;
   console.log("contacts", contacts);
@@ -32,11 +32,7 @@ export default function Contacts() {
 
 function ContactPreview({ contact, image }) {
   const { unfilteredRooms, rooms } = useContext(GlobalContext);
-  // const [rooms, setRooms] = useState([]);
-  // const [unfilteredRooms, setUnfilteredRooms] = useState([]);
   const [user, setUser] = useState(contact);
-  // useEffect(() => console.log(unfilteredRooms), [unfilteredRooms]);
-  // useEffect(() => console.log(rooms), [rooms]);
   // console.log("contact.email", contact.email);
   // console.log("user", user);
   useEffect(() => {
@@ -46,16 +42,23 @@ function ContactPreview({ contact, image }) {
     );
     // console.log("q", q);
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      console.log("snapshot length", snapshot.docs.length);
-      snapshot.docs.map((doc) => console.log("doc", doc.data()));
+      // console.log("snapshot length", snapshot.docs.length);
+      // snapshot.docs.map((doc) => console.log("doc", doc.data()));
       if (snapshot.docs.length) {
         const userDoc = snapshot.docs[0].data();
-        console.log("userDoc", userDoc);
+        // console.log("userDoc", userDoc);
         setUser((prevUser) => ({ ...prevUser, userDoc }));
       }
     });
     return () => unsubscribe();
   }, []);
+  console.log("contact.email", contact.email);
+  console.log(
+    "unfilteredRooms",
+    unfilteredRooms.find((room) =>
+      room.participantsArray.includes(contact.email)
+    )
+  );
   console.log("user", user);
   return (
     <ListItemMessages

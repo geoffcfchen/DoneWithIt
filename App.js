@@ -14,6 +14,7 @@ import AuthContext from "./app/auth/context";
 import authStorage from "./app/auth/storage";
 import { navigationRef } from "./app/navigation/rootNavigation";
 import logger from "./app/utility/logger";
+import ContextWrapper from "./app/context/ContextWrapper";
 
 LogBox.ignoreLogs([
   "Setting a timer",
@@ -25,7 +26,7 @@ logger.start();
 // https://docs.expo.dev/versions/latest/sdk/splash-screen/
 SplashScreen.preventAutoHideAsync();
 
-export default function App() {
+function App() {
   const [user, setUser] = useState();
   const [isReady, setIsReady] = useState(false);
 
@@ -65,3 +66,13 @@ export default function App() {
     </AuthContext.Provider>
   );
 }
+
+function Main() {
+  return (
+    <ContextWrapper>
+      <App></App>
+    </ContextWrapper>
+  );
+}
+
+export default Main;

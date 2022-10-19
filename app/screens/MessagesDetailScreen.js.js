@@ -32,10 +32,9 @@ import GlobalContext from "../context/Context";
 import { pickImage, takeImage } from "../utility/pickImage";
 import { uploadImage } from "../utility/uploadImage";
 import { askForPermission } from "../utility/askPermission";
+import uuid from "react-native-uuid";
 
-const randomID = nanoid();
-
-export default function MessagesDetailsScreen() {
+export default function MessagesDetailsScreen({ route }) {
   const [roomHash, setRoomHash] = useState("");
   const [messages, setMessages] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -45,11 +44,13 @@ export default function MessagesDetailsScreen() {
     theme: { colors },
   } = useContext(GlobalContext);
   const { currentUser } = auth;
-  const route = useRoute();
+  // const route = useRoute();
   const room = route.params.room;
   const selectedImage = route.params.image;
   const userB = route.params.user;
   // console.log("route", route);
+  console.log("room", room);
+  console.log("userB", userB);
 
   const senderUser = currentUser.photoURL
     ? {
@@ -60,16 +61,16 @@ export default function MessagesDetailsScreen() {
     : { name: currentUser.displayName, _id: currentUser.uid };
   // console.log("senderUser = ", senderUser);
 
-  const roomID = room ? room.id : randomID;
-  // console.log("roomID = ", roomID);
+  const roomID = room ? room.id : uuid.v4();
+  console.log("roomID = ", roomID);
 
   const roomRef = doc(db, "rooms", roomID);
   // console.log("roomRef = ", roomRef);
   const roomMessagesRef = collection(db, "rooms", roomID, "messages");
   // console.log("roomMessageRef = ", roomMessagesRef);
-  // if (!room) {
-  //   console.log("no room");
-  // }
+  if (!room) {
+    console.log("no room");
+  }
 
   useEffect(() => {
     (async () => {
@@ -118,10 +119,6 @@ export default function MessagesDetailsScreen() {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(roomMessagesRef, (querySnapshot) => {
-      console.log(
-        "querySnapshot",
-        querySnapshot.docChanges().filter(({ type }) => type === "added").length
-      );
       const messagesFirestore = querySnapshot
         .docChanges()
         .filter(({ type }) => type === "added")
@@ -155,24 +152,24 @@ export default function MessagesDetailsScreen() {
   async function onSend(messages = []) {
     // console.log("message", messages.length);
     const writes = messages.map((m) => addDoc(roomMessagesRef, m));
-    console.log("messages inside onsend", messages);
+    // console.log("messages inside onsend", messages);
     const lastMessage = messages[messages.length - 1];
-    console.log("lastMessage=", lastMessage);
+    // console.log("lastMessage=", lastMessage);
     writes.push(updateDoc(roomRef, { lastMessage }));
     // updateDoc(roomRef, { lastMessage });
     await Promise.all(writes);
   }
 
-  console.log("messages global", messages.length);
+  // console.log("messages global", messages.length);
 
   async function sendImage(uri, roomPath) {
-    console.log("roomPath", roomPath);
+    // console.log("roomPath", roomPath);
     const { url, fileName } = await uploadImage(
       uri,
       `images/rooms/${roomPath || roomHash}`
     );
-    console.log("url", url);
-    console.log("fileName", fileName);
+    // console.log("url", url);
+    // console.log("fileName", fileName);
     const message = {
       _id: fileName,
       text: "",
@@ -180,9 +177,9 @@ export default function MessagesDetailsScreen() {
       user: senderUser,
       image: url,
     };
-    console.log("message in sendImage", message);
+    // console.log("message in sendImage", message);
     const lastMessage = { ...message, text: "Image" };
-    console.log("lastMessage", lastMessage);
+    // console.log("lastMessage", lastMessage);
     await Promise.all([
       addDoc(roomMessagesRef, message),
       updateDoc(roomRef, { lastMessage }),
@@ -191,7 +188,7 @@ export default function MessagesDetailsScreen() {
 
   async function handlePhotoPicker() {
     const result = await pickImage();
-    console.log(result);
+    // console.log(result);
 
     if (!result.cancelled) {
       await sendImage(result.uri);
