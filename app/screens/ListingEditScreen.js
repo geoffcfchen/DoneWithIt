@@ -28,8 +28,38 @@ const categories = [
   {
     backgroundColor: "#fc5c65",
     icon: "pill",
-    label: "pills",
+    label: "Refill Pills",
     value: 1,
+  },
+  {
+    backgroundColor: "#fd9644",
+    icon: "emoticon-sick-outline",
+    label: "Become worse",
+    value: 2,
+  },
+  {
+    backgroundColor: "#26de81",
+    icon: "medical-bag",
+    label: "Medicine questions",
+    value: 3,
+  },
+  {
+    backgroundColor: "#2bcbba",
+    icon: "food-variant",
+    label: "Food questions",
+    value: 4,
+  },
+  {
+    backgroundColor: "#45aaf2",
+    icon: "dog-side",
+    label: "Behavior questions",
+    value: 5,
+  },
+  {
+    backgroundColor: "#4b7bec",
+    icon: "dog",
+    label: "Skin questions",
+    value: 6,
   },
 ];
 

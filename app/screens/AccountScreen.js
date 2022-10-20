@@ -92,6 +92,7 @@ function AccountScreen({ navigation }) {
                 ></Icon>
               }
               onPress={() => navigation.navigate(item.targetScreen)}
+              endIcon="chevron-right"
             ></ListItem>
           )}
         ></FlatList>

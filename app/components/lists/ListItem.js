@@ -11,6 +11,7 @@ function ListItem({
   subTitle,
   image,
   IconComponent,
+  endIcon,
   onPress,
   renderRightActions,
 }) {
@@ -30,11 +31,13 @@ function ListItem({
               </AppText>
             )}
           </View>
-          <MaterialCommunityIcons
-            name="chevron-right"
-            size={25}
-            color={colors.medium}
-          ></MaterialCommunityIcons>
+          {endIcon && (
+            <MaterialCommunityIcons
+              name={endIcon}
+              size={25}
+              color={colors.medium}
+            ></MaterialCommunityIcons>
+          )}
         </View>
       </TouchableHighlight>
     </Swipeable>
