@@ -9,18 +9,21 @@ import {
   SubmitButton,
 } from "../components/forms";
 import CategoryPickerItem from "../components/CategoryPickerItem";
+import ContactsPickerItem from "../components/ContactsPickerItem";
 import FormImagePicker from "../components/forms/FormImagePicker";
 import listingsApi from "../api/listing";
 import Screen from "../components/Screen";
 import useLocation from "../hooks/useLocation";
+import useContacts from "../hooks/useHooks";
 import UploadScreen from "./UploadScreen";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label("Title"),
-  price: Yup.string().required().min(1).label("Title"),
+  petName: Yup.string().required().min(1).label("PetName"),
   // price: Yup.number().required().min(1).max(10000).label("Price"),
   description: Yup.string().label("Description"),
   category: Yup.object().required().nullable().label("Category"),
+  doctor: Yup.object().required().nullable().label("Category"),
   images: Yup.array().min(1, "Please select at least one image."),
 });
 
@@ -61,9 +64,17 @@ const categories = [
     label: "Skin questions",
     value: 6,
   },
+  {
+    backgroundColor: "#a55eea",
+    icon: "head-question",
+    label: "Other questions",
+    value: 7,
+  },
 ];
 
 function ListingEditScreen(props) {
+  const contacts = useContacts();
+  // const contacts = [{ contactName: "Kate Bell", email: "kate-bell@mac.com" }];
   const location = useLocation();
   const [uploadVisible, setUploadVisible] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -95,9 +106,10 @@ function ListingEditScreen(props) {
       <AppForm
         initialValues={{
           title: "",
-          price: "",
+          petName: "",
           description: "",
           category: null,
+          doctor: null,
           images: [],
         }}
         onSubmit={handleSubmit}
@@ -110,18 +122,31 @@ function ListingEditScreen(props) {
           placeholder="Title"
         ></AppFormField>
         <AppFormField
+          maxLength={255}
+          name="petName"
+          placeholder="Pet name"
+        ></AppFormField>
+        {/* <AppFormField
           keyboardType="numeric"
           maxLength={8}
           name="price"
           placeholder="Pet name"
           width={140}
-        ></AppFormField>
+        ></AppFormField> */}
         <AppFormPicker
           items={categories}
           name="category"
           numberOfColumns={3}
           PickerItemComponent={CategoryPickerItem}
           placeholder="Category"
+          width="50%"
+        ></AppFormPicker>
+        <AppFormPicker
+          items={contacts}
+          name="doctor"
+          numberOfColumns={3}
+          PickerItemComponent={ContactsPickerItem}
+          placeholder="Doctor"
           width="50%"
         ></AppFormPicker>
 

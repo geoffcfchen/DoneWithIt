@@ -3,18 +3,18 @@ import { View, StyleSheet, TouchableOpacity } from "react-native";
 import AppText from "./AppText";
 import Icon from "./Icon";
 
-function CategoryPickerItem({ item, onPress }) {
+function ContactsPickerItem({ item, onPress }) {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={onPress}>
         <Icon
-          backgroundColor={item.backgroundColor}
-          name={item.icon}
+          backgroundColor="red"
+          name="md-person-circle-sharp"
           size={80}
-          category="MaterialCommunityIcons"
+          category="Ionicons"
         ></Icon>
       </TouchableOpacity>
-      <AppText style={styles.label}>{item.label}</AppText>
+      <AppText style={styles.label}>{item.contactName}</AppText>
     </View>
   );
 }
@@ -32,4 +32,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CategoryPickerItem;
+export default ContactsPickerItem;

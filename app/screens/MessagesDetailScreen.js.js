@@ -34,7 +34,7 @@ import { uploadImage } from "../utility/uploadImage";
 import { askForPermission } from "../utility/askPermission";
 import uuid from "react-native-uuid";
 
-export default function MessagesDetailsScreen({ route }) {
+export default function MessagesDetailsScreen() {
   const [roomHash, setRoomHash] = useState("");
   const [messages, setMessages] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -44,7 +44,7 @@ export default function MessagesDetailsScreen({ route }) {
     theme: { colors },
   } = useContext(GlobalContext);
   const { currentUser } = auth;
-  // const route = useRoute();
+  const route = useRoute();
   const room = route.params.room;
   const selectedImage = route.params.image;
   const userB = route.params.user;
@@ -124,6 +124,7 @@ export default function MessagesDetailsScreen({ route }) {
         .filter(({ type }) => type === "added")
         .map(({ doc }) => {
           const message = doc.data();
+          // console.log(doc.data().createdAt.toDate().getTime());
           return { ...message, createdAt: message.createdAt.toDate() };
         })
         .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());

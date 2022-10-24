@@ -26,6 +26,7 @@ function AppPicker({
   width = "100%",
 }) {
   const [modalVisible, setModalVisible] = useState(false);
+  // console.log("items", items[6]);
   return (
     <React.Fragment>
       <TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
@@ -39,7 +40,9 @@ function AppPicker({
             ></MaterialCommunityIcons>
           )}
           {selectedItem ? (
-            <AppText style={styles.text}>{selectedItem.label}</AppText>
+            <AppText style={styles.text}>
+              {selectedItem.label || selectedItem.contactName}
+            </AppText>
           ) : (
             <AppText style={styles.placeholder}>{placeholder}</AppText>
           )}
@@ -55,7 +58,11 @@ function AppPicker({
           <Button title="Close" onPress={() => setModalVisible(false)}></Button>
           <FlatList
             data={items}
-            keyExtractor={(item) => item.value.toString()}
+            keyExtractor={
+              (item) => (item.value ? item.value.toString() : item.email)
+              // console.log(item.value.toString());
+              // item.value ? item.value.toString() : item.email;
+            }
             numColumns={numberOfColumns}
             renderItem={({ item }) => (
               <PickerItemComponent

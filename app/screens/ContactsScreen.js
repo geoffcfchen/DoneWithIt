@@ -14,7 +14,7 @@ export default function Contacts() {
   // const contacts = [{ contactName: "Kate Bell", email: "kate-bell@mac.com" }];
   const route = useRoute();
   const image = route.params && route.params.image;
-  // console.log("contacts", contacts);
+  console.log("contacts", contacts.length);
   // console.log("route", route);
   // console.log("image", image);
   return (

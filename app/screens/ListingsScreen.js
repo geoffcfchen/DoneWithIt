@@ -14,24 +14,11 @@ import useApi from "../hooks/useApi";
 const listings = [
   {
     id: 1,
+    user: { _id: "test", avatar: "test", name: "name" },
     title: "Skin discharge or oozing?",
     description:
       "Clear, sticky, wound-like spots on your dogs skin would describe something colloquially called a “hot spot”, or acute moist dermatitis. Hot Spots develop from a bacterial or fungal skin infection that occurs from",
     image: require("../assets/dog-head.jpeg"),
-  },
-  {
-    id: 2,
-    title: "Skin Ulcers and Draining Lesions?",
-    description:
-      "With skin ulcers and draining lesions, the first sign of a problem may be a crusty area on the skin, nose or foot. In other cases, skin problems may start out small and progress into more extensive lesions.",
-    image: require("../assets/dog-leg.jpeg"),
-  },
-  {
-    id: 3,
-    title: "Itchy-scratchy?",
-    description:
-      "Dogs with dry skin can be suffering for a number of reasons, including parasites and allergies. Itchy skin is not only unpleasant for your dog but can result in skin problems over time. If your dog is scratchin. ",
-    image: require("../assets/dog-itch.jpeg"),
   },
 ];
 
