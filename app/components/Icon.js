@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, Ionicons, Fontisto } from "@expo/vector-icons";
 
 function Icon({
   name,
@@ -20,7 +20,21 @@ function Icon({
         alignItems: "center",
       }}
     >
-      {category === "MaterialCommunityIcons" ? (
+      {category === "MaterialCommunityIcons" && (
+        <MaterialCommunityIcons
+          name={name}
+          color={iconColor}
+          size={size * 0.5}
+        ></MaterialCommunityIcons>
+      )}
+      {category === "Ionicons" && (
+        <Ionicons name={name} color={iconColor} size={size * 0.5}></Ionicons>
+      )}
+      {category === "Fontisto" && (
+        <Fontisto name={name} color={iconColor} size={size * 0.5}></Fontisto>
+      )}
+
+      {/* {category === "MaterialCommunityIcons" ? (
         <MaterialCommunityIcons
           name={name}
           color={iconColor}
@@ -28,7 +42,7 @@ function Icon({
         ></MaterialCommunityIcons>
       ) : (
         <Ionicons name={name} color={iconColor} size={size * 0.5}></Ionicons>
-      )}
+      )} */}
     </View>
   );
 }
