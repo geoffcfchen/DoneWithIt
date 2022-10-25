@@ -51,14 +51,18 @@ export default function MessagesScreen() {
           .data()
           .participants.find((p) => p.email !== currentUser.email),
       }));
-      // .sort(
-      //   (a, b) =>
-      //     b.lastMessage.createdAt.toDate().getTime() -
-      //     a.lastMessage.createdAt.toDate().getTime()
-      // );
-      // console.log("parsedChats", parsedChats.lastMessage);
+
+      // console.log("parsedChats", parsedChats);
       setUnfilteredRooms(parsedChats);
-      setRooms(parsedChats.filter((doc) => doc.lastMessage));
+      setRooms(
+        parsedChats
+          .filter((doc) => doc.lastMessage)
+          .sort(
+            (a, b) =>
+              b.lastMessage.createdAt.toDate().getTime() -
+              a.lastMessage.createdAt.toDate().getTime()
+          )
+      );
     });
     return () => unsubscribe();
   }, []);
@@ -70,7 +74,7 @@ export default function MessagesScreen() {
     }
     return user;
   }
-
+  console.log("rooms", rooms);
   // const handleDelete = (message) => {
   //   setMessages(messages.filter((m) => m.id !== message.id));
   // };

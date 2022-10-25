@@ -55,7 +55,7 @@ export default function MessagesDetailsScreen() {
   const selectedImage = route.params.image;
   const userB = route.params.user;
   // console.log("route", route);
-  console.log("room = ", room);
+  // console.log("room = ", room);
   // console.log("userB", userB);
 
   const senderUser = currentUser.photoURL
@@ -68,7 +68,7 @@ export default function MessagesDetailsScreen() {
   // console.log("senderUser = ", senderUser);
 
   const roomID = room ? room.id : useMemo(() => nanoid(), []);
-  console.log("roomID = ", roomID);
+  // console.log("roomID = ", roomID);
 
   const roomRef = doc(db, "rooms", roomID);
   // console.log("roomRef = ", roomRef);
@@ -159,7 +159,7 @@ export default function MessagesDetailsScreen() {
   // console.log("messages outside", messages);
 
   async function onSend(messages = []) {
-    console.log("message", messages.length);
+    console.log("message", messages);
     const writes = messages.map((m) => addDoc(roomMessagesRef, m));
     console.log("messages inside onsend", messages);
     const lastMessage = messages[messages.length - 1];
