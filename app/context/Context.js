@@ -7,6 +7,10 @@ const GlobalContext = React.createContext({
   setRooms: () => {},
   unfilteredRooms: [],
   setUnfilteredRooms: () => {},
+  questions: [],
+  setQuestions: () => {},
+  unfilteredQuestions: [],
+  setUnfilteredQuestions: () => {},
 });
 
 export default GlobalContext;

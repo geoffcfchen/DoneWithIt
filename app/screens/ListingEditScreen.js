@@ -1,6 +1,15 @@
-import { useState } from "react";
+import react, { useState, useEffect, useContext } from "react";
 import { StyleSheet } from "react-native";
 import * as Yup from "yup";
+import {
+  collection,
+  onSnapshot,
+  query,
+  where,
+  doc,
+  setDoc,
+} from "firebase/firestore";
+import uuid from "react-native-uuid";
 
 import {
   AppForm,
@@ -16,15 +25,20 @@ import Screen from "../components/Screen";
 import useLocation from "../hooks/useLocation";
 import useContacts from "../hooks/useHooks";
 import UploadScreen from "./UploadScreen";
+import { auth, db } from "../../firebase";
+import GlobalContext from "../context/Context";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label("Title"),
   petName: Yup.string().required().min(1).label("PetName"),
   // price: Yup.number().required().min(1).max(10000).label("Price"),
-  description: Yup.string().label("Description"),
+  description: Yup.string().required().min(1).label("Description"),
   category: Yup.object().required().nullable().label("Category"),
-  doctor: Yup.object().required().nullable().label("Category"),
-  images: Yup.array().min(1, "Please select at least one image."),
+  doctor: Yup.object().required().nullable().label("Doctor"),
+  images: Yup.array().min(
+    1,
+    "Please select at least one image (i.g., your pet)."
+  ),
 });
 
 const categories = [
@@ -73,27 +87,139 @@ const categories = [
 ];
 
 function ListingEditScreen(props) {
+  const [questionHash, setQuestionHash] = useState("");
   const contacts = useContacts();
+  const {
+    questions,
+    setQuestions,
+    unfilteredQuestions,
+    setUnfilteredQuestions,
+  } = useContext(GlobalContext);
   // const contacts = [{ contactName: "Kate Bell", email: "kate-bell@mac.com" }];
+  // const [question, setQuestion] = useState();
   const location = useLocation();
   const [uploadVisible, setUploadVisible] = useState(false);
   const [progress, setProgress] = useState(0);
 
+  const { currentUser } = auth;
+
+  const senderUser = currentUser.photoURL
+    ? {
+        name: currentUser.displayName,
+        _id: currentUser.uid,
+        avatar: currentUser.photoURL,
+      }
+    : { name: currentUser.displayName, _id: currentUser.uid };
+
+  // console.log("senderUser", senderUser);
+
+  // console.log("roomMessageRef = ", roomMessagesRef);
+  // if (!room) {
+  //   console.log("no room");
+  // }
+
+  // do the query and see if there are questions already opened in firebase database
+  const questionsQuery = query(
+    collection(db, "questions"),
+    where("participantsArray", "array-contains", currentUser.email)
+  );
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
+      // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
+      const parsedQuestions = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+        userB: doc
+          .data()
+          .participants.find((p) => p.email !== currentUser.email),
+      }));
+      // .sort(
+      //   (a, b) =>
+      //     b.lastMessage.createdAt.toDate().getTime() -
+      //     a.lastMessage.createdAt.toDate().getTime()
+      // );
+      console.log("parsedQuestions", parsedQuestions);
+      setUnfilteredQuestions(parsedQuestions);
+      // setRooms(parsedChats.filter((doc) => doc.lastMessage));
+    });
+    return () => unsubscribe();
+  }, []);
+
   const handleSubmit = async (listing, { resetForm }) => {
-    console.log("listing", listing);
-    setProgress(0);
-    setUploadVisible(true);
-    const result = await listingsApi.addListing(
-      { ...listing, location },
-      (progress) => setProgress(progress)
+    console.log("listing", listing.doctor);
+
+    const question = unfilteredQuestions.find((question) =>
+      question.participantsArray.includes(listing.doctor.email)
     );
 
-    if (!result.ok) {
-      setUploadVisible(false);
-      return alert("Could not save the listing.");
+    // console.log("question", question);
+    const questionID = question ? question.id : uuid.v4();
+    // console.log("questionID = ", questionID);
+
+    const questionRef = doc(db, "questions", questionID);
+    // console.log("questionRef = ", questionRef);
+    const questionMessagesRef = collection(
+      db,
+      "questions",
+      questionID,
+      "messages"
+    );
+    console.log("question", question);
+    if (!question) {
+      // create currUserData
+      const currUserData = {
+        displayName: currentUser.displayName,
+        email: currentUser.email,
+      };
+      console.log("currUserData", currUserData);
+      // put in photoURL in currUserData if curretUser has photoURL
+      if (currentUser.photoURL) {
+        currUserData.photoURL = currentUser.photoURL;
+      }
+      // now construct userBdata
+      const userB = listing.doctor;
+      const userBData = {
+        displayName: userB.contactName || userB.displayName || "",
+        email: userB.email,
+      };
+      // put in photoURL in userBData if userB has photoURL
+      if (userB.photoURL) {
+        userBData.photoURL = userB.photoURL;
+      }
+      // construct the questionData
+      const questionData = {
+        participants: [currUserData, userBData],
+        participantsArray: [currentUser.email, userB.email],
+      };
+      // construct the roomRef with roomData
+      try {
+        await setDoc(questionRef, questionData);
+      } catch (error) {
+        console.log(error);
+      }
+
+      const emailHash = `${currentUser.email}:${userB.email}:`;
+      console.log(emailHash);
+      setQuestionHash(emailHash);
+      // not sure what this following line is doing. Let's figure it out later
+      // if (selectedImage && selectedImage.uri) {
+      //   await sendImage(selectedImage.uri, emailHash);
     }
 
-    resetForm();
+    // setProgress(0);
+    // setUploadVisible(true);
+    // const result = await listingsApi.addListing(
+    //   { ...listing, location },
+    //   (progress) => setProgress(progress)
+    // );
+
+    // if (!result.ok) {
+    //   setUploadVisible(false);
+    //   return alert("Could not save the listing.");
+    // }
+
+    // resetForm();
   };
 
   return (

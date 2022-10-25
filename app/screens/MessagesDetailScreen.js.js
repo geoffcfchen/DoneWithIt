@@ -9,7 +9,13 @@ import {
 import "react-native-get-random-values";
 import { nanoid } from "nanoid";
 import { useRoute } from "@react-navigation/native";
-import React, { useContext, useState, useEffect, useCallback } from "react";
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
 import {
   onSnapshot,
   doc,
@@ -49,7 +55,7 @@ export default function MessagesDetailsScreen() {
   const selectedImage = route.params.image;
   const userB = route.params.user;
   // console.log("route", route);
-  // console.log("room", room);
+  console.log("room = ", room);
   // console.log("userB", userB);
 
   const senderUser = currentUser.photoURL
@@ -61,8 +67,8 @@ export default function MessagesDetailsScreen() {
     : { name: currentUser.displayName, _id: currentUser.uid };
   // console.log("senderUser = ", senderUser);
 
-  const roomID = room ? room.id : uuid.v4();
-  // console.log("roomID = ", roomID);
+  const roomID = room ? room.id : useMemo(() => nanoid(), []);
+  console.log("roomID = ", roomID);
 
   const roomRef = doc(db, "rooms", roomID);
   // console.log("roomRef = ", roomRef);
@@ -76,6 +82,7 @@ export default function MessagesDetailsScreen() {
     (async () => {
       // if there is no conversation
       if (!room) {
+        console.log("test");
         // create currUserData
         const currUserData = {
           displayName: currentUser.displayName,
@@ -124,7 +131,6 @@ export default function MessagesDetailsScreen() {
         .filter(({ type }) => type === "added")
         .map(({ doc }) => {
           const message = doc.data();
-          // console.log(doc.data().createdAt.toDate().getTime());
           return { ...message, createdAt: message.createdAt.toDate() };
         })
         .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
@@ -146,18 +152,21 @@ export default function MessagesDetailsScreen() {
       setMessages((previousMessages) =>
         GiftedChat.append(previousMessages, messages)
       );
+      // console.log("messages inside", messages);
     },
     [messages]
   );
+  // console.log("messages outside", messages);
 
   async function onSend(messages = []) {
-    // console.log("message", messages.length);
+    console.log("message", messages.length);
     const writes = messages.map((m) => addDoc(roomMessagesRef, m));
-    // console.log("messages inside onsend", messages);
+    console.log("messages inside onsend", messages);
     const lastMessage = messages[messages.length - 1];
-    // console.log("lastMessage=", lastMessage);
+    console.log("lastMessage=", lastMessage);
     writes.push(updateDoc(roomRef, { lastMessage }));
-    // updateDoc(roomRef, { lastMessage });
+    //  updateDoc(roomRef, { lastMessage });
+    console.log("roomRef", roomRef);
     await Promise.all(writes);
   }
 

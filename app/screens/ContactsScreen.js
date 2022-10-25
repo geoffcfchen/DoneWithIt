@@ -13,9 +13,10 @@ export default function Contacts() {
   const contacts = useContacts();
   // const contacts = [{ contactName: "Kate Bell", email: "kate-bell@mac.com" }];
   const route = useRoute();
+
   const image = route.params && route.params.image;
   console.log("contacts", contacts.length);
-  // console.log("route", route);
+  console.log("route", route);
   // console.log("image", image);
   return (
     <FlatList
@@ -34,6 +35,7 @@ function ContactPreview({ contact, image }) {
   const { unfilteredRooms, rooms } = useContext(GlobalContext);
   const [user, setUser] = useState(contact);
   // console.log("contact.email", contact.email);
+  // console.log("unfilteredRooms", unfilteredRooms);
   // console.log("user", user);
   useEffect(() => {
     const q = query(

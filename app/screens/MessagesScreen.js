@@ -44,23 +44,19 @@ export default function MessagesScreen() {
   useEffect(() => {
     const unsubscribe = onSnapshot(chatsQuery, (querySnapshot) => {
       // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
-      const parsedChats = querySnapshot.docs
-        .map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-          userB: doc
-            .data()
-            .participants.find((p) => p.email !== currentUser.email),
-        }))
-        .sort(
-          (a, b) =>
-            b.lastMessage.createdAt.toDate().getTime() -
-            a.lastMessage.createdAt.toDate().getTime()
-        );
-      // console.log(
-      //   "parsedChats",
-      //   parsedChats[0].lastMessage.createdAt.toDate().getTime()
+      const parsedChats = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+        userB: doc
+          .data()
+          .participants.find((p) => p.email !== currentUser.email),
+      }));
+      // .sort(
+      //   (a, b) =>
+      //     b.lastMessage.createdAt.toDate().getTime() -
+      //     a.lastMessage.createdAt.toDate().getTime()
       // );
+      // console.log("parsedChats", parsedChats.lastMessage);
       setUnfilteredRooms(parsedChats);
       setRooms(parsedChats.filter((doc) => doc.lastMessage));
     });
