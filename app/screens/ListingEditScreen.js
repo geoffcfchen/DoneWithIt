@@ -1,4 +1,4 @@
-import react, { useState, useEffect, useContext } from "react";
+import react, { useState, useEffect, useContext, useMemo } from "react";
 import { StyleSheet } from "react-native";
 import * as Yup from "yup";
 import {
@@ -8,6 +8,7 @@ import {
   where,
   doc,
   setDoc,
+  addDoc,
 } from "firebase/firestore";
 import uuid from "react-native-uuid";
 
@@ -27,6 +28,7 @@ import useContacts from "../hooks/useHooks";
 import UploadScreen from "./UploadScreen";
 import { auth, db } from "../../firebase";
 import GlobalContext from "../context/Context";
+import { uploadImage } from "../utility/uploadImage";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label("Title"),
@@ -139,7 +141,7 @@ function ListingEditScreen(props) {
       //     b.lastMessage.createdAt.toDate().getTime() -
       //     a.lastMessage.createdAt.toDate().getTime()
       // );
-      console.log("parsedQuestions", parsedQuestions);
+      // console.log("parsedQuestions", parsedQuestions);
       setUnfilteredQuestions(parsedQuestions);
       // setRooms(parsedChats.filter((doc) => doc.lastMessage));
     });
@@ -147,38 +149,40 @@ function ListingEditScreen(props) {
   }, []);
 
   const handleSubmit = async (listing, { resetForm }) => {
-    console.log("listing", listing.doctor);
+    console.log("listing", listing);
 
     const question = unfilteredQuestions.find((question) =>
       question.participantsArray.includes(listing.doctor.email)
     );
 
-    // console.log("question", question);
-    const questionID = question ? question.id : uuid.v4();
-    // console.log("questionID = ", questionID);
+    console.log("question", question);
+    const questionID = question ? question.id : useMemo(() => nanoid(), []);
+    console.log("questionID = ", questionID);
 
     const questionRef = doc(db, "questions", questionID);
-    // console.log("questionRef = ", questionRef);
+    console.log("questionRef = ", questionRef);
     const questionMessagesRef = collection(
       db,
       "questions",
       questionID,
       "messages"
     );
-    console.log("question", question);
+    console.log("questionMessagesRef", questionMessagesRef);
+    const userB = listing.doctor;
+    // console.log("question", question);
     if (!question) {
       // create currUserData
       const currUserData = {
         displayName: currentUser.displayName,
         email: currentUser.email,
       };
-      console.log("currUserData", currUserData);
+      // console.log("currUserData", currUserData);
       // put in photoURL in currUserData if curretUser has photoURL
       if (currentUser.photoURL) {
         currUserData.photoURL = currentUser.photoURL;
       }
       // now construct userBdata
-      const userB = listing.doctor;
+
       const userBData = {
         displayName: userB.contactName || userB.displayName || "",
         email: userB.email,
@@ -198,14 +202,15 @@ function ListingEditScreen(props) {
       } catch (error) {
         console.log(error);
       }
-
-      const emailHash = `${currentUser.email}:${userB.email}:`;
-      console.log(emailHash);
-      setQuestionHash(emailHash);
-      // not sure what this following line is doing. Let's figure it out later
-      // if (selectedImage && selectedImage.uri) {
-      //   await sendImage(selectedImage.uri, emailHash);
     }
+
+    const emailHash = `${currentUser.email}:${userB.email}:`;
+    // setQuestionHash(emailHash);
+    sendQuestion(listing, questionMessagesRef, emailHash);
+    // console.log("questionHash", questionHash);
+    // not sure what this following line is doing. Let's figure it out later
+    // if (selectedImage && selectedImage.uri) {
+    //   await sendImage(selectedImage.uri, emailHash);
 
     // setProgress(0);
     // setUploadVisible(true);
@@ -221,6 +226,40 @@ function ListingEditScreen(props) {
 
     // resetForm();
   };
+
+  async function sendQuestion(
+    listing,
+    questionMessagesRef,
+    emailHash,
+    roomPath
+  ) {
+    const uri = listing.images[0];
+    console.log("uri", uri);
+    console.log("emailHash", emailHash);
+    const { url, fileName } = await uploadImage(
+      uri,
+      `images/questions/${roomPath || questionHash}`
+    );
+    console.log("url", url);
+    console.log("fileName", fileName);
+    const message = {
+      _id: fileName,
+      image: url,
+      title: listing.title,
+      petName: listing.petName,
+      category: listing.category,
+      description: listing.description,
+      createdAt: new Date(),
+      user: senderUser,
+    };
+    console.log("message in sendImage", message);
+    // const lastMessage = { ...message, text: "Image" };
+    // console.log("lastMessage", lastMessage);
+    await Promise.all([
+      addDoc(questionMessagesRef, message),
+      // updateDoc(roomRef, { lastMessage }),
+    ]);
+  }
 
   return (
     <Screen style={styles.container}>

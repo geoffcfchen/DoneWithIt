@@ -74,7 +74,7 @@ export default function MessagesScreen() {
     }
     return user;
   }
-  console.log("rooms", rooms);
+  // console.log("rooms", rooms);
   // const handleDelete = (message) => {
   //   setMessages(messages.filter((m) => m.id !== message.id));
   // };

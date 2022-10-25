@@ -116,9 +116,11 @@ export default function MessagesDetailsScreen() {
       const emailHash = `${currentUser.email}:${userB.email}:`;
       setRoomHash(emailHash);
       // not sure what this following line is doing. Let's figure it out later
+      console.log("emailHash", emailHash);
       if (selectedImage && selectedImage.uri) {
         await sendImage(selectedImage.uri, emailHash);
       }
+      console.log("selectedImage", selectedImage);
     })();
   }, []);
   // console.log("selectedImage", selectedImage);
@@ -174,6 +176,8 @@ export default function MessagesDetailsScreen() {
 
   async function sendImage(uri, roomPath) {
     // console.log("roomPath", roomPath);
+    console.log("uri", uri);
+    console.log("roomHash ", `${roomPath || roomHash}`);
     const { url, fileName } = await uploadImage(
       uri,
       `images/rooms/${roomPath || roomHash}`
@@ -198,7 +202,7 @@ export default function MessagesDetailsScreen() {
 
   async function handlePhotoPicker() {
     const result = await pickImage();
-    // console.log(result);
+    console.log("result", result.uri);
 
     if (!result.cancelled) {
       await sendImage(result.uri);
