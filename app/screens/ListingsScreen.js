@@ -103,9 +103,9 @@ function ListingsScreen({ navigation }) {
     return () => unsubscribe();
   }, []);
 
-  console.log("unfilteredQuestions", unfilteredQuestions);
-  console.log("questions", questions);
-  console.log("currentUser", currentUser.email);
+  // console.log("unfilteredQuestions", unfilteredQuestions);
+  // console.log("questions", questions);
+  // console.log("currentUser", currentUser.email);
 
   return (
     <Screen style={styles.screen}>

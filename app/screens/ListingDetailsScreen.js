@@ -7,12 +7,13 @@ import colors from "../config/colors";
 import ListItem from "../components/lists/ListItem";
 import ContactSellerForm from "../components/ContactSellerForm";
 import { auth } from "../../firebase";
+import Icon from "../components/Icon";
 
 function ListingDetailsScreen({ route }) {
   const { currentUser } = auth;
   const { item: listing } = route.params;
-  console.log(currentUser);
-  // console.log(listing);
+  // console.log(currentUser);
+  console.log("listing = ", listing);
   // const userB = listing.participants.find((p) => p.email !== currentUser.email);
   return (
     <KeyboardAvoidingView
@@ -32,7 +33,25 @@ function ListingDetailsScreen({ route }) {
         <AppText style={styles.description}>
           {listing.lastMessage.description}
         </AppText>
+
         <View style={styles.userContainer}>
+          <ListItem
+            IconComponent={<Icon name="paw" backgroundColor="green"></Icon>}
+            title={listing.lastMessage.petName}
+          ></ListItem>
+        </View>
+        <View style={styles.userContainer}>
+          <ListItem
+            IconComponent={
+              <Icon
+                name={listing.lastMessage.category.icon}
+                backgroundColor={listing.lastMessage.category.backgroundColor}
+              ></Icon>
+            }
+            title={listing.lastMessage.category.label}
+          ></ListItem>
+        </View>
+        <View style={styles.userBContainer}>
           <ListItem
             image={
               listing.userB.photoURL
@@ -45,18 +64,7 @@ function ListingDetailsScreen({ route }) {
             endIcon="phone"
           ></ListItem>
         </View>
-        {/* <View style={styles.userContainer}>
-          <ListItem
-            image={
-              currentUser.photoURL
-                ? {
-                    uri: currentUser.photoURL,
-                  }
-                : require("../assets/icon-square.png")
-            }
-            title={currentUser.displayName || currentUser.email}
-          ></ListItem>
-        </View> */}
+
         {/* <ContactSellerForm listing={listing}></ContactSellerForm> */}
       </View>
     </KeyboardAvoidingView>
@@ -80,8 +88,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "500",
   },
+  userBContainer: {
+    marginVertical: 6,
+  },
   userContainer: {
-    marginVertical: 10,
+    marginVertical: 5,
   },
 });
 
