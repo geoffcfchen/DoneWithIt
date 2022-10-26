@@ -18,6 +18,7 @@ function ListingDetailsScreen({ route }) {
     <KeyboardAvoidingView
       behavior="position"
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}
+      style={styles.container}
     >
       <Image
         style={styles.image}
@@ -43,6 +44,8 @@ function ListingDetailsScreen({ route }) {
             title={listing.userB.displayName || listing.userB.email}
             endIcon="phone"
           ></ListItem>
+        </View>
+        {/* <View style={styles.userContainer}>
           <ListItem
             image={
               currentUser.photoURL
@@ -51,10 +54,9 @@ function ListingDetailsScreen({ route }) {
                   }
                 : require("../assets/icon-square.png")
             }
-            title={currentUser.displayName}
-            endIcon="phone"
+            title={currentUser.displayName || currentUser.email}
           ></ListItem>
-        </View>
+        </View> */}
         {/* <ContactSellerForm listing={listing}></ContactSellerForm> */}
       </View>
     </KeyboardAvoidingView>
@@ -62,6 +64,7 @@ function ListingDetailsScreen({ route }) {
 }
 
 const styles = StyleSheet.create({
+  container: { backgroundColor: colors.light, flex: 1 },
   detailContainer: { padding: 20 },
   image: {
     width: "100%",
@@ -78,7 +81,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   userContainer: {
-    marginVertical: 0,
+    marginVertical: 10,
   },
 });
 

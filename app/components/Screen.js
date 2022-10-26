@@ -1,11 +1,20 @@
 import React from "react";
 import Constants from "expo-constants";
-import { View, SafeAreaView, StyleSheet } from "react-native";
+import {
+  View,
+  Keyboard,
+  SafeAreaView,
+  StyleSheet,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+} from "react-native";
 
 function Screen({ children, style }) {
   return (
     <SafeAreaView style={[styles.screen, style]}>
-      <View style={[styles.view, style]}>{children}</View>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={[styles.view, style]}>{children}</View>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 }
@@ -17,6 +26,7 @@ const styles = StyleSheet.create({
   },
   view: {
     flex: 1,
+    padding: 10,
   },
 });
 
