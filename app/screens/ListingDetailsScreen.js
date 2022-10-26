@@ -1,20 +1,19 @@
 import React from "react";
-import {
-  Image,
-  View,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
-// import { Image } from "react-native-expo-image-cache";
+import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
+import { Image } from "react-native-expo-image-cache";
 
 import AppText from "../components/AppText";
 import colors from "../config/colors";
 import ListItem from "../components/lists/ListItem";
 import ContactSellerForm from "../components/ContactSellerForm";
+import { auth } from "../../firebase";
 
 function ListingDetailsScreen({ route }) {
-  const listing = route.params;
+  const { currentUser } = auth;
+  const { item: listing } = route.params;
+  console.log(currentUser);
+  // console.log(listing);
+  // const userB = listing.participants.find((p) => p.email !== currentUser.email);
   return (
     <KeyboardAvoidingView
       behavior="position"
@@ -23,20 +22,40 @@ function ListingDetailsScreen({ route }) {
       <Image
         style={styles.image}
         // preview={{ uri: listing.images[0].thumbnailUrl }}
-        // tint="light"
-        // uri={listing.images[0].url}
-        source={listing.image}
+        tint="light"
+        uri={listing.lastMessage.image}
+        // source={listing.image} // if from image-cache, there is no source prop
       ></Image>
       <View style={styles.detailContainer}>
-        <AppText style={styles.title}>{listing.title}</AppText>
-        <AppText style={styles.description}>{listing.description}</AppText>
+        <AppText style={styles.title}>{listing.lastMessage.title}</AppText>
+        <AppText style={styles.description}>
+          {listing.lastMessage.description}
+        </AppText>
         <View style={styles.userContainer}>
           <ListItem
-            image={require("../assets/mosh.jpg")}
-            title="Thomas Lai (Pet owner)"
+            image={
+              listing.userB.photoURL
+                ? {
+                    uri: listing.userB.photoURL,
+                  }
+                : require("../assets/icon-square.png")
+            }
+            title={listing.userB.displayName || listing.userB.email}
+            endIcon="phone"
+          ></ListItem>
+          <ListItem
+            image={
+              currentUser.photoURL
+                ? {
+                    uri: currentUser.photoURL,
+                  }
+                : require("../assets/icon-square.png")
+            }
+            title={currentUser.displayName}
+            endIcon="phone"
           ></ListItem>
         </View>
-        <ContactSellerForm listing={listing}></ContactSellerForm>
+        {/* <ContactSellerForm listing={listing}></ContactSellerForm> */}
       </View>
     </KeyboardAvoidingView>
   );

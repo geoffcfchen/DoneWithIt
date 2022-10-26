@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FlatList, StyleSheet } from "react-native";
 
 import ActivityIndicator from "../components/ActivityIndicator";
@@ -10,6 +10,9 @@ import listingsApi from "../api/listing";
 import routes from "../navigation/routes";
 import Screen from "../components/Screen";
 import useApi from "../hooks/useApi";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { auth, db } from "../../firebase";
+import GlobalContext from "../context/Context";
 
 const listings = [
   {
@@ -65,17 +68,58 @@ const listings = [
 // }
 
 function ListingsScreen({ navigation }) {
+  const { currentUser } = auth;
+  const {
+    questions,
+    setQuestions,
+    unfilteredQuestions,
+    setUnfilteredQuestions,
+  } = useContext(GlobalContext);
+
+  const questionsQuery = query(
+    collection(db, "questions"),
+    where("participantsArray", "array-contains", currentUser.email)
+  );
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
+      // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
+      const parsedQuestions = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+        userB: doc
+          .data()
+          .participants.find((p) => p.email !== currentUser.email),
+      }));
+      // .sort(
+      //   (a, b) =>
+      //     b.lastMessage.createdAt.toDate().getTime() -
+      //     a.lastMessage.createdAt.toDate().getTime()
+      // );
+      // console.log("parsedQuestions", parsedQuestions);
+      setUnfilteredQuestions(parsedQuestions);
+      setQuestions(parsedQuestions.filter((doc) => doc.lastMessage));
+    });
+    return () => unsubscribe();
+  }, []);
+
+  console.log("unfilteredQuestions", unfilteredQuestions);
+  console.log("questions", questions);
+  console.log("currentUser", currentUser.email);
+
   return (
     <Screen style={styles.screen}>
       <FlatList
-        data={listings}
-        keyExtractor={(listing) => listing.id.toString()}
+        data={questions}
+        keyExtractor={(question) => question.lastMessage._id.toString()}
         renderItem={({ item }) => (
           <Card
-            title={item.title}
-            subTitle={item.description}
-            image={item.image}
-            onPress={() => navigation.navigate(routes.LISTING_DETAILS, item)}
+            title={item.lastMessage.title}
+            subTitle={item.lastMessage.description}
+            imageUrl={item.lastMessage.image}
+            onPress={() =>
+              navigation.navigate(routes.LISTING_DETAILS, { item })
+            }
           />
         )}
       />

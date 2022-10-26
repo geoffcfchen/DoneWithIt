@@ -9,6 +9,7 @@ import {
   doc,
   setDoc,
   addDoc,
+  updateDoc,
 } from "firebase/firestore";
 import uuid from "react-native-uuid";
 
@@ -206,7 +207,7 @@ function ListingEditScreen(props) {
 
     const emailHash = `${currentUser.email}:${userB.email}:`;
     // setQuestionHash(emailHash);
-    sendQuestion(listing, questionMessagesRef, emailHash);
+    sendQuestion(listing, questionMessagesRef, questionRef, emailHash);
     // console.log("questionHash", questionHash);
     // not sure what this following line is doing. Let's figure it out later
     // if (selectedImage && selectedImage.uri) {
@@ -230,6 +231,7 @@ function ListingEditScreen(props) {
   async function sendQuestion(
     listing,
     questionMessagesRef,
+    questionRef,
     emailHash,
     roomPath
   ) {
@@ -253,11 +255,11 @@ function ListingEditScreen(props) {
       user: senderUser,
     };
     console.log("message in sendImage", message);
-    // const lastMessage = { ...message, text: "Image" };
+    const lastMessage = { ...message };
     // console.log("lastMessage", lastMessage);
     await Promise.all([
       addDoc(questionMessagesRef, message),
-      // updateDoc(roomRef, { lastMessage }),
+      updateDoc(questionRef, { lastMessage }),
     ]);
   }
 
