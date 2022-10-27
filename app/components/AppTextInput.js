@@ -29,8 +29,8 @@ const styles = StyleSheet.create({
     backgroundColor: defaultStyles.colors.light,
     borderRadius: 25,
     flexDirection: "row",
-    padding: 15,
-    marginVertical: 10,
+    padding: 10,
+    marginVertical: 7,
   },
   icon: {
     marginRight: 10,

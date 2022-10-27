@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.light,
     height: 100,
     justifyContent: "center",
-    marginVertical: 10,
+    marginVertical: 5,
     overflow: "hidden",
     width: 100,
   },
