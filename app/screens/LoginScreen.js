@@ -3,8 +3,9 @@ import { StyleSheet, Image } from "react-native";
 import * as Yup from "yup";
 import AuthContext from "../auth/context";
 import { useContext } from "react";
+import { Ionicons } from "@expo/vector-icons";
 
-import Screen from "../components/Screen";
+import { ScreenScrollView } from "../components/Screen";
 import {
   ErrorMessage,
   AppForm,
@@ -17,11 +18,15 @@ import { auth } from "../../firebase";
 import { signUp, signIn } from "../../firebase";
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().required().email().label("Email"),
-  password: Yup.string().required().min(4).label("Password"),
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  password: Yup.string().required("Password is required"),
+  passwordConfirmation: Yup.string().oneOf(
+    [Yup.ref("password"), null],
+    "Passwords must match"
+  ),
 });
 
-function LoginScreen(props) {
+function LoginScreen({ navigation }) {
   const { user, setUser } = useContext(AuthContext);
   // const auth = useAuth();
   const [loginFailed, setLoginFailed] = useState(false);
@@ -50,7 +55,14 @@ function LoginScreen(props) {
   }, []);
 
   return (
-    <Screen style={styles.container}>
+    <ScreenScrollView style={styles.container}>
+      <Ionicons
+        name="arrow-back-sharp"
+        size={24}
+        color="black"
+        style={{ marginLeft: 10 }}
+        onPress={() => navigation.goBack()}
+      />
       <Image style={styles.logo} source={require("../assets/icon.png")}></Image>
       <AppForm
         initialValues={{ email: "", password: "" }}
@@ -81,7 +93,7 @@ function LoginScreen(props) {
         ></AppFormField>
         <SubmitButton title="Login"></SubmitButton>
       </AppForm>
-    </Screen>
+    </ScreenScrollView>
   );
 }
 

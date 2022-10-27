@@ -5,6 +5,7 @@ import {
   Keyboard,
   SafeAreaView,
   StyleSheet,
+  ScrollView,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
 } from "react-native";
@@ -14,6 +15,16 @@ function Screen({ children, style }) {
     <SafeAreaView style={[styles.screen, style]}>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={[styles.view, style]}>{children}</View>
+      </TouchableWithoutFeedback>
+    </SafeAreaView>
+  );
+}
+
+export function ScreenScrollView({ children, style }) {
+  return (
+    <SafeAreaView style={[styles.screen, style]}>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <ScrollView style={[styles.view, style]}>{children}</ScrollView>
       </TouchableWithoutFeedback>
     </SafeAreaView>
   );

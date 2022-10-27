@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 import { updateProfile } from "@firebase/auth";
 import { doc, setDoc } from "@firebase/firestore";
+import * as Yup from "yup";
+import { Ionicons } from "@expo/vector-icons";
 
 import AuthContext from "../auth/context";
 import ActivityIndicator from "../components/ActivityIndicator";
@@ -13,7 +15,7 @@ import {
   ErrorMessage,
   SubmitButton,
 } from "../components/forms";
-import Screen from "../components/Screen";
+import Screen, { ScreenScrollView } from "../components/Screen";
 import usersApi from "../api/users";
 import useAuth from "../auth/useAuth";
 import useApi from "../hooks/useApi";
@@ -22,7 +24,22 @@ import FormProfileImagePicker from "../components/forms/FormProfileImagePicker";
 import { signUp, auth, db } from "../../firebase";
 import { uploadImage } from "../utility/uploadImage";
 
-function RegisterScreen(props) {
+const validationSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Name is required"),
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  password: Yup.string().required("Password is required"),
+  passwordConfirmation: Yup.string().oneOf(
+    [Yup.ref("password"), null],
+    "Passwords must match"
+  ),
+  // price: Yup.number().required().min(1).max(10000).label("Price"),
+  image: Yup.array().required("Profile Image is required").min(1),
+});
+
+function RegisterScreen({ navigation }) {
   const { user, setUser } = useContext(AuthContext);
   const registerApi = useApi(usersApi.register);
   const loginApi = useApi(authApi.login);
@@ -92,10 +109,18 @@ function RegisterScreen(props) {
       <ActivityIndicator
         visible={registerApi.loading || loginApi.loading}
       ></ActivityIndicator>
-      <Screen>
+      <ScreenScrollView>
+        <Ionicons
+          name="arrow-back-sharp"
+          size={24}
+          color="black"
+          style={{ marginLeft: 10 }}
+          onPress={() => navigation.goBack()}
+        />
         <AppForm
           initialValues={{ name: "", email: "", password: "", image: [] }}
           onSubmit={handleSubmitFirebase}
+          validationSchema={validationSchema}
         >
           <ErrorMessage error={error} visible={error}></ErrorMessage>
           <View style={styles.profileimage}>
@@ -105,7 +130,6 @@ function RegisterScreen(props) {
             autoCapitalize="none"
             autoCorrect={false}
             icon="account"
-            keyboardType="email-address"
             name="name"
             placeholder="Name"
             textContentType="name"
@@ -128,9 +152,18 @@ function RegisterScreen(props) {
             textContentType="password"
             secureTextEntry
           ></AppFormField>
+          <AppFormField
+            autoCapitalize="none"
+            autoCorrect={false}
+            icon="lock"
+            name="passwordConfirmation"
+            placeholder="Comfirm Password"
+            textContentType="password"
+            secureTextEntry
+          ></AppFormField>
           <SubmitButton title="Register"></SubmitButton>
         </AppForm>
-      </Screen>
+      </ScreenScrollView>
     </>
   );
 }
