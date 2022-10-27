@@ -12,6 +12,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import uuid from "react-native-uuid";
+import { nanoid } from "nanoid";
 
 import {
   AppForm,
@@ -30,6 +31,7 @@ import UploadScreen from "./UploadScreen";
 import { auth, db } from "../../firebase";
 import GlobalContext from "../context/Context";
 import { uploadImage } from "../utility/uploadImage";
+import { random } from "nanoid";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label("Title"),
@@ -90,6 +92,7 @@ const categories = [
 ];
 
 function ListingEditScreen(props) {
+  const randomID = useMemo(() => nanoid(), []);
   const [questionHash, setQuestionHash] = useState("");
   const contacts = useContacts();
   const {
@@ -122,32 +125,32 @@ function ListingEditScreen(props) {
   // }
 
   // do the query and see if there are questions already opened in firebase database
-  // const questionsQuery = query(
-  //   collection(db, "questions"),
-  //   where("participantsArray", "array-contains", currentUser.email)
-  // );
+  const questionsQuery = query(
+    collection(db, "questions"),
+    where("participantsArray", "array-contains", currentUser.email)
+  );
 
-  // useEffect(() => {
-  //   const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
-  //     // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
-  //     const parsedQuestions = querySnapshot.docs.map((doc) => ({
-  //       ...doc.data(),
-  //       id: doc.id,
-  //       userB: doc
-  //         .data()
-  //         .participants.find((p) => p.email !== currentUser.email),
-  //     }));
-  //     // .sort(
-  //     //   (a, b) =>
-  //     //     b.lastMessage.createdAt.toDate().getTime() -
-  //     //     a.lastMessage.createdAt.toDate().getTime()
-  //     // );
-  //     // console.log("parsedQuestions", parsedQuestions);
-  //     setUnfilteredQuestions(parsedQuestions);
-  //     // setRooms(parsedChats.filter((doc) => doc.lastMessage));
-  //   });
-  //   return () => unsubscribe();
-  // }, []);
+  useEffect(() => {
+    const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
+      // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
+      const parsedQuestions = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+        userB: doc
+          .data()
+          .participants.find((p) => p.email !== currentUser.email),
+      }));
+      // .sort(
+      //   (a, b) =>
+      //     b.lastMessage.createdAt.toDate().getTime() -
+      //     a.lastMessage.createdAt.toDate().getTime()
+      // );
+      // console.log("parsedQuestions", parsedQuestions);
+      setUnfilteredQuestions(parsedQuestions);
+      // setRooms(parsedChats.filter((doc) => doc.lastMessage));
+    });
+    return () => unsubscribe();
+  }, []);
   console.log("unfilteredQuestions", unfilteredQuestions);
 
   const handleSubmit = async (listing, { resetForm }) => {
@@ -158,7 +161,7 @@ function ListingEditScreen(props) {
     );
 
     console.log("question", question);
-    const questionID = question ? question.id : useMemo(() => nanoid(), []);
+    const questionID = question ? question.id : randomID;
     console.log("questionID = ", questionID);
 
     const questionRef = doc(db, "questions", questionID);
@@ -207,12 +210,8 @@ function ListingEditScreen(props) {
     }
 
     const emailHash = `${currentUser.email}:${userB.email}:`;
-    // setQuestionHash(emailHash);
+
     sendQuestion(listing, questionMessagesRef, questionRef, emailHash);
-    // console.log("questionHash", questionHash);
-    // not sure what this following line is doing. Let's figure it out later
-    // if (selectedImage && selectedImage.uri) {
-    //   await sendImage(selectedImage.uri, emailHash);
 
     // setProgress(0);
     // setUploadVisible(true);
@@ -226,7 +225,7 @@ function ListingEditScreen(props) {
     //   return alert("Could not save the listing.");
     // }
 
-    resetForm();
+    // resetForm();
   };
 
   async function sendQuestion(

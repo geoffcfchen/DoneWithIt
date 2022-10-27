@@ -31,10 +31,6 @@ function LoginScreen({ navigation }) {
   // const auth = useAuth();
   const [loginFailed, setLoginFailed] = useState(false);
 
-  async function handlePressSignIn() {
-    await signIn(email, password);
-  }
-
   const handleSubmit = async ({ email, password }) => {
     await signIn(email, password);
     // const result = await authApi.login(email, password);
