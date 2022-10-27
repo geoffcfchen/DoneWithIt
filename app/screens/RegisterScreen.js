@@ -12,6 +12,7 @@ import authApi from "../api/auth";
 import {
   AppForm,
   AppFormField,
+  AppFormPicker,
   ErrorMessage,
   SubmitButton,
 } from "../components/forms";
@@ -23,6 +24,22 @@ import logger from "../utility/logger";
 import FormProfileImagePicker from "../components/forms/FormProfileImagePicker";
 import { signUp, auth, db } from "../../firebase";
 import { uploadImage } from "../utility/uploadImage";
+import CategoryPickerItem from "../components/CategoryPickerItem";
+
+const roles = [
+  {
+    backgroundColor: "dodgerblue",
+    icon: "doctor",
+    label: "Doctor",
+    value: 1,
+  },
+  {
+    backgroundColor: "#fc5c65",
+    icon: "paw",
+    label: "Parent",
+    value: 2,
+  },
+];
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -75,7 +92,7 @@ function RegisterScreen({ navigation }) {
     if (userInfo.image.length === 1) {
       const { url } = await uploadImage(
         userInfo.image[0],
-        `images/${user.uid}`,
+        `images/profilePhotos/${user.uid}`,
         "profilePicture"
       );
       photoURL = url;
@@ -83,6 +100,7 @@ function RegisterScreen({ navigation }) {
     const userData = {
       displayName: userInfo.name,
       email: userInfo.email,
+      role: userInfo.role,
     };
     if (photoURL) {
       userData.photoURL = photoURL;
@@ -118,7 +136,13 @@ function RegisterScreen({ navigation }) {
           onPress={() => navigation.goBack()}
         />
         <AppForm
-          initialValues={{ name: "", email: "", password: "", image: [] }}
+          initialValues={{
+            name: "",
+            email: "",
+            password: "",
+            image: [],
+            role: "",
+          }}
           onSubmit={handleSubmitFirebase}
           validationSchema={validationSchema}
         >
@@ -161,6 +185,14 @@ function RegisterScreen({ navigation }) {
             textContentType="password"
             secureTextEntry
           ></AppFormField>
+          <AppFormPicker
+            items={roles}
+            name="role"
+            numberOfColumns={3}
+            PickerItemComponent={CategoryPickerItem}
+            placeholder="Role"
+            width="50%"
+          ></AppFormPicker>
           <SubmitButton title="Register"></SubmitButton>
         </AppForm>
       </ScreenScrollView>

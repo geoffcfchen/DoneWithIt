@@ -54,8 +54,6 @@ const initialMessages = [
 
 function AccountScreen({ navigation }) {
   const { user, setUser } = useContext(AuthContext);
-  // const { user, logOut } = useAuth();
-  const { currentUser } = auth;
 
   const signOutUser = () => {
     auth.signOut().then(() => {
@@ -66,12 +64,12 @@ function AccountScreen({ navigation }) {
     <Screen style={styles.screen}>
       <View style={styles.container}>
         <ListItem
-          title={user.name}
-          subTitle={user.email}
+          title={user.displayName}
+          // subTitle={user.email}
           image={
-            currentUser.photoURL
+            user.photoURL
               ? {
-                  uri: currentUser.photoURL,
+                  uri: user.photoURL,
                 }
               : require("../assets/icon-square.png")
           }
