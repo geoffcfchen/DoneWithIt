@@ -4,9 +4,13 @@ import { theme } from "../config/colors";
 
 export default function ContextWrapper(props) {
   const [rooms, setRooms] = useState([]);
-  const [questions, setQuestions] = useState([]);
   const [unfilteredRooms, setUnfilteredRooms] = useState([]);
+  const [questions, setQuestions] = useState([]);
   const [unfilteredQuestions, setUnfilteredQuestions] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [petOwners, setPetOwners] = useState([]);
+  const [doctors, setDoctors] = useState([]);
+  const [unfilteredDoctors, setUnfilteredDoctors] = useState([]);
   return (
     <Context.Provider
       value={{
@@ -19,6 +23,14 @@ export default function ContextWrapper(props) {
         setQuestions,
         unfilteredQuestions,
         setUnfilteredQuestions,
+        userData,
+        setUserData,
+        petOwners,
+        setPetOwners,
+        doctors,
+        setDoctors,
+        unfilteredDoctors,
+        setUnfilteredDoctors,
       }}
     >
       {props.children}

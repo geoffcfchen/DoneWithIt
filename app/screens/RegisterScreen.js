@@ -86,7 +86,7 @@ function RegisterScreen({ navigation }) {
   const handleSubmitFirebase = async (userInfo) => {
     // console.log("userInfo", userInfo);
     await signUp(userInfo.email, userInfo.password);
-    const user = auth.currentUser;
+    setUser(auth.currentUser);
     // console.log("auth.currentUser", user);
     let photoURL;
     if (userInfo.image.length === 1) {

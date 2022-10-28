@@ -99,6 +99,9 @@ function ListingEditScreen(props) {
   const [progress, setProgress] = useState(0);
   const { user } = useContext(AuthContext);
 
+  const currentUser = auth.currentUser;
+  console.log("currentUser", currentUser);
+
   const senderUser = user.photoURL
     ? {
         name: user.displayName,

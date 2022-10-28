@@ -200,7 +200,7 @@ const DoctorListScreen = ({ navigation, route }) => {
           </View>
 
           <View style={styles.bookContainerStyle}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               activeOpacity={0.99}
               onPress={() =>
                 navigation.navigate("TimeSlots", {
@@ -217,7 +217,7 @@ const DoctorListScreen = ({ navigation, route }) => {
                   Book Video Consult
                 </Text>
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity
               activeOpacity={0.99}
               onPress={() =>
@@ -232,7 +232,7 @@ const DoctorListScreen = ({ navigation, route }) => {
             >
               <View style={styles.bookAppointmentButtonStyle}>
                 <Text style={{ ...Fonts.primaryColorBold }}>
-                  Book Appointment
+                  Scheudle Phone Call
                 </Text>
               </View>
             </TouchableOpacity>
@@ -296,8 +296,8 @@ const styles = StyleSheet.create({
   bookContainerStyle: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    marginHorizontal: Sizes.fixPadding * 2.0,
+    justifyContent: "center",
+    // marginHorizontal: Sizes.fixPadding * 3.0,
   },
   bookVideoConsultButtonStyle: {
     width: width / 2 - 30,

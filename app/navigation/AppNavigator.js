@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 
@@ -11,10 +11,44 @@ import routes from "./routes";
 import useNotifications from "../hooks/useNotifications";
 import { StyleSheet, View } from "react-native";
 import ScheduleNavigator from "./ScheduleNavigator";
+import AuthContext from "../auth/context";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { db } from "../../firebase";
+import GlobalContext from "../context/Context";
+import OpenScheduleScreen from "../screens/OpenScheduleScreen";
 
 const Tab = createBottomTabNavigator();
 
 function AppNavigator() {
+  const { user } = useContext(AuthContext);
+  const { setUserData, userData } = useContext(GlobalContext);
+
+  const questionsQuery = query(
+    collection(db, "customers"),
+    where("email", "==", user.email)
+  );
+  console.log("test");
+  console.log("userData", userData);
+  useEffect(() => {
+    const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
+      querySnapshot.docs.map((doc) => setUserData(doc.data()));
+      // const parsedQuestions = querySnapshot.docs.map((doc) => ({
+      //   ...doc.data(),
+      //   id: doc.id,
+      //   userB: doc.data().participants.find((p) => p.email !== user.email),
+      // }));
+      // .sort(
+      //   (a, b) =>
+      //     b.lastMessage.createdAt.toDate().getTime() -
+      //     a.lastMessage.createdAt.toDate().getTime()
+      // );
+      // console.log("parsedQuestions", parsedQuestions);
+      // setUnfilteredQuestions(parsedQuestions);
+      // setQuestions(parsedQuestions.filter((doc) => doc.lastMessage));
+    });
+    return () => unsubscribe();
+  }, []);
+
   useNotifications();
   return (
     <Tab.Navigator
@@ -44,25 +78,48 @@ function AppNavigator() {
           ),
         }}
       ></Tab.Screen>
-      <Tab.Screen
-        name="ListingEdit"
-        component={ListingEditScreen}
-        options={({ navigation }) => ({
-          headerShown: false,
-          tabBarButton: () => (
-            <NewListingButton
-              onPress={() => navigation.navigate(routes.LISTINGEDIT)}
-            ></NewListingButton>
-          ),
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="plus-circle"
-              color={color}
-              size={size}
-            ></MaterialCommunityIcons>
-          ),
-        })}
-      ></Tab.Screen>
+      {userData.role.label == "Doctor" ? (
+        <Tab.Screen
+          name="OpenSchedule"
+          component={OpenScheduleScreen}
+          options={({ navigation }) => ({
+            headerShown: false,
+            tabBarButton: () => (
+              <NewListingButton
+                onPress={() => navigation.navigate(routes.OPENSCHEDULE)}
+              ></NewListingButton>
+            ),
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons
+                name="plus-circle"
+                color={color}
+                size={size}
+              ></MaterialCommunityIcons>
+            ),
+          })}
+        ></Tab.Screen>
+      ) : (
+        <Tab.Screen
+          name="ListingEdit"
+          component={ListingEditScreen}
+          options={({ navigation }) => ({
+            headerShown: false,
+            tabBarButton: () => (
+              <NewListingButton
+                onPress={() => navigation.navigate(routes.LISTINGEDIT)}
+              ></NewListingButton>
+            ),
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons
+                name="plus-circle"
+                color={color}
+                size={size}
+              ></MaterialCommunityIcons>
+            ),
+          })}
+        ></Tab.Screen>
+      )}
+
       <Tab.Screen
         name="AccountNav"
         component={AccountNavigator}

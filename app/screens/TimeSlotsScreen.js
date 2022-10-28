@@ -12,9 +12,11 @@ import {
 } from "react-native";
 import { Fonts, Colors, Sizes } from "../constant/styles";
 import { MaterialIcons } from "@expo/vector-icons";
+import moment from "moment";
+import dayjs from "dayjs";
 
 const morningSlots = [
-  "8:00",
+  "8:00 - 9:00",
   "8:30",
   "9:00",
   "9:30",
@@ -164,9 +166,22 @@ const TimeSlotScreen = ({ navigation, route }) => {
   }
 
   function calander() {
+    const datesWhitelist = [
+      // single date (today)
+      // dayjs().add(3, "day"),
+      //   moment().add(1, "days"),
+      //   date range
+      {
+        start: moment().add(0, "days"),
+        end: moment().add(5, "days"),
+      },
+    ];
+    console.log(datesWhitelist);
+    console.log(moment().add(1, "days"));
+    console.log(dayjs().add(1, "day"));
     return (
       <View>
-        <View style={{}}>
+        <View>
           <CalendarStrip
             style={{
               height: 100,
@@ -182,7 +197,8 @@ const TimeSlotScreen = ({ navigation, route }) => {
             dateNameStyle={{ color: "black", fontSize: 15.0 }}
             highlightDateNameStyle={{ color: "white", fontSize: 15.0 }}
             highlightDateNumberStyle={{ color: "white", fontSize: 17.0 }}
-            datesBlacklist={datesBlacklistFunc}
+            // datesBlacklist={datesBlacklistFunc}
+            datesWhitelist={datesWhitelist}
             disabledDateOpacity={0.6}
             disabledDateNameStyle={{ color: "gray", fontSize: 15.0 }}
             disabledDateNumberStyle={{ color: "gray", fontSize: 17.0 }}
