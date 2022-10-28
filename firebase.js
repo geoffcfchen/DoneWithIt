@@ -6,6 +6,7 @@ import {
 } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
+import { Alert } from "react-native";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBlYEAHVWYmDghYf1sHWap9c8UFAKlSYNc",
@@ -23,7 +24,14 @@ export const storage = getStorage(app);
 export const db = getFirestore(app);
 
 export function signIn(email, password) {
-  return signInWithEmailAndPassword(auth, email, password);
+  try {
+    signInWithEmailAndPassword(auth, email, password).catch((error) => {
+      Alert.alert("Incorrect Email address or Password");
+    });
+  } catch (error) {
+    alert(error.message);
+  }
+  return;
 }
 
 export function signUp(email, password) {

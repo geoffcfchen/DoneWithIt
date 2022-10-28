@@ -1,6 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 
 import AccountNavigator from "./AccountNavigator";
 
@@ -9,13 +9,16 @@ import ListingEditScreen from "../screens/ListingEditScreen";
 import NewListingButton from "./NewListingButton";
 import routes from "./routes";
 import useNotifications from "../hooks/useNotifications";
+import { StyleSheet, View } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
 function AppNavigator() {
   useNotifications();
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{ headerShown: false, tabBarShowLabel: false }}
+    >
       <Tab.Screen
         name="Questions"
         component={FeedNavigator}
@@ -27,6 +30,16 @@ function AppNavigator() {
               color={color}
               size={size}
             ></MaterialCommunityIcons>
+          ),
+        }}
+      ></Tab.Screen>
+      <Tab.Screen
+        name="Schedules"
+        component={FeedNavigator}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="calendar-alt" size={size} color={color} />
           ),
         }}
       ></Tab.Screen>
@@ -66,5 +79,16 @@ function AppNavigator() {
     </Tab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  circleStyle: {
+    height: 60.0,
+    width: 60.0,
+    backgroundColor: "#F5F5F5",
+    borderRadius: 30.0,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
 
 export default AppNavigator;

@@ -16,8 +16,8 @@ export default function Contacts() {
 
   const image = route.params && route.params.image;
   // console.log("contacts", contacts.length);
-  console.log("route", route);
-  console.log("image", image);
+  // console.log("route", route);
+  // console.log("image", image);
   return (
     <FlatList
       style={{ flex: 1, padding: 10 }}

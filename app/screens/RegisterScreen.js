@@ -57,7 +57,7 @@ const validationSchema = Yup.object().shape({
 });
 
 function RegisterScreen({ navigation }) {
-  const { user, setUser } = useContext(AuthContext);
+  const { setUser } = useContext(AuthContext);
   const registerApi = useApi(usersApi.register);
   const loginApi = useApi(authApi.login);
 
@@ -84,10 +84,10 @@ function RegisterScreen({ navigation }) {
   };
 
   const handleSubmitFirebase = async (userInfo) => {
-    console.log("userInfo", userInfo);
+    // console.log("userInfo", userInfo);
     await signUp(userInfo.email, userInfo.password);
     const user = auth.currentUser;
-    console.log("auth.currentUser", user);
+    // console.log("auth.currentUser", user);
     let photoURL;
     if (userInfo.image.length === 1) {
       const { url } = await uploadImage(
@@ -109,7 +109,7 @@ function RegisterScreen({ navigation }) {
       updateProfile(user, userData),
       setDoc(doc(db, "customers", user.uid), { ...userData, uid: user.uid }),
     ]);
-    console.log("updated user", user);
+    // console.log("updated user", user);
   };
 
   useEffect(() => {

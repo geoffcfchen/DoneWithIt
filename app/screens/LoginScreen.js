@@ -32,7 +32,7 @@ function LoginScreen({ navigation }) {
   const [loginFailed, setLoginFailed] = useState(false);
 
   const handleSubmit = async ({ email, password }) => {
-    await signIn(email, password);
+    signIn(email, password);
     // const result = await authApi.login(email, password);
     // console.log(result);
     // if (!result.ok) return setLoginFailed(true);

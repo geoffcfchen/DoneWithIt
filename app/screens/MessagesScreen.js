@@ -13,6 +13,7 @@ import ListItemMessages from "../components/lists/ListItemMessages";
 import ContactsFloatingIcon from "../components/ContactsFloatingIcon";
 import useContacts from "../hooks/useHooks";
 import AppText from "../components/AppText";
+import AuthContext from "../auth/context";
 
 const initialMessages = [
   {
@@ -30,7 +31,7 @@ const initialMessages = [
 ];
 
 export default function MessagesScreen() {
-  const { currentUser } = auth;
+  const { user } = useContext(AuthContext);
   const { rooms, setRooms, setUnfilteredRooms } = useContext(GlobalContext);
 
   const [messages, setMessages] = useState(initialMessages);
@@ -38,7 +39,7 @@ export default function MessagesScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const chatsQuery = query(
     collection(db, "rooms"),
-    where("participantsArray", "array-contains", currentUser.email)
+    where("participantsArray", "array-contains", user.email)
   );
 
   useEffect(() => {
@@ -47,9 +48,7 @@ export default function MessagesScreen() {
       const parsedChats = querySnapshot.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
-        userB: doc
-          .data()
-          .participants.find((p) => p.email !== currentUser.email),
+        userB: doc.data().participants.find((p) => p.email !== user.email),
       }));
 
       // console.log("parsedChats", parsedChats);

@@ -1,16 +1,7 @@
 import react, { useState, useEffect, useContext, useMemo } from "react";
 import { StyleSheet } from "react-native";
 import * as Yup from "yup";
-import {
-  collection,
-  onSnapshot,
-  query,
-  where,
-  doc,
-  setDoc,
-  addDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { collection, doc, setDoc, addDoc, updateDoc } from "firebase/firestore";
 import uuid from "react-native-uuid";
 import { nanoid } from "nanoid";
 
@@ -32,6 +23,7 @@ import { auth, db } from "../../firebase";
 import GlobalContext from "../context/Context";
 import { uploadImage } from "../utility/uploadImage";
 import { random } from "nanoid";
+import AuthContext from "../auth/context";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label("Title"),
@@ -106,16 +98,15 @@ function ListingEditScreen(props) {
   const location = useLocation();
   const [uploadVisible, setUploadVisible] = useState(false);
   const [progress, setProgress] = useState(0);
+  const { user } = useContext(AuthContext);
 
-  const { currentUser } = auth;
-
-  const senderUser = currentUser.photoURL
+  const senderUser = user.photoURL
     ? {
-        name: currentUser.displayName,
-        _id: currentUser.uid,
-        avatar: currentUser.photoURL,
+        name: user.displayName,
+        _id: user.uid,
+        avatar: user.photoURL,
       }
-    : { name: currentUser.displayName, _id: currentUser.uid };
+    : { name: user.displayName, _id: user.uid };
 
   // console.log("senderUser", senderUser);
 
@@ -125,66 +116,66 @@ function ListingEditScreen(props) {
   // }
 
   // do the query and see if there are questions already opened in firebase database
-  const questionsQuery = query(
-    collection(db, "questions"),
-    where("participantsArray", "array-contains", currentUser.email)
-  );
+  // const questionsQuery = query(
+  //   collection(db, "questions"),
+  //   where("participantsArray", "array-contains", currentUser.email)
+  // );
 
-  useEffect(() => {
-    const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
-      // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
-      const parsedQuestions = querySnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-        userB: doc
-          .data()
-          .participants.find((p) => p.email !== currentUser.email),
-      }));
-      // .sort(
-      //   (a, b) =>
-      //     b.lastMessage.createdAt.toDate().getTime() -
-      //     a.lastMessage.createdAt.toDate().getTime()
-      // );
-      // console.log("parsedQuestions", parsedQuestions);
-      setUnfilteredQuestions(parsedQuestions);
-      // setRooms(parsedChats.filter((doc) => doc.lastMessage));
-    });
-    return () => unsubscribe();
-  }, []);
-  console.log("unfilteredQuestions", unfilteredQuestions);
+  // useEffect(() => {
+  //   const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
+  //     // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
+  //     const parsedQuestions = querySnapshot.docs.map((doc) => ({
+  //       ...doc.data(),
+  //       id: doc.id,
+  //       userB: doc
+  //         .data()
+  //         .participants.find((p) => p.email !== currentUser.email),
+  //     }));
+  //     // .sort(
+  //     //   (a, b) =>
+  //     //     b.lastMessage.createdAt.toDate().getTime() -
+  //     //     a.lastMessage.createdAt.toDate().getTime()
+  //     // );
+  //     // console.log("parsedQuestions", parsedQuestions);
+  //     setUnfilteredQuestions(parsedQuestions);
+  //     // setRooms(parsedChats.filter((doc) => doc.lastMessage));
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
+  // console.log("unfilteredQuestions", unfilteredQuestions);
 
   const handleSubmit = async (listing, { resetForm }) => {
-    console.log("listing", listing);
+    // console.log("listing", listing);
 
     const question = unfilteredQuestions.find((question) =>
       question.participantsArray.includes(listing.doctor.email)
     );
 
-    console.log("question", question);
+    // console.log("question", question);
     const questionID = question ? question.id : randomID;
-    console.log("questionID = ", questionID);
+    // console.log("questionID = ", questionID);
 
     const questionRef = doc(db, "questions", questionID);
-    console.log("questionRef = ", questionRef);
+    // console.log("questionRef = ", questionRef);
     const questionMessagesRef = collection(
       db,
       "questions",
       questionID,
       "messages"
     );
-    console.log("questionMessagesRef", questionMessagesRef);
+    // console.log("questionMessagesRef", questionMessagesRef);
     const userB = listing.doctor;
     // console.log("question", question);
     if (!question) {
       // create currUserData
       const currUserData = {
-        displayName: currentUser.displayName,
-        email: currentUser.email,
+        displayName: user.displayName,
+        email: user.email,
       };
       // console.log("currUserData", currUserData);
       // put in photoURL in currUserData if curretUser has photoURL
-      if (currentUser.photoURL) {
-        currUserData.photoURL = currentUser.photoURL;
+      if (user.photoURL) {
+        currUserData.photoURL = user.photoURL;
       }
       // now construct userBdata
 
@@ -199,7 +190,7 @@ function ListingEditScreen(props) {
       // construct the questionData
       const questionData = {
         participants: [currUserData, userBData],
-        participantsArray: [currentUser.email, userB.email],
+        participantsArray: [user.email, userB.email],
       };
       // construct the roomRef with roomData
       try {
@@ -209,7 +200,7 @@ function ListingEditScreen(props) {
       }
     }
 
-    const emailHash = `${currentUser.email}:${userB.email}:`;
+    const emailHash = `${user.email}:${userB.email}:`;
 
     sendQuestion(listing, questionMessagesRef, questionRef, emailHash);
 
@@ -236,14 +227,14 @@ function ListingEditScreen(props) {
     roomPath
   ) {
     const uri = listing.images[0];
-    console.log("uri", uri);
-    console.log("emailHash", emailHash);
+    // console.log("uri", uri);
+    // console.log("emailHash", emailHash);
     const { url, fileName } = await uploadImage(
       uri,
       `images/questions/${roomPath || questionHash}`
     );
-    console.log("url", url);
-    console.log("fileName", fileName);
+    // console.log("url", url);
+    // console.log("fileName", fileName);
     const message = {
       _id: fileName,
       image: url,
@@ -254,7 +245,7 @@ function ListingEditScreen(props) {
       createdAt: new Date(),
       user: senderUser,
     };
-    console.log("message in sendImage", message);
+    // console.log("message in sendImage", message);
     const lastMessage = { ...message };
     // console.log("lastMessage", lastMessage);
     await Promise.all([
@@ -300,13 +291,6 @@ function ListingEditScreen(props) {
           name="petName"
           placeholder="Pet name"
         ></AppFormField>
-        {/* <AppFormField
-          keyboardType="numeric"
-          maxLength={8}
-          name="price"
-          placeholder="Pet name"
-          width={140}
-        ></AppFormField> */}
         <AppFormPicker
           items={categories}
           name="category"

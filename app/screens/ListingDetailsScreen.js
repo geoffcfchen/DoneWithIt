@@ -5,15 +5,11 @@ import { Image } from "react-native-expo-image-cache";
 import AppText from "../components/AppText";
 import colors from "../config/colors";
 import ListItem from "../components/lists/ListItem";
-import ContactSellerForm from "../components/ContactSellerForm";
-import { auth } from "../../firebase";
 import Icon from "../components/Icon";
 
 function ListingDetailsScreen({ route }) {
-  const { currentUser } = auth;
   const { item: listing } = route.params;
-  // console.log(currentUser);
-  console.log("listing = ", listing);
+  // console.log("listing = ", listing);
   // const userB = listing.participants.find((p) => p.email !== currentUser.email);
   return (
     <KeyboardAvoidingView

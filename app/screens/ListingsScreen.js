@@ -13,6 +13,7 @@ import useApi from "../hooks/useApi";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import GlobalContext from "../context/Context";
+import AuthContext from "../auth/context";
 
 const listings = [
   {
@@ -68,17 +69,13 @@ const listings = [
 // }
 
 function ListingsScreen({ navigation }) {
-  const { currentUser } = auth;
-  const {
-    questions,
-    setQuestions,
-    unfilteredQuestions,
-    setUnfilteredQuestions,
-  } = useContext(GlobalContext);
+  const { user } = useContext(AuthContext);
+  const { questions, setQuestions, setUnfilteredQuestions } =
+    useContext(GlobalContext);
 
   const questionsQuery = query(
     collection(db, "questions"),
-    where("participantsArray", "array-contains", currentUser.email)
+    where("participantsArray", "array-contains", user.email)
   );
 
   useEffect(() => {
@@ -87,9 +84,7 @@ function ListingsScreen({ navigation }) {
       const parsedQuestions = querySnapshot.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
-        userB: doc
-          .data()
-          .participants.find((p) => p.email !== currentUser.email),
+        userB: doc.data().participants.find((p) => p.email !== user.email),
       }));
       // .sort(
       //   (a, b) =>
@@ -105,7 +100,6 @@ function ListingsScreen({ navigation }) {
 
   // console.log("unfilteredQuestions", unfilteredQuestions);
   // console.log("questions", questions);
-  // console.log("currentUser", currentUser.email);
 
   return (
     <Screen style={styles.screen}>

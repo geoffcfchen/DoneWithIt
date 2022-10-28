@@ -39,6 +39,7 @@ import { pickImage, takeImage } from "../utility/pickImage";
 import { uploadImage } from "../utility/uploadImage";
 import { askForPermission } from "../utility/askPermission";
 import uuid from "react-native-uuid";
+import AuthContext from "../auth/context";
 
 export default function MessagesDetailsScreen() {
   const [roomHash, setRoomHash] = useState("");
@@ -49,7 +50,8 @@ export default function MessagesDetailsScreen() {
   const {
     theme: { colors },
   } = useContext(GlobalContext);
-  const { currentUser } = auth;
+
+  const { user } = useContext(AuthContext);
   const route = useRoute();
   const room = route.params.room;
   const selectedImage = route.params.image;
@@ -58,13 +60,13 @@ export default function MessagesDetailsScreen() {
   // console.log("room = ", room);
   // console.log("userB", userB);
 
-  const senderUser = currentUser.photoURL
+  const senderUser = user.photoURL
     ? {
-        name: currentUser.displayName,
-        _id: currentUser.uid,
-        avatar: currentUser.photoURL,
+        name: user.displayName,
+        _id: user.uid,
+        avatar: user.photoURL,
       }
-    : { name: currentUser.displayName, _id: currentUser.uid };
+    : { name: user.displayName, _id: user.uid };
   // console.log("senderUser = ", senderUser);
 
   const roomID = room ? room.id : useMemo(() => nanoid(), []);
@@ -85,12 +87,12 @@ export default function MessagesDetailsScreen() {
         console.log("test");
         // create currUserData
         const currUserData = {
-          displayName: currentUser.displayName,
-          email: currentUser.email,
+          displayName: user.displayName,
+          email: user.email,
         };
         // put in photoURL in currUserData if curretUser has photoURL
-        if (currentUser.photoURL) {
-          currUserData.photoURL = currentUser.photoURL;
+        if (user.photoURL) {
+          currUserData.photoURL = user.photoURL;
         }
         // now construct userBdata
         const userBData = {
@@ -104,7 +106,7 @@ export default function MessagesDetailsScreen() {
         // construct the roomData
         const roomData = {
           participants: [currUserData, userBData],
-          participantsArray: [currentUser.email, userB.email],
+          participantsArray: [user.email, userB.email],
         };
         // construct the roomRef with roomData
         try {
@@ -113,7 +115,7 @@ export default function MessagesDetailsScreen() {
           console.log(error);
         }
       }
-      const emailHash = `${currentUser.email}:${userB.email}:`;
+      const emailHash = `${user.email}:${userB.email}:`;
       setRoomHash(emailHash);
       // not sure what this following line is doing. Let's figure it out later
       console.log("emailHash", emailHash);
