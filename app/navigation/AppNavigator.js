@@ -10,6 +10,7 @@ import NewListingButton from "./NewListingButton";
 import routes from "./routes";
 import useNotifications from "../hooks/useNotifications";
 import { StyleSheet, View } from "react-native";
+import ScheduleNavigator from "./ScheduleNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -35,7 +36,7 @@ function AppNavigator() {
       ></Tab.Screen>
       <Tab.Screen
         name="Schedules"
-        component={FeedNavigator}
+        component={ScheduleNavigator}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (

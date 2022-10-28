@@ -14,7 +14,6 @@ import {
 import CategoryPickerItem from "../components/CategoryPickerItem";
 import ContactsPickerItem from "../components/ContactsPickerItem";
 import FormImagePicker from "../components/forms/FormImagePicker";
-import listingsApi from "../api/listing";
 import Screen from "../components/Screen";
 import useLocation from "../hooks/useLocation";
 import useContacts from "../hooks/useHooks";
@@ -95,7 +94,7 @@ function ListingEditScreen(props) {
   } = useContext(GlobalContext);
   // const contacts = [{ contactName: "Kate Bell", email: "kate-bell@mac.com" }];
   // const [question, setQuestion] = useState();
-  const location = useLocation();
+  // const location = useLocation();
   const [uploadVisible, setUploadVisible] = useState(false);
   const [progress, setProgress] = useState(0);
   const { user } = useContext(AuthContext);
