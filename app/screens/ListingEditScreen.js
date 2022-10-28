@@ -108,42 +108,6 @@ function ListingEditScreen(props) {
       }
     : { name: user.displayName, _id: user.uid };
 
-  // console.log("senderUser", senderUser);
-
-  // console.log("roomMessageRef = ", roomMessagesRef);
-  // if (!room) {
-  //   console.log("no room");
-  // }
-
-  // do the query and see if there are questions already opened in firebase database
-  // const questionsQuery = query(
-  //   collection(db, "questions"),
-  //   where("participantsArray", "array-contains", currentUser.email)
-  // );
-
-  // useEffect(() => {
-  //   const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
-  //     // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
-  //     const parsedQuestions = querySnapshot.docs.map((doc) => ({
-  //       ...doc.data(),
-  //       id: doc.id,
-  //       userB: doc
-  //         .data()
-  //         .participants.find((p) => p.email !== currentUser.email),
-  //     }));
-  //     // .sort(
-  //     //   (a, b) =>
-  //     //     b.lastMessage.createdAt.toDate().getTime() -
-  //     //     a.lastMessage.createdAt.toDate().getTime()
-  //     // );
-  //     // console.log("parsedQuestions", parsedQuestions);
-  //     setUnfilteredQuestions(parsedQuestions);
-  //     // setRooms(parsedChats.filter((doc) => doc.lastMessage));
-  //   });
-  //   return () => unsubscribe();
-  // }, []);
-  // console.log("unfilteredQuestions", unfilteredQuestions);
-
   const handleSubmit = async (listing, { resetForm }) => {
     // console.log("listing", listing);
 
@@ -216,7 +180,7 @@ function ListingEditScreen(props) {
     //   return alert("Could not save the listing.");
     // }
 
-    // resetForm();
+    resetForm();
   };
 
   async function sendQuestion(
