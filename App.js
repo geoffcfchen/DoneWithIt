@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import "expo-dev-menu";
 import { onAuthStateChanged } from "firebase/auth";
 import * as SplashScreen from "expo-splash-screen";
 import { LogBox } from "react-native";
 
-import { auth } from "./firebase";
+import { auth, db } from "./firebase";
 import navigationTheme from "./app/navigation/navigationTheme";
 import AppNavigator from "./app/navigation/AppNavigator";
 import OfflineNotice from "./app/components/OfflineNotice";
@@ -15,6 +15,8 @@ import authStorage from "./app/auth/storage";
 import { navigationRef } from "./app/navigation/rootNavigation";
 import logger from "./app/utility/logger";
 import ContextWrapper from "./app/context/ContextWrapper";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import GlobalContext from "./app/context/Context";
 
 LogBox.ignoreLogs([
   "Setting a timer",
@@ -29,6 +31,11 @@ SplashScreen.preventAutoHideAsync();
 function App() {
   const [user, setUser] = useState();
   const [isReady, setIsReady] = useState(false);
+
+  // const questionsQuery = query(
+  //   collection(db, "customers"),
+  //   where("email", "==", user?.email)
+  // );
 
   useEffect(() => {
     async function prepare() {
@@ -46,6 +53,14 @@ function App() {
     }
     prepare();
   }, []);
+
+  // useEffect(() => {
+  //   console.log("userEffect");
+  //   const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
+  //     querySnapshot.docs.map((doc) => setUserData(doc.data()));
+  //   });
+  //   unsubscribe();
+  // }, [user]);
 
   const onNavigationContainerReady = useCallback(async () => {
     if (isReady) await SplashScreen.hideAsync();
