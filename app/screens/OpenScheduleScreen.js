@@ -1,30 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import React, { useState, useContext } from "react";
+import { StyleSheet, Button, View, SafeAreaView } from "react-native";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-import ActivityIndicator from "../components/ActivityIndicator";
-import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";
-import Card from "../components/Card";
 import colors from "../config/colors";
-import listingsApi from "../api/listing";
-import routes from "../navigation/routes";
 import Screen from "../components/Screen";
-import useApi from "../hooks/useApi";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { auth, db } from "../../firebase";
-import GlobalContext from "../context/Context";
 import AuthContext from "../auth/context";
-
-const listings = [
-  {
-    id: 1,
-    user: { _id: "test", avatar: "test", name: "name" },
-    title: "Skin discharge or oozing?",
-    description:
-      "Clear, sticky, wound-like spots on your dogs skin would describe something colloquially called a “hot spot”, or acute moist dermatitis. Hot Spots develop from a bacterial or fungal skin infection that occurs from",
-    image: require("../assets/dog-head.jpeg"),
-  },
-];
 
 // function ListingsScreen({ navigation }) {
 //   const getListingsApi = useApi(listingsApi.getListings);
@@ -70,55 +51,59 @@ const listings = [
 
 function OpenScheduleScreen({ navigation }) {
   const { user } = useContext(AuthContext);
-  const { questions, setQuestions, setUnfilteredQuestions } =
-    useContext(GlobalContext);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-  const questionsQuery = query(
-    collection(db, "questions"),
-    where("participantsArray", "array-contains", user.email)
-  );
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
 
-  useEffect(() => {
-    const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
-      // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
-      const parsedQuestions = querySnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-        userB: doc.data().participants.find((p) => p.email !== user.email),
-      }));
-      // .sort(
-      //   (a, b) =>
-      //     b.lastMessage.createdAt.toDate().getTime() -
-      //     a.lastMessage.createdAt.toDate().getTime()
-      // );
-      // console.log("parsedQuestions", parsedQuestions);
-      setUnfilteredQuestions(parsedQuestions);
-      setQuestions(parsedQuestions.filter((doc) => doc.lastMessage));
-    });
-    return () => unsubscribe();
-  }, []);
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    console.warn("A date has been picked: ", date);
+    hideDatePicker();
+  };
+
+  // const questionsQuery = query(
+  //   collection(db, "questions"),
+  //   where("participantsArray", "array-contains", user.email)
+  // );
+
+  // useEffect(() => {
+  //   const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
+  //     // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
+  //     const parsedQuestions = querySnapshot.docs.map((doc) => ({
+  //       ...doc.data(),
+  //       id: doc.id,
+  //       userB: doc.data().participants.find((p) => p.email !== user.email),
+  //     }));
+  //     // .sort(
+  //     //   (a, b) =>
+  //     //     b.lastMessage.createdAt.toDate().getTime() -
+  //     //     a.lastMessage.createdAt.toDate().getTime()
+  //     // );
+  //     // console.log("parsedQuestions", parsedQuestions);
+  //     setUnfilteredQuestions(parsedQuestions);
+  //     setQuestions(parsedQuestions.filter((doc) => doc.lastMessage));
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
 
   // console.log("unfilteredQuestions", unfilteredQuestions);
   // console.log("questions", questions);
 
   return (
-    <Screen style={styles.screen}>
-      <AppText>test</AppText>
-      <FlatList
-        data={questions}
-        keyExtractor={(question) => question.lastMessage._id.toString()}
-        renderItem={({ item }) => (
-          <Card
-            title={item.lastMessage.title}
-            subTitle={item.lastMessage.description}
-            imageUrl={item.lastMessage.image}
-            onPress={() =>
-              navigation.navigate(routes.LISTING_DETAILS, { item })
-            }
-          />
-        )}
+    <SafeAreaView>
+      <Button title="Show Date Picker" onPress={showDatePicker} />
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
       />
-    </Screen>
+    </SafeAreaView>
   );
 }
 
