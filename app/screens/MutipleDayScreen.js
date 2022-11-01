@@ -7,8 +7,6 @@ import AppText from "../components/AppText";
 import colors from "../config/colors";
 import Screen from "../components/Screen";
 import AuthContext from "../auth/context";
-import MutipleDayScreen from "./MutipleDayScreen";
-import IndividualDayScreen from "./IndividualDayScreen";
 
 // function ListingsScreen({ navigation }) {
 //   const getListingsApi = useApi(listingsApi.getListings);
@@ -52,9 +50,42 @@ import IndividualDayScreen from "./IndividualDayScreen";
 //   );
 // }
 
-const Tab = createMaterialTopTabNavigator();
+const Tab = createMaterialTopTabNavigator;
 
-function OpenScheduleScreen({ navigation }) {
+function MutipleDayScreen({ navigation }) {
+  const { user } = useContext(AuthContext);
+  const [startDatetime, setStartDatetime] = useState([]);
+  const [endDatetime, setEndDatetime] = useState([]);
+  const [isStartDatePickerVisible, setIsStartDatePickerVisibility] =
+    useState(false);
+  const [isEndDatePickerVisible, setIsEndDatePickerVisibility] =
+    useState(false);
+
+  const showStartDatePicker = () => {
+    setIsStartDatePickerVisibility(true);
+  };
+  const showEndDatePicker = () => {
+    setIsEndDatePickerVisibility(true);
+  };
+
+  const hideStartDatePicker = () => {
+    setIsStartDatePickerVisibility(false);
+  };
+
+  const hideEndDatePicker = () => {
+    setIsEndDatePickerVisibility(false);
+  };
+
+  const handleConfirmStart = (startDatetime) => {
+    setStartDatetime(startDatetime);
+    hideStartDatePicker();
+  };
+
+  const handleConfirmEnd = (endDatetime) => {
+    setEndDatetime(endDatetime);
+    hideEndDatePicker();
+  };
+
   // console.log("startDatetime", startDatetime);
   // console.log("endDatetime", endDatetime);
   // const questionsQuery = query(
@@ -86,23 +117,35 @@ function OpenScheduleScreen({ navigation }) {
   // console.log("questions", questions);
 
   return (
-    <Screen>
-      <Tab.Navigator>
-        <Tab.Screen
-          name="IndividualDay"
-          component={IndividualDayScreen}
-        ></Tab.Screen>
-        <Tab.Screen name="MutipleDay" component={MutipleDayScreen}></Tab.Screen>
-      </Tab.Navigator>
+    <Screen style={styles.container}>
+      {/* <View style={styles.container}>
+        <Button title="Start Datetime" onPress={showStartDatePicker} />
+        <DateTimePickerModal
+          display="inline"
+          isVisible={isStartDatePickerVisible}
+          mode="datetime"
+          onConfirm={handleConfirmStart}
+          onCancel={hideStartDatePicker}
+        />
+        <Button title="End Datetime" onPress={showEndDatePicker} />
+        <DateTimePickerModal
+          display="inline"
+          isVisible={isEndDatePickerVisible}
+          mode="datetime"
+          onConfirm={handleConfirmEnd}
+          onCancel={hideEndDatePicker}
+        />
+      </View> */}
+      <AppText>Stay tuned!</AppText>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    alignItems: "center",
     justifyContent: "center",
   },
 });
 
-export default OpenScheduleScreen;
+export default MutipleDayScreen;
