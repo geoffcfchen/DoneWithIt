@@ -97,11 +97,15 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
         const message = doc.data();
         return { slot: message.slot.toDate() };
       });
-      console.log("messagesFirestore", messagesFirestore);
+      // console.log("messagesFirestore", messagesFirestore);
+      const timeslot = messagesFirestore.map((doc) => moment(doc.slot));
+      // console.log("timeslot", timeslot);
+      setDatesWhitelist([...datesWhitelist, ...timeslot]);
       // // setTimeSlots(parsedTimesSlots);
     });
     return () => unsubscribe();
   }, []);
+  // console.log("datesWhitelist", datesWhitelist);
 
   // const appendMessages = useCallback(
   //   (datesWhitelist) => {
