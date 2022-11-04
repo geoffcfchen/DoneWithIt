@@ -6,12 +6,14 @@ import ConsultationScreen from "../screens/ConsultationDetailScreen";
 import ListingEditScreen from "../screens/ListingEditScreen";
 import OpenScheduleScreen from "../screens/OpenScheduleScreen";
 import GlobalContext from "../context/Context";
+import { useRoute } from "@react-navigation/native";
 
 const Stack = createNativeStackNavigator();
 
 function SubmitNavigator() {
   const { userData } = useContext(GlobalContext);
-  // console.log("userData", userData);
+  const route = useRoute();
+  const timeSlots = route.params.timeSlot;
   return (
     <Stack.Navigator
       screenOptions={{ presentation: "modal", headerShown: false }}
@@ -19,7 +21,10 @@ function SubmitNavigator() {
       {userData.role.label == "Doctor" ? (
         <Stack.Screen
           name="OpenSchedule"
-          component={OpenScheduleScreen}
+          // component={OpenScheduleScreen}
+          children={() => (
+            <OpenScheduleScreen timeSlots={timeSlots}></OpenScheduleScreen>
+          )}
         ></Stack.Screen>
       ) : (
         <Stack.Screen

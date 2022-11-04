@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, Button, View, SafeAreaView } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -9,6 +9,10 @@ import Screen from "../components/Screen";
 import AuthContext from "../auth/context";
 import MutipleDayScreen from "./MutipleDayScreen";
 import IndividualDayScreen from "./IndividualDayScreen";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { db } from "../../firebase";
+import GlobalContext from "../context/Context";
+import { useRoute } from "@react-navigation/native";
 
 // function ListingsScreen({ navigation }) {
 //   const getListingsApi = useApi(listingsApi.getListings);
@@ -54,43 +58,46 @@ import IndividualDayScreen from "./IndividualDayScreen";
 
 const Tab = createMaterialTopTabNavigator();
 
-function OpenScheduleScreen({ navigation }) {
-  // console.log("startDatetime", startDatetime);
-  // console.log("endDatetime", endDatetime);
-  // const questionsQuery = query(
-  //   collection(db, "questions"),
-  //   where("participantsArray", "array-contains", user.email)
+function OpenScheduleScreen({ navigation, timeSlots }) {
+  const { userData } = useContext(GlobalContext);
+  // console.log("timeSlots", timeSlots);
+  // const route = useRoute();
+  // console.log("route", route.params);
+  // const [timeSlots, setTimeSlots] = useState([]);
+  // const timeSlotsQuery = query(
+  //   collection(db, "timeSlots"),
+  //   where("participantsArray", "array-contains", userData.email)
   // );
 
   // useEffect(() => {
-  //   const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
+  //   const unsubscribe = onSnapshot(timeSlotsQuery, (querySnapshot) => {
   //     // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
-  //     const parsedQuestions = querySnapshot.docs.map((doc) => ({
+  //     const parsedTimesSlots = querySnapshot.docs.map((doc) => ({
   //       ...doc.data(),
   //       id: doc.id,
-  //       userB: doc.data().participants.find((p) => p.email !== user.email),
   //     }));
-  //     // .sort(
-  //     //   (a, b) =>
-  //     //     b.lastMessage.createdAt.toDate().getTime() -
-  //     //     a.lastMessage.createdAt.toDate().getTime()
-  //     // );
-  //     // console.log("parsedQuestions", parsedQuestions);
-  //     setUnfilteredQuestions(parsedQuestions);
-  //     setQuestions(parsedQuestions.filter((doc) => doc.lastMessage));
+
+  //     // console.log("parsedTimesSlots", parsedTimesSlots);
+  //     setTimeSlots(parsedTimesSlots);
   //   });
   //   return () => unsubscribe();
   // }, []);
+  // // console.log(timeSlots);
 
-  // console.log("unfilteredQuestions", unfilteredQuestions);
-  // console.log("questions", questions);
+  // const timeSlot = timeSlots.find((timeSlot) =>
+  //   timeSlot.participantsArray.includes(userData.email)
+  // );
+  // console.log("test1");
 
   return (
     <Screen>
       <Tab.Navigator>
         <Tab.Screen
           name="IndividualDay"
-          component={IndividualDayScreen}
+          // component={IndividualDayScreen}
+          children={() => (
+            <IndividualDayScreen timeSlots={timeSlots}></IndividualDayScreen>
+          )}
         ></Tab.Screen>
         <Tab.Screen name="MutipleDay" component={MutipleDayScreen}></Tab.Screen>
       </Tab.Navigator>

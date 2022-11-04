@@ -2,7 +2,6 @@ import react, { useState, useEffect, useContext, useMemo } from "react";
 import { StyleSheet } from "react-native";
 import * as Yup from "yup";
 import { collection, doc, setDoc, addDoc, updateDoc } from "firebase/firestore";
-import uuid from "react-native-uuid";
 import { nanoid } from "nanoid";
 
 import {
@@ -86,12 +85,7 @@ function ListingEditScreen(props) {
   const randomID = useMemo(() => nanoid(), []);
   const [questionHash, setQuestionHash] = useState("");
   const contacts = useContacts();
-  const {
-    questions,
-    setQuestions,
-    unfilteredQuestions,
-    setUnfilteredQuestions,
-  } = useContext(GlobalContext);
+  const { unfilteredQuestions } = useContext(GlobalContext);
   // const contacts = [{ contactName: "Kate Bell", email: "kate-bell@mac.com" }];
   // const [question, setQuestion] = useState();
   // const location = useLocation();

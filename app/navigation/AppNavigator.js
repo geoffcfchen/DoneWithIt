@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 
@@ -13,7 +13,7 @@ import { StyleSheet, View } from "react-native";
 import ScheduleNavigator from "./ScheduleNavigator";
 import AuthContext from "../auth/context";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { db } from "../../firebase";
+import { auth, db } from "../../firebase";
 import GlobalContext from "../context/Context";
 import OpenScheduleScreen from "../screens/OpenScheduleScreen";
 import SubmitNavigator from "./SubmitNavigator";
@@ -23,7 +23,8 @@ const Tab = createBottomTabNavigator();
 function AppNavigator() {
   const { user } = useContext(AuthContext);
   const { setUserData, userData } = useContext(GlobalContext);
-  // console.log("user email", user.email);
+  const [timeSlots, setTimeSlots] = useState([]);
+
   const questionsQuery = query(
     collection(db, "customers"),
     where("email", "==", user.email)
@@ -35,7 +36,27 @@ function AppNavigator() {
     });
     return () => unsubscribe();
   }, []);
-  // console.log("userData", userData);
+
+  const timeSlotsQuery = query(
+    collection(db, "timeSlots"),
+    where("participantsArray", "array-contains", user.email)
+  );
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(timeSlotsQuery, (querySnapshot) => {
+      const parsedTimesSlots = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+
+      setTimeSlots(parsedTimesSlots);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const timeSlot = timeSlots.find((timeSlot) =>
+    timeSlot.participantsArray.includes(user.email)
+  );
 
   useNotifications();
   return (
@@ -74,7 +95,9 @@ function AppNavigator() {
           headerShown: false,
           tabBarButton: () => (
             <NewListingButton
-              onPress={() => navigation.navigate(routes.SUBMITSCHEDULE)}
+              onPress={() =>
+                navigation.navigate(routes.SUBMITSCHEDULE, { timeSlot })
+              }
             ></NewListingButton>
           ),
           tabBarIcon: ({ color, size }) => (
