@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import CalendarStrip from "react-native-calendar-strip";
 import {
   Text,
@@ -95,17 +101,27 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
       //   .map(({ doc }) => console.log("doc_id", doc.id));
       const messagesFirestore = querySnapshot.docChanges().map(({ doc }) => {
         const message = doc.data();
-        return { slot: message.slot.toDate() };
+        return { id: doc.id, slot: moment(message.slot.toDate()) };
       });
-      // console.log("messagesFirestore", messagesFirestore);
-      const timeslot = messagesFirestore.map((doc) => moment(doc.slot));
+      console.log("messagesFirestore", messagesFirestore);
+      // const timeslot = messagesFirestore.map((doc) => moment(doc.slot));
       // console.log("timeslot", timeslot);
-      setDatesWhitelist([...datesWhitelist, ...timeslot]);
+      // console.log("datesWhitelist inside", datesWhitelist);
+      appendtimeslot(messagesFirestore);
       // // setTimeSlots(parsedTimesSlots);
     });
     return () => unsubscribe();
   }, []);
-  // console.log("datesWhitelist", datesWhitelist);
+
+  const appendtimeslot = useCallback((timeslot) => {
+    setDatesWhitelist((previousdatesWhitelist) => [
+      ...previousdatesWhitelist,
+      ...timeslot,
+    ]);
+    // console.log("messages inside", messages);
+  }, []);
+
+  console.log("datesWhitelist outside", datesWhitelist);
 
   // const appendMessages = useCallback(
   //   (datesWhitelist) => {
@@ -186,7 +202,7 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
   };
 
   const handleConfirmStart1 = (Datetime) => {
-    setDatesWhitelist([...datesWhitelist, moment(Datetime)]);
+    // setDatesWhitelist([...datesWhitelist, moment(Datetime)]);
     handleSubmit(Datetime, userData);
     hideStartDatetime1Picker();
   };
@@ -194,7 +210,7 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
   useEffect(() => {
     const samedate = datesWhitelist.filter(
       (value) =>
-        value.toDate().getDate() == moment(selectedDay).toDate().getDate()
+        value.slot.toDate().getDate() == moment(selectedDay).toDate().getDate()
     );
     setFilteredDates(samedate);
   }, [datesWhitelist, selectedDay]);
@@ -203,38 +219,56 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
     function morningSlots(filteredDates, duration) {
       if (filteredDates.length) {
         const filteredMorningSlots = filteredDates.filter((element) =>
-          element.isBefore(element.clone().hour(12).minute(0).second(0))
+          element.slot.isBefore(
+            element.slot.clone().hour(12).minute(0).second(0)
+          )
         );
         const convertedfilteredMorningSlots = filteredMorningSlots.map(
           (element) => {
-            var new_date = moment(element).add(duration, "hours");
-            return formatAMPM(element) + " - " + formatAMPM(new_date);
+            var new_date = moment(element.slot).add(duration, "hours");
+            return {
+              ...element,
+              slot: formatAMPM(element.slot) + " - " + formatAMPM(new_date),
+            };
           }
         );
+
         setSelectedMorningSlot(convertedfilteredMorningSlots);
 
         const filteredAfternoonSlots = filteredDates.filter((element) =>
-          element.isBetween(
-            element.clone().hour(12).minute(0).second(0),
-            element.clone().hour(18).minute(0).second(0)
+          element.slot.isBetween(
+            element.slot.clone().hour(12).minute(0).second(0),
+            element.slot.clone().hour(18).minute(0).second(0)
           )
         );
         const convertedfilteredAfternoonSlots = filteredAfternoonSlots.map(
           (element) => {
-            var new_date = moment(element).add(duration, "hours");
-            return formatAMPM(element) + " - " + formatAMPM(new_date);
+            var new_date = moment(element.slot).add(duration, "hours");
+            return {
+              ...element,
+              slot: formatAMPM(element.slot) + " - " + formatAMPM(new_date),
+            };
           }
         );
         setSelectedAfternoonSlot(convertedfilteredAfternoonSlots);
 
         const filteredEveningSlots = filteredDates.filter((element) =>
-          element.isAfter(element.clone().hour(18).minute(0).second(0))
+          element.slot.isAfter(
+            element.slot.clone().hour(18).minute(0).second(0)
+          )
         );
         const convertedfilteredEveningSlots = filteredEveningSlots.map(
           (element) => {
             var new_date = moment(element).add(duration, "hours");
-            return formatAMPM(element) + " - " + formatAMPM(new_date);
+            return {
+              ...element,
+              slot: formatAMPM(element.slot) + " - " + formatAMPM(new_date),
+            };
           }
+        );
+        console.log(
+          "convertedfilteredEveningSlots",
+          convertedfilteredEveningSlots
         );
         setSelectedEveningSlot(convertedfilteredEveningSlots);
       } else {
@@ -248,29 +282,24 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
 
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity
-        activeOpacity={0.99}
-        onPress={() => {
-          setSelectedSlot(`${item}`);
-        }}
-      >
+      <TouchableOpacity activeOpacity={0.99} onPress={() => console.log(item)}>
         <View
           style={{
             backgroundColor:
-              selectedSlot == `${item} PM` ? Colors.primary : "white",
+              selectedSlot == `${item.slot} PM` ? Colors.primary : "white",
             borderColor:
-              selectedSlot == `${item} PM` ? Colors.primary : "#CDCDCD",
+              selectedSlot == `${item.slot} PM` ? Colors.primary : "#CDCDCD",
             ...styles.slotContainerStyle,
           }}
         >
           <Text
             style={
-              selectedSlot == `${item} PM`
+              selectedSlot == `${item.slot} PM`
                 ? { ...Fonts.white16Regular }
                 : { ...Fonts.primaryColor16Regular }
             }
           >
-            {item}
+            {item.slot}
           </Text>
         </View>
       </TouchableOpacity>
@@ -300,7 +329,7 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
         }
         data={selectedAfternoonSlot}
         renderItem={renderItem}
-        keyExtractor={(index) => `${index}`}
+        keyExtractor={(item) => item.id}
         numColumns={2}
         ListFooterComponent={
           <>
@@ -356,7 +385,7 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
             highlightDateNameStyle={{ color: "white", fontSize: 15.0 }}
             highlightDateNumberStyle={{ color: "white", fontSize: 17.0 }}
             // datesBlacklist={datesBlacklistFunc}
-            datesWhitelist={datesWhitelist}
+            datesWhitelist={datesWhitelist.map((item) => item.slot)}
             disabledDateOpacity={0.6}
             disabledDateNameStyle={{ color: "gray", fontSize: 15.0 }}
             disabledDateNumberStyle={{ color: "gray", fontSize: 17.0 }}
@@ -436,26 +465,26 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
         <TouchableOpacity
           activeOpacity={0.99}
           onPress={() => {
-            console.log(`${item}`);
+            console.log(item);
           }}
         >
           <View
             style={{
               backgroundColor:
-                selectedSlot == `${item}` ? Colors.primary : "white",
+                selectedSlot == `${item.slot}` ? Colors.primary : "white",
               borderColor:
-                selectedSlot == `${item}` ? Colors.primary : "#CDCDCD",
+                selectedSlot == `${item.slot}` ? Colors.primary : "#CDCDCD",
               ...styles.slotContainerStyle,
             }}
           >
             <Text
               style={
-                selectedSlot == `${item}`
+                selectedSlot == `${item.slot}`
                   ? { ...Fonts.white16Regular }
                   : { ...Fonts.primaryColor16Regular }
               }
             >
-              {item}
+              {item.slot}
             </Text>
           </View>
         </TouchableOpacity>
@@ -466,7 +495,7 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
       <View>
         <FlatList
           data={slots}
-          keyExtractor={(index) => `${index}`}
+          keyExtractor={(item) => item.id}
           renderItem={renderItem}
           scrollEnabled={false}
           numColumns={2}
