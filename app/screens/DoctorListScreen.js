@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -18,6 +18,8 @@ import {
   MaterialIcons,
   AntDesign,
 } from "@expo/vector-icons";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const { width } = Dimensions.get("screen");
 
@@ -90,6 +92,45 @@ const doctorsList = [
 
 const DoctorListScreen = ({ navigation, route }) => {
   const type = "General practice";
+  const [doctorsList, setDoctorsList] = useState([]);
+  const [timeSlots, setTimeSlots] = useState([]);
+
+  const doctorsQuery = query(
+    collection(db, "customers"),
+    where("role.label", "==", "Doctor")
+  );
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(doctorsQuery, (querySnapshot) => {
+      // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
+      const parsedDoctors = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      // console.log(parsedDoctors);
+      setDoctorsList(parsedDoctors);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const timeSlotsQuery = query(
+    collection(db, "timeSlots")
+    // where("role.label", "==", "Doctor")
+  );
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(timeSlotsQuery, (querySnapshot) => {
+      // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
+      const parsedTimeSlots = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      // console.log(parsedDoctors);
+      setTimeSlots(parsedTimeSlots);
+    });
+    return () => unsubscribe();
+  }, []);
+  console.log("timeslots", timeSlots);
 
   return (
     <SafeAreaView style={{ flex: 1 }} backgroundColor="rgba(0,0,0,0)">
@@ -141,7 +182,7 @@ const DoctorListScreen = ({ navigation, route }) => {
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <View style={styles.doctorImageContainerStyle}>
               <Image
-                source={item.image}
+                source={{ uri: item.photoURL }}
                 resizeMode="contain"
                 style={{
                   height: 109.0,
@@ -152,7 +193,9 @@ const DoctorListScreen = ({ navigation, route }) => {
               />
             </View>
             <View>
-              <Text style={{ ...Fonts.black16Bold }}>{item.name}</Text>
+              <Text style={{ ...Fonts.black16Bold }}>
+                Dr. {item.displayName}
+              </Text>
               {/* <Text
                 style={{
                   ...Fonts.gray17Regular,

@@ -46,7 +46,7 @@ import { useRoute } from "@react-navigation/native";
 
 const { width } = Dimensions.get("screen");
 
-const IndividualDayScreen = ({ navigation, timeSlots }) => {
+const IndividualDayScreen = ({ timeSlots }) => {
   const randomID = useMemo(() => nanoid(), []);
   const { userData } = useContext(GlobalContext);
   const [datesWhitelist, setDatesWhitelist] = useState([]);
@@ -64,7 +64,7 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
 
   const [book, setBook] = useState(false);
   // const route = useRoute();
-
+  const navigation = useNavigation();
   // console.log("timeSlots", timeSlots);
 
   const timeSlotID = timeSlots ? timeSlots.id : randomID;
@@ -95,47 +95,50 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
 
   // console.log(timeSlotMessagesRef);
 
+  // useEffect(() => {
+  //   const unsubscribe = onSnapshot(timeSlotMessagesRef, (querySnapshot) => {
+  //     const messagesFirestore = querySnapshot.docChanges().map(({ doc }) => {
+  //       const message = doc.data();
+  //       return {
+  //         ...message,
+  //         id: doc.id,
+  //         slot: moment(message.slot.toDate()),
+  //         datetime: moment(message.slot.toDate()),
+  //       };
+  //     });
+  //     console.log("messagesFirestore", messagesFirestore);
+  //     appendtimeslot(messagesFirestore);
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
+
   useEffect(() => {
     const unsubscribe = onSnapshot(timeSlotMessagesRef, (querySnapshot) => {
       // querySnapshot
       //   .docChanges()
       //   .map(({ doc }) => console.log("doc_id", doc.id));
-      const messagesFirestore = querySnapshot.docChanges().map(({ doc }) => {
+      const messagesFirestore = querySnapshot.docs.map((doc) => {
         const message = doc.data();
         return {
           ...message,
           id: doc.id,
-          slot: moment(message.slot.toDate()),
-          datetime: moment(message.slot.toDate()),
+          slot: moment(message.slotStartingTime.toDate()),
+          datetime: moment(message.slotStartingTime.toDate()),
         };
       });
       console.log("messagesFirestore", messagesFirestore);
-      // const timeslot = messagesFirestore.map((doc) => moment(doc.slot));
-      // console.log("timeslot", timeslot);
-      // console.log("datesWhitelist inside", datesWhitelist);
-      appendtimeslot(messagesFirestore);
-      // // setTimeSlots(parsedTimesSlots);
+      setDatesWhitelist(messagesFirestore);
     });
     return () => unsubscribe();
   }, []);
 
-  const appendtimeslot = useCallback((timeslot) => {
-    setDatesWhitelist((previousdatesWhitelist) => [
-      ...previousdatesWhitelist,
-      ...timeslot,
-    ]);
-    // console.log("messages inside", messages);
-  }, []);
-
-  // const appendMessages = useCallback(
-  //   (datesWhitelist) => {
-  //     setDatesWhitelist((previousdatesWhitelists) =>
-  //       GiftedChat.append(previousMessages, messages)
-  //     );
-  //     // console.log("messages inside", messages);
-  //   },
-  //   [messages]
-  // );
+  // const appendtimeslot = useCallback((timeslot) => {
+  //   setDatesWhitelist((previousdatesWhitelist) => [
+  //     ...previousdatesWhitelist,
+  //     ...timeslot,
+  //   ]);
+  //   console.log("timeslot inside", timeslot);
+  // }, []);
 
   // console.log(userData);
   async function handleSubmit(slot, userData) {
@@ -177,10 +180,12 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
       // petName: listing.petName,
       // category: listing.category,
       // description: listing.description,
-      // createdAt: new Date(),
-      slot: slot,
+      createdAt: new Date(),
+      slotStartingTime: slot,
       user: userData,
       participantsArray: [userData.email],
+      duration: 1,
+      numberOfPeopleLimit: 10,
     };
     // console.log("message in sendImage", message);
     // const lastMessage = { ...message };
@@ -270,10 +275,6 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
             };
           }
         );
-        console.log(
-          "convertedfilteredEveningSlots",
-          convertedfilteredEveningSlots
-        );
         setSelectedEveningSlot(convertedfilteredEveningSlots);
       } else {
         setSelectedMorningSlot([]);
@@ -284,9 +285,20 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
     morningSlots(filteredDates, number);
   }, [filteredDates, datesWhitelist, number]);
 
+  // console.log("filteredDates", filteredDates);
+  // console.log("datesWhitelist", datesWhitelist);
+
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity activeOpacity={0.99} onPress={() => console.log(item)}>
+      <TouchableOpacity
+        activeOpacity={0.99}
+        onPress={() =>
+          navigation.navigate("Consultation", {
+            item: item,
+            timeSlotID: timeSlotID,
+          })
+        }
+      >
         <View
           style={{
             backgroundColor:
@@ -370,7 +382,6 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
   }
 
   function calander() {
-    const test = [moment()];
     return (
       <View>
         <CalendarStrip
@@ -424,7 +435,7 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
           value={number}
           defaultValue={"1"}
         ></AppTextInput>
-        <Button title="Clear timeframe" onPress={clearDatetime1Picker} />
+        {/* <Button title="Clear timeframe" onPress={clearDatetime1Picker} /> */}
 
         <DateTimePickerModal
           // display="inline"
@@ -463,7 +474,7 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
   }
 
   function slotsTime({ slots }) {
-    const navigation = useNavigation();
+    // const navigation = useNavigation();
     const renderItem = ({ item }) => {
       // console.log("item", item);
       return (

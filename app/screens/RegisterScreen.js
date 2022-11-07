@@ -36,7 +36,7 @@ const roles = [
   {
     backgroundColor: "#fc5c65",
     icon: "paw",
-    label: "Parent",
+    label: "Client",
     value: 2,
   },
 ];
@@ -84,12 +84,13 @@ function RegisterScreen({ navigation }) {
   };
 
   const handleSubmitFirebase = async (userInfo) => {
-    // console.log("userInfo", userInfo);
+    console.log("userInfo", userInfo);
     await signUp(userInfo.email, userInfo.password);
-    setUser(auth.currentUser);
+    const user = auth.currentUser;
     // console.log("auth.currentUser", user);
     let photoURL;
     if (userInfo.image.length === 1) {
+      console.log("test");
       const { url } = await uploadImage(
         userInfo.image[0],
         `images/profilePhotos/${user.uid}`,
@@ -105,17 +106,20 @@ function RegisterScreen({ navigation }) {
     if (photoURL) {
       userData.photoURL = photoURL;
     }
+    console.log(userData);
     await Promise.all([
       updateProfile(user, userData),
       setDoc(doc(db, "customers", user.uid), { ...userData, uid: user.uid }),
     ]);
     // console.log("updated user", user);
+
+    setUser(user);
   };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
-        console.log(authUser);
+        // console.log(authUser);
         setUser(authUser);
       }
     });
