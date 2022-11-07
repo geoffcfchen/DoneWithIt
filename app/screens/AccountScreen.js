@@ -10,6 +10,7 @@ import ListItemSeparator from "../components/lists/ListItemSeparator";
 import useAuth from "../auth/useAuth";
 import { auth } from "../../firebase";
 import AuthContext from "../auth/context";
+import GlobalContext from "../context/Context";
 
 const menuItems = [
   // {
@@ -53,7 +54,8 @@ const initialMessages = [
 ];
 
 function AccountScreen({ navigation }) {
-  const { user, setUser } = useContext(AuthContext);
+  const { setUser } = useContext(AuthContext);
+  const { userData } = useContext(GlobalContext);
 
   const signOutUser = () => {
     auth.signOut().then(() => {
@@ -64,12 +66,12 @@ function AccountScreen({ navigation }) {
     <Screen style={styles.screen}>
       <View style={styles.container}>
         <ListItem
-          title={user.displayName}
+          title={userData.displayName}
           // subTitle={user.email}
           image={
-            user.photoURL
+            userData.photoURL
               ? {
-                  uri: user.photoURL,
+                  uri: userData.photoURL,
                 }
               : require("../assets/icon-square.png")
           }

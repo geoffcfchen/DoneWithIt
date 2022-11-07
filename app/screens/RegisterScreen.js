@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import { updateProfile } from "@firebase/auth";
-import { doc, setDoc } from "@firebase/firestore";
+import { doc, setDoc, updateDoc } from "@firebase/firestore";
 import * as Yup from "yup";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -58,39 +58,39 @@ const validationSchema = Yup.object().shape({
 
 function RegisterScreen({ navigation }) {
   const { setUser } = useContext(AuthContext);
-  const registerApi = useApi(usersApi.register);
-  const loginApi = useApi(authApi.login);
+  // const registerApi = useApi(usersApi.register);
+  // const loginApi = useApi(authApi.login);
 
   // const auth = useAuth();
   const [error, setError] = useState();
 
-  const handleSubmit = async (userInfo) => {
-    const result = await registerApi.request(userInfo);
+  // const handleSubmit = async (userInfo) => {
+  //   const result = await registerApi.request(userInfo);
 
-    if (!result.ok) {
-      if (result.data) setError(result.data.error);
-      else {
-        setError("An unexpected error occurred.");
-        logger.log(result);
-      }
-      return;
-    }
+  //   if (!result.ok) {
+  //     if (result.data) setError(result.data.error);
+  //     else {
+  //       setError("An unexpected error occurred.");
+  //       logger.log(result);
+  //     }
+  //     return;
+  //   }
 
-    const { data: authToken } = await loginApi.request(
-      userInfo.email,
-      userInfo.password
-    );
-    auth.logIn(authToken);
-  };
+  //   const { data: authToken } = await loginApi.request(
+  //     userInfo.email,
+  //     userInfo.password
+  //   );
+  //   auth.logIn(authToken);
+  // };
 
   const handleSubmitFirebase = async (userInfo) => {
-    console.log("userInfo", userInfo);
     await signUp(userInfo.email, userInfo.password);
     const user = auth.currentUser;
-    // console.log("auth.currentUser", user);
+    const userID = user.uid;
+    const userRef = doc(db, "customers", userID);
+
     let photoURL;
     if (userInfo.image.length === 1) {
-      console.log("test");
       const { url } = await uploadImage(
         userInfo.image[0],
         `images/profilePhotos/${user.uid}`,
@@ -106,12 +106,15 @@ function RegisterScreen({ navigation }) {
     if (photoURL) {
       userData.photoURL = photoURL;
     }
-    console.log(userData);
-    await Promise.all([
-      updateProfile(user, userData),
-      setDoc(doc(db, "customers", user.uid), { ...userData, uid: user.uid }),
-    ]);
-    // console.log("updated user", user);
+
+    try {
+      await Promise.all([
+        updateProfile(user, userData),
+        updateDoc(userRef, { ...userData, uid: user.uid }),
+      ]);
+    } catch (error) {
+      console.log(error);
+    }
 
     setUser(user);
   };
@@ -128,9 +131,9 @@ function RegisterScreen({ navigation }) {
 
   return (
     <>
-      <ActivityIndicator
+      {/* <ActivityIndicator
         visible={registerApi.loading || loginApi.loading}
-      ></ActivityIndicator>
+      ></ActivityIndicator> */}
       <ScreenScrollView>
         <Ionicons
           name="arrow-back-sharp"
