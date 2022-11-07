@@ -18,6 +18,7 @@ import {
   Button,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { useNavigation } from "@react-navigation/native";
 
 import { Fonts, Colors, Sizes } from "../constant/styles";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -101,7 +102,12 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
       //   .map(({ doc }) => console.log("doc_id", doc.id));
       const messagesFirestore = querySnapshot.docChanges().map(({ doc }) => {
         const message = doc.data();
-        return { id: doc.id, slot: moment(message.slot.toDate()) };
+        return {
+          ...message,
+          id: doc.id,
+          slot: moment(message.slot.toDate()),
+          datetime: moment(message.slot.toDate()),
+        };
       });
       console.log("messagesFirestore", messagesFirestore);
       // const timeslot = messagesFirestore.map((doc) => moment(doc.slot));
@@ -306,6 +312,11 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
     );
   };
 
+  console.log(
+    "datesWhitelist.map((item) => item.slot)",
+    datesWhitelist.map((item) => item.slot).length
+  );
+
   return (
     <Screen>
       {selectDate()}
@@ -366,36 +377,36 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
   }
 
   function calander() {
+    const test = [moment()];
     return (
       <View>
-        <View>
-          <CalendarStrip
-            style={{
-              height: 100,
-              paddingTop: Sizes.fixPadding * 2.0,
-              paddingBottom: Sizes.fixPadding,
-            }}
-            highlightDateContainerStyle={{
-              backgroundColor: Colors.primary,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            dateNumberStyle={{ color: "black", fontSize: 17.0 }}
-            dateNameStyle={{ color: "black", fontSize: 15.0 }}
-            highlightDateNameStyle={{ color: "white", fontSize: 15.0 }}
-            highlightDateNumberStyle={{ color: "white", fontSize: 17.0 }}
-            // datesBlacklist={datesBlacklistFunc}
-            datesWhitelist={datesWhitelist.map((item) => item.slot)}
-            disabledDateOpacity={0.6}
-            disabledDateNameStyle={{ color: "gray", fontSize: 15.0 }}
-            disabledDateNumberStyle={{ color: "gray", fontSize: 17.0 }}
-            useIsoWeekday={false}
-            scrollable={true}
-            upperCaseDays={false}
-            styleWeekend={true}
-            onDateSelected={SelectedDate}
-          />
-        </View>
+        <CalendarStrip
+          style={{
+            height: 100,
+            paddingTop: Sizes.fixPadding * 2.0,
+            paddingBottom: Sizes.fixPadding,
+          }}
+          highlightDateContainerStyle={{
+            backgroundColor: Colors.primary,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          dateNumberStyle={{ color: "black", fontSize: 17.0 }}
+          dateNameStyle={{ color: "black", fontSize: 15.0 }}
+          highlightDateNameStyle={{ color: "white", fontSize: 15.0 }}
+          highlightDateNumberStyle={{ color: "white", fontSize: 17.0 }}
+          // markedDates={markedDatesFunc}
+          // datesBlacklist={datesBlacklistFunc}
+          datesWhitelist={datesWhitelist.map((item) => item.slot)}
+          disabledDateOpacity={0.6}
+          disabledDateNameStyle={{ color: "gray", fontSize: 15.0 }}
+          disabledDateNumberStyle={{ color: "gray", fontSize: 17.0 }}
+          useIsoWeekday={false}
+          scrollable={true}
+          upperCaseDays={false}
+          styleWeekend={true}
+          onDateSelected={SelectedDate}
+        />
       </View>
     );
   }
@@ -459,14 +470,17 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
   }
 
   function slotsTime({ slots }) {
+    const navigation = useNavigation();
     const renderItem = ({ item }) => {
       // console.log("item", item);
       return (
         <TouchableOpacity
           activeOpacity={0.99}
-          onPress={() => {
-            console.log(item);
-          }}
+          onPress={() =>
+            navigation.navigate("Consultation", {
+              item: item,
+            })
+          }
         >
           <View
             style={{

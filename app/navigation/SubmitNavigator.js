@@ -19,13 +19,19 @@ function SubmitNavigator() {
       screenOptions={{ presentation: "modal", headerShown: false }}
     >
       {userData.role.label == "Doctor" ? (
-        <Stack.Screen
-          name="OpenSchedule"
-          // component={OpenScheduleScreen}
-          children={() => (
-            <OpenScheduleScreen timeSlots={timeSlots}></OpenScheduleScreen>
-          )}
-        ></Stack.Screen>
+        <>
+          <Stack.Screen
+            name="OpenSchedule"
+            // component={OpenScheduleScreen}
+            children={() => (
+              <OpenScheduleScreen timeSlots={timeSlots}></OpenScheduleScreen>
+            )}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="Consultation"
+            component={ConsultationScreen}
+          ></Stack.Screen>
+        </>
       ) : (
         <Stack.Screen
           name="ListingEdit"

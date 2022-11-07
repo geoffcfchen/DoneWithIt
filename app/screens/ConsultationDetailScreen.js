@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Fonts, Colors, Sizes } from "../constant/styles";
 import { MaterialIcons, Ionicons, FontAwesome5 } from "@expo/vector-icons";
+import moment from "moment";
 
 const { width } = Dimensions.get("screen");
 
@@ -27,13 +28,29 @@ const patientLit = [
 ];
 
 const ConsultationScreen = ({ navigation, route }) => {
-  const image = route.params.image;
-  const name = route.params.name;
-  const experience = route.params.experience;
-  const type = route.params.type;
-  const slot = route.params.selectedSlot;
-  const rating = route.params.rating;
+  // const image = route.params.image;
+  // const name = route.params.name;
+  // const experience = route.params.experience;
+  // const type = route.params.type;
 
+  const doctorData = route.params.item.user;
+  const datetime = route.params.item.datetime;
+  const slot = route.params.item.slot;
+  const participants = route.params.item.participantsArray.filter(
+    (item) => item != doctorData.email
+  );
+
+  // console.log("datetime", datetime);
+  // console.log("slot", slot);
+  console.log(
+    "participants",
+    route.params.item.participantsArray.filter(
+      (item) => item != doctorData.email
+    )
+  );
+
+  // const rating = route.params.rating;
+  // console.log("item", item);
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       {header()}
@@ -43,8 +60,8 @@ const ConsultationScreen = ({ navigation, route }) => {
       {divider()}
       {appintmentText()}
       {patients()}
-      {addPatient()}
-      {confirmPayButton()}
+      {/* {addPatient()} */}
+      {deleteButton()}
     </View>
   );
 
@@ -58,7 +75,7 @@ const ConsultationScreen = ({ navigation, route }) => {
       >
         <View style={styles.doctorImageContainerStyle}>
           <Image
-            source={image}
+            source={{ uri: doctorData.photoURL }}
             resizeMode="contain"
             style={{
               height: 90.0,
@@ -77,9 +94,11 @@ const ConsultationScreen = ({ navigation, route }) => {
             }}
           >
             <View style={{ width: width / 3.0 }}>
-              <Text style={{ ...Fonts.black16Bold }}>{name}</Text>
+              <Text style={{ ...Fonts.black16Bold }}>
+                {doctorData.displayName}
+              </Text>
             </View>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               activeOpacity={0.99}
               onPress={() =>
                 navigation.navigate("DoctorProfile", {
@@ -92,29 +111,29 @@ const ConsultationScreen = ({ navigation, route }) => {
               }
             >
               <Text style={{ ...Fonts.primaryColor13Bold }}>View Profile</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
-          <Text
+          {/* <Text
             style={{
               ...Fonts.gray17Regular,
               marginTop: Sizes.fixPadding - 7.0,
             }}
           >
             {type}
-          </Text>
-          <Text
+          </Text> */}
+          {/* <Text
             style={{
               ...Fonts.primaryColor16Regular,
               marginTop: Sizes.fixPadding - 7.0,
             }}
           >
             {experience} Years Experience
-          </Text>
-          <Text
+          </Text> */}
+          {/* <Text
             style={{ ...Fonts.black20Bold, marginTop: Sizes.fixPadding - 2.0 }}
           >
             $39
-          </Text>
+          </Text> */}
         </View>
       </View>
     );
@@ -129,18 +148,24 @@ const ConsultationScreen = ({ navigation, route }) => {
   function dateAndTime() {
     return (
       <View style={styles.dateAndTimeContainerStyle}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <View
+          style={{
+            flexDirection: "row",
+
+            marginLeft: 10,
+          }}
+        >
           <FontAwesome5 name="calendar-alt" size={16} color="gray" />
           <Text
             style={{
               ...Fonts.black16Regular,
-              marginLeft: Sizes.fixPadding + 5.0,
+              marginLeft: Sizes.fixPadding + 2,
             }}
           >
-            28-June
+            {moment(datetime).format("dddd, MMM Do YYYY")}
           </Text>
         </View>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <View style={{ flexDirection: "row", marginLeft: 8 }}>
           <MaterialIcons name="access-time" size={18} color="gray" />
           <Text
             style={{ ...Fonts.black16Regular, marginLeft: Sizes.fixPadding }}
@@ -200,7 +225,7 @@ const ConsultationScreen = ({ navigation, route }) => {
     );
   }
 
-  function confirmPayButton() {
+  function deleteButton() {
     return (
       <TouchableOpacity
         activeOpacity={0.99}
@@ -208,7 +233,7 @@ const ConsultationScreen = ({ navigation, route }) => {
         onPress={() => navigation.navigate("PaymentMethod")}
       >
         <View style={styles.confirmButtonStyle}>
-          <Text style={{ ...Fonts.white20Regular }}>Confirm & Pay</Text>
+          <Text style={{ ...Fonts.white20Regular }}>Cancel schedule</Text>
         </View>
       </TouchableOpacity>
     );
@@ -239,7 +264,7 @@ const ConsultationScreen = ({ navigation, route }) => {
         <Text
           style={{ ...Fonts.black20Bold, marginLeft: Sizes.fixPadding + 5.0 }}
         >
-          Consultaion Detail
+          Schedule Detail
         </Text>
       </View>
     );
@@ -263,8 +288,8 @@ const styles = StyleSheet.create({
     bottom: Sizes.fixPadding,
   },
   dateAndTimeContainerStyle: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
+    // flexDirection: "row",
+    // justifyContent: "space-evenly",
     paddingVertical: Sizes.fixPadding,
   },
   doctorImageContainerStyle: {
