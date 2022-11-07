@@ -127,8 +127,6 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
     // console.log("messages inside", messages);
   }, []);
 
-  console.log("datesWhitelist outside", datesWhitelist);
-
   // const appendMessages = useCallback(
   //   (datesWhitelist) => {
   //     setDatesWhitelist((previousdatesWhitelists) =>
@@ -312,11 +310,6 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
     );
   };
 
-  console.log(
-    "datesWhitelist.map((item) => item.slot)",
-    datesWhitelist.map((item) => item.slot).length
-  );
-
   return (
     <Screen>
       {selectDate()}
@@ -479,6 +472,7 @@ const IndividualDayScreen = ({ navigation, timeSlots }) => {
           onPress={() =>
             navigation.navigate("Consultation", {
               item: item,
+              timeSlotID: timeSlotID,
             })
           }
         >

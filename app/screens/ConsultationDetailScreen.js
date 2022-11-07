@@ -11,6 +11,9 @@ import {
 import { Fonts, Colors, Sizes } from "../constant/styles";
 import { MaterialIcons, Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import moment from "moment";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "../../firebase";
+import { useNavigation } from "@react-navigation/native";
 
 const { width } = Dimensions.get("screen");
 
@@ -39,6 +42,8 @@ const ConsultationScreen = ({ navigation, route }) => {
   const participants = route.params.item.participantsArray.filter(
     (item) => item != doctorData.email
   );
+  const timeSlotID = route.params.timeSlotID;
+  const messageID = route.params.item.id;
 
   // console.log("datetime", datetime);
   // console.log("slot", slot);
@@ -225,12 +230,32 @@ const ConsultationScreen = ({ navigation, route }) => {
     );
   }
 
+  async function handelDelete() {
+    deleteDoc(docRef)
+      .then(() => {
+        navigation.goBack();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   function deleteButton() {
+    const navigation = useNavigation();
+    docRef = doc(db, "timeSlots", timeSlotID, "messages", messageID);
     return (
       <TouchableOpacity
         activeOpacity={0.99}
         style={styles.confirmAndPayButtonStyle}
-        onPress={() => navigation.navigate("PaymentMethod")}
+        onPress={() => {
+          deleteDoc(docRef)
+            .then(() => {
+              navigation.goBack();
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }}
       >
         <View style={styles.confirmButtonStyle}>
           <Text style={{ ...Fonts.white20Regular }}>Cancel schedule</Text>
