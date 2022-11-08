@@ -51,6 +51,11 @@ const TimeSlotScreen = ({ navigation, route }) => {
   const experience = route.params.experience;
   const type = route.params.type;
   const rating = route.params.rating;
+  const timeSlot = route.params.timeSlot;
+  const item = route.params.item;
+
+  console.log("timeSlot", timeSlot);
+  console.log("item", item);
 
   const [selectedSlot, setSelectedSlot] = useState("");
 
@@ -176,9 +181,9 @@ const TimeSlotScreen = ({ navigation, route }) => {
         end: moment().add(5, "days"),
       },
     ];
-    console.log(datesWhitelist);
-    console.log(moment().add(1, "days"));
-    console.log(dayjs().add(1, "day"));
+    // console.log(datesWhitelist);
+    // console.log(moment().add(1, "days"));
+    // console.log(dayjs().add(1, "day"));
     return (
       <View>
         <View>
@@ -226,7 +231,7 @@ const TimeSlotScreen = ({ navigation, route }) => {
       >
         <View style={styles.doctorImageContainerStyle}>
           <Image
-            source={image}
+            source={{ uri: item.photoURL }}
             resizeMode="contain"
             style={{
               height: 90.0,
@@ -244,7 +249,10 @@ const TimeSlotScreen = ({ navigation, route }) => {
             }}
           >
             <View style={{ width: width / 2.0 }}>
-              <Text style={{ ...Fonts.black16Bold }}>{name}</Text>
+              <Text style={{ ...Fonts.black16Bold }}>
+                {" "}
+                Dr. {item.displayName}
+              </Text>
             </View>
             {/* <TouchableOpacity
               activeOpacity={0.99}

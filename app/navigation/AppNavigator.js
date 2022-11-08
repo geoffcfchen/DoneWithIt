@@ -77,6 +77,7 @@ function AppNavigator() {
           ),
         }}
       ></Tab.Screen>
+
       <Tab.Screen
         name="Schedules"
         component={ScheduleNavigator}

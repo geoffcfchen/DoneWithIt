@@ -63,12 +63,25 @@ const IndividualDayScreen = ({ timeSlots }) => {
   const [number, onChangeNumber] = useState(1);
 
   const [book, setBook] = useState(false);
-  // const route = useRoute();
+  const route = useRoute();
   const navigation = useNavigation();
-  // console.log("timeSlots", timeSlots);
+  // console.log("userData", userData);
 
-  const timeSlotID = timeSlots ? timeSlots.id : randomID;
-  // console.log("timeSlotID", timeSlotID);
+  let timeSlotID;
+  let doctorData;
+  if (userData.role.label == "Client") {
+    timeSlots = route.params.timeSlots[0];
+    timeSlotID = timeSlots.id;
+    doctorData = route.params.item;
+    console.log("timeSlotID", timeSlotID);
+    console.log("doctorData", doctorData);
+  } else {
+    timeSlotID = timeSlots ? timeSlots.id : randomID;
+  }
+  // console.log("DoctorInfo", route.params.item);
+  // console.log("timeSlots", route.params.timeSlots);
+  // console.log("item", item);
+
   const timeSlotRef = doc(db, "timeSlots", timeSlotID);
   const timeSlotMessagesRef = collection(
     db,
@@ -183,7 +196,7 @@ const IndividualDayScreen = ({ timeSlots }) => {
       createdAt: new Date(),
       slotStartingTime: slot,
       user: userData,
-      participantsArray: [userData.email],
+      participantsArray: [],
       duration: 1,
       numberOfPeopleLimit: 10,
     };
@@ -324,7 +337,8 @@ const IndividualDayScreen = ({ timeSlots }) => {
 
   return (
     <Screen>
-      {selectDate()}
+      {userData.role.label == "Doctor" && selectDate()}
+      {userData.role.label == "Client" && doctorInfo()}
       {calander()}
       {divider()}
       <FlatList
@@ -379,6 +393,79 @@ const IndividualDayScreen = ({ timeSlots }) => {
       return strTime;
     }
     return momentdate;
+  }
+
+  function doctorInfo() {
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          marginHorizontal: Sizes.fixPadding * 2.0,
+        }}
+      >
+        <View style={styles.doctorImageContainerStyle}>
+          <Image
+            source={{ uri: doctorData.photoURL }}
+            resizeMode="contain"
+            style={{
+              height: 90.0,
+              width: 90.0,
+              borderRadius: 45.0,
+            }}
+          />
+        </View>
+        <View style={{ justifyContent: "center", marginTop: Sizes.fixPadding }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: width - 140.0,
+            }}
+          >
+            <View style={{ width: width / 2.0 }}>
+              <Text style={{ ...Fonts.black16Bold }}>
+                Dr. {doctorData.displayName}
+              </Text>
+            </View>
+            {/* <TouchableOpacity
+              activeOpacity={0.99}
+              onPress={() =>
+                navigation.navigate("DoctorProfile", {
+                  image: image,
+                  name: name,
+                  type: type,
+                  rating: rating,
+                  experience: experience,
+                })
+              }
+            >
+              <Text style={{ ...Fonts.primaryColor13Bold }}>View Profile</Text>
+            </TouchableOpacity> */}
+          </View>
+          {/* <Text
+            style={{
+              ...Fonts.gray17Regular,
+              marginTop: Sizes.fixPadding - 7.0,
+            }}
+          >
+            {type}
+          </Text> */}
+          {/* <Text
+            style={{
+              ...Fonts.primaryColor16Regular,
+              marginTop: Sizes.fixPadding - 7.0,
+            }}
+          >
+            {experience} Years Experience
+          </Text> */}
+          {/* <Text
+            style={{ ...Fonts.black20Bold, marginTop: Sizes.fixPadding - 2.0 }}
+          >
+            $39
+          </Text> */}
+        </View>
+      </View>
+    );
   }
 
   function calander() {

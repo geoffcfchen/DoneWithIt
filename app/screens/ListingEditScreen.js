@@ -1,7 +1,14 @@
 import react, { useState, useEffect, useContext, useMemo } from "react";
 import { StyleSheet } from "react-native";
 import * as Yup from "yup";
-import { collection, doc, setDoc, addDoc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  setDoc,
+  addDoc,
+  updateDoc,
+  onSnapshot,
+} from "firebase/firestore";
 import { nanoid } from "nanoid";
 
 import {
@@ -84,7 +91,8 @@ const categories = [
 function ListingEditScreen(props) {
   const randomID = useMemo(() => nanoid(), []);
   const [questionHash, setQuestionHash] = useState("");
-  const contacts = useContacts();
+  // const contacts = useContacts();
+  const [contacts, setContacts] = useState([]);
   const { unfilteredQuestions } = useContext(GlobalContext);
   // const contacts = [{ contactName: "Kate Bell", email: "kate-bell@mac.com" }];
   // const [question, setQuestion] = useState();
@@ -93,8 +101,32 @@ function ListingEditScreen(props) {
   const [progress, setProgress] = useState(0);
   const { user } = useContext(AuthContext);
 
-  const currentUser = auth.currentUser;
-  // console.log("currentUser", currentUser);
+  const customersRef = collection(db, "customers");
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(customersRef, (querySnapshot) => {
+      const customers = querySnapshot.docs
+        .map((doc) => {
+          const customer = doc.data();
+          return {
+            ...customer,
+          };
+        })
+        .filter((item) => item.role.label == "Doctor");
+      const parsedcustomers = customers.map((item) => {
+        return {
+          contactName: item.displayName,
+          email: item.email,
+        };
+      });
+      // console.log("customers", parsedcustomers);
+      setContacts(parsedcustomers);
+      // setDatesWhitelist(messagesFirestore);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  console.log("contacts", contacts);
 
   const senderUser = user.photoURL
     ? {
