@@ -10,7 +10,35 @@ import useContacts from "../hooks/useHooks";
 import AppText from "../components/AppText";
 
 export default function Contacts() {
-  const contacts = useContacts();
+  // const contacts = useContacts();
+  const { userData } = useContext(GlobalContext);
+  const [contacts, setContacts] = useState([]);
+  const customersRef = collection(db, "customers");
+  useEffect(() => {
+    const unsubscribe = onSnapshot(customersRef, (querySnapshot) => {
+      const customers = querySnapshot.docs
+        .map((doc) => {
+          const customer = doc.data();
+          return {
+            ...customer,
+          };
+        })
+        .filter((item) => item.email != userData.email);
+
+      const parsedcustomers = customers.map((item) => {
+        return {
+          contactName: item.displayName,
+          email: item.email,
+          photoURL: item.photoURL,
+        };
+      });
+      console.log(parsedcustomers);
+      // console.log("customers", parsedcustomers);
+      setContacts(parsedcustomers);
+      // setDatesWhitelist(messagesFirestore);
+    });
+    return () => unsubscribe();
+  }, []);
   // const contacts = [{ contactName: "Kate Bell", email: "kate-bell@mac.com" }];
   const route = useRoute();
 
@@ -22,7 +50,7 @@ export default function Contacts() {
     <FlatList
       style={{ flex: 1, padding: 10 }}
       data={contacts}
-      keyExtractor={(_, i) => i}
+      keyExtractor={(item) => item.email}
       renderItem={({ item }) => (
         // <AppText>{item.contactName}</AppText>
         <ContactPreview contact={item} image={image}></ContactPreview>

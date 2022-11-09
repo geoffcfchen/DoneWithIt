@@ -130,13 +130,6 @@ const DoctorListScreen = ({ navigation, route }) => {
     });
     return () => unsubscribe();
   }, []);
-  // console.log("timeslots", timeSlots);
-  console.log(
-    "timeSlots",
-    timeSlots.filter(
-      (item) => item.participantsArray[0] === "b95606023@gmail.com"
-    )
-  );
 
   return (
     <SafeAreaView style={{ flex: 1 }} backgroundColor="rgba(0,0,0,0)">

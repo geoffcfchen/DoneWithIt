@@ -30,13 +30,9 @@ logger.start();
 SplashScreen.preventAutoHideAsync();
 
 function App() {
+  // const { user } = useContext(AuthContext);
   const [user, setUser] = useState();
-  const [isReady, setIsReady] = useState(false);
-
-  // const questionsQuery = query(
-  //   collection(db, "customers"),
-  //   where("email", "==", user?.email)
-  // );
+  const [isReady, setIsReady] = useState(true);
 
   useEffect(() => {
     async function prepare() {
@@ -53,17 +49,8 @@ function App() {
       }
     }
     prepare();
+    // console.log("user in first useEffect", user);
   }, []);
-
-  // useEffect(() => {
-  //   console.log("userEffect");
-  //   const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
-  //     querySnapshot.docs.map((doc) => setUserData(doc.data()));
-  //   });
-  //   unsubscribe();
-  // }, [user]);
-
-  console.log(user);
 
   const onNavigationContainerReady = useCallback(async () => {
     if (isReady) await SplashScreen.hideAsync();

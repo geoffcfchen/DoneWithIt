@@ -126,7 +126,7 @@ function ListingEditScreen(props) {
     return () => unsubscribe();
   }, []);
 
-  console.log("contacts", contacts);
+  // console.log("contacts", contacts);
 
   const senderUser = user.photoURL
     ? {

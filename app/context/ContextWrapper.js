@@ -7,7 +7,7 @@ export default function ContextWrapper(props) {
   const [unfilteredRooms, setUnfilteredRooms] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [unfilteredQuestions, setUnfilteredQuestions] = useState([]);
-  const [userData, setUserData] = useState([]);
+  const [userData, setUserData] = useState();
   const [petOwners, setPetOwners] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [unfilteredDoctors, setUnfilteredDoctors] = useState([]);

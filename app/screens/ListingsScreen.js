@@ -92,7 +92,7 @@ function ListingsScreen({ navigation }) {
       //     b.lastMessage.createdAt.toDate().getTime() -
       //     a.lastMessage.createdAt.toDate().getTime()
       // );
-      console.log("parsedQuestions", parsedQuestions);
+      // console.log("parsedQuestions", parsedQuestions);
       setUnfilteredQuestions(parsedQuestions);
       setQuestions(parsedQuestions.filter((doc) => doc.lastMessage));
     });

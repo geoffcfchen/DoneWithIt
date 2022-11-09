@@ -24,6 +24,7 @@ function AppNavigator() {
   const { user } = useContext(AuthContext);
   const { setUserData, userData } = useContext(GlobalContext);
   const [timeSlots, setTimeSlots] = useState([]);
+  const [role, setRole] = useState();
 
   const questionsQuery = query(
     collection(db, "customers"),
@@ -33,7 +34,8 @@ function AppNavigator() {
   useEffect(() => {
     const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
       const data = querySnapshot.docs.map((doc) => doc.data());
-      setUserData(data);
+      setUserData(...data);
+      setRole(data[0].role.label);
     });
     return () => unsubscribe();
   }, []);
@@ -42,9 +44,6 @@ function AppNavigator() {
     collection(db, "timeSlots"),
     where("participantsArray", "array-contains", user.email)
   );
-
-  // console.log(userData);
-  // console.log(user);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(timeSlotsQuery, (querySnapshot) => {
@@ -82,16 +81,18 @@ function AppNavigator() {
         }}
       ></Tab.Screen>
 
-      <Tab.Screen
-        name="Schedules"
-        component={ScheduleNavigator}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome5 name="calendar-alt" size={size} color={color} />
-          ),
-        }}
-      ></Tab.Screen>
+      {role && role != "Doctor" && (
+        <Tab.Screen
+          name="Schedules"
+          component={ScheduleNavigator}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome5 name="calendar-alt" size={size} color={color} />
+            ),
+          }}
+        ></Tab.Screen>
+      )}
 
       <Tab.Screen
         name="SubmitSchedule"
