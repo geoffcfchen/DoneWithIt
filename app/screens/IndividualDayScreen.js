@@ -515,7 +515,7 @@ const IndividualDayScreen = ({ timeSlots }) => {
           title="Add starting time"
           onPress={showStartDatetime1Picker}
         />
-        <AppTextInput
+        {/* <AppTextInput
           keyboardType="numeric"
           maxLength={8}
           placeholder="Duration (hour)"
@@ -523,7 +523,7 @@ const IndividualDayScreen = ({ timeSlots }) => {
           onChangeText={onChangeNumber}
           value={number}
           defaultValue={"1"}
-        ></AppTextInput>
+        ></AppTextInput> */}
         {/* <Button title="Clear timeframe" onPress={clearDatetime1Picker} /> */}
 
         <DateTimePickerModal
