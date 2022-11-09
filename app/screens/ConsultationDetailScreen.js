@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import {
   Text,
   View,
@@ -16,8 +16,11 @@ import {
   collection,
   deleteDoc,
   doc,
+  setDoc,
   updateDoc,
 } from "firebase/firestore";
+import { nanoid } from "nanoid";
+
 import { db } from "../../firebase";
 import { useNavigation } from "@react-navigation/native";
 import GlobalContext from "../context/Context";
@@ -42,7 +45,7 @@ const ConsultationScreen = ({ navigation, route }) => {
   const { unfilteredQuestions, userData } = useContext(GlobalContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [questionReference, setQuestionReference] = useState([]);
-
+  const randomID = useMemo(() => nanoid(), []);
   // const image = route.params.image;
   // const name = route.params.name;
   // const experience = route.params.experience;
@@ -95,7 +98,7 @@ const ConsultationScreen = ({ navigation, route }) => {
         }
         const questionData = {
           participants: [currUserData, userBData],
-          participantsArray: [user.email, userB.email],
+          participantsArray: [userData.email, doctorData.email],
         };
         try {
           await setDoc(questionRef, questionData);
