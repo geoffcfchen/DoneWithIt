@@ -14,6 +14,7 @@ import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import GlobalContext from "../context/Context";
 import AuthContext from "../auth/context";
+import moment from "moment";
 
 const listings = [
   {
@@ -91,7 +92,7 @@ function ListingsScreen({ navigation }) {
       //     b.lastMessage.createdAt.toDate().getTime() -
       //     a.lastMessage.createdAt.toDate().getTime()
       // );
-      // console.log("parsedQuestions", parsedQuestions);
+      console.log("parsedQuestions", parsedQuestions);
       setUnfilteredQuestions(parsedQuestions);
       setQuestions(parsedQuestions.filter((doc) => doc.lastMessage));
     });
@@ -99,7 +100,7 @@ function ListingsScreen({ navigation }) {
   }, []);
 
   // console.log("unfilteredQuestions", unfilteredQuestions);
-  // console.log("questions", questions);
+  // console.log("questions", questions[0].datetime.toDate());
 
   return (
     <Screen style={styles.screen}>
@@ -111,6 +112,8 @@ function ListingsScreen({ navigation }) {
             title={item.lastMessage.title}
             subTitle={item.lastMessage.description}
             imageUrl={item.lastMessage.image}
+            datetime={item.datetime}
+            slot={item.slot}
             onPress={() =>
               navigation.navigate(routes.LISTING_DETAILS, { item })
             }

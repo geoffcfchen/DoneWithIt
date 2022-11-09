@@ -142,49 +142,34 @@ function ListingEditScreen(props) {
     const question = unfilteredQuestions.find((question) =>
       question.participantsArray.includes(listing.doctor.email)
     );
-
-    // console.log("question", question);
     const questionID = question ? question.id : randomID;
-    // console.log("questionID = ", questionID);
-
     const questionRef = doc(db, "questions", questionID);
-    // console.log("questionRef = ", questionRef);
     const questionMessagesRef = collection(
       db,
       "questions",
       questionID,
       "messages"
     );
-    // console.log("questionMessagesRef", questionMessagesRef);
     const userB = listing.doctor;
-    // console.log("question", question);
     if (!question) {
-      // create currUserData
       const currUserData = {
         displayName: user.displayName,
         email: user.email,
       };
-      // console.log("currUserData", currUserData);
-      // put in photoURL in currUserData if curretUser has photoURL
       if (user.photoURL) {
         currUserData.photoURL = user.photoURL;
       }
-      // now construct userBdata
-
       const userBData = {
         displayName: userB.contactName || userB.displayName || "",
         email: userB.email,
       };
-      // put in photoURL in userBData if userB has photoURL
       if (userB.photoURL) {
         userBData.photoURL = userB.photoURL;
       }
-      // construct the questionData
       const questionData = {
         participants: [currUserData, userBData],
         participantsArray: [user.email, userB.email],
       };
-      // construct the roomRef with roomData
       try {
         await setDoc(questionRef, questionData);
       } catch (error) {

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -11,10 +11,17 @@ import {
 import { Fonts, Colors, Sizes } from "../constant/styles";
 import { MaterialIcons, Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import moment from "moment";
-import { arrayUnion, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import {
+  arrayUnion,
+  collection,
+  deleteDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../../firebase";
 import { useNavigation } from "@react-navigation/native";
 import GlobalContext from "../context/Context";
+import Screen from "../components/Screen";
 
 const { width } = Dimensions.get("screen");
 
@@ -32,14 +39,15 @@ const patientLit = [
 ];
 
 const ConsultationScreen = ({ navigation, route }) => {
-  const { userData } = useContext(GlobalContext);
+  const { unfilteredQuestions, userData } = useContext(GlobalContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const [questionReference, setQuestionReference] = useState([]);
 
   // const image = route.params.image;
   // const name = route.params.name;
   // const experience = route.params.experience;
   // const type = route.params.type;
-  console.log("item", route.params.item);
+  // console.log("item", route.params.item);
   const doctorData = route.params.item.user;
   const datetime = route.params.item.datetime;
   const slot = route.params.item.slot;
@@ -52,19 +60,55 @@ const ConsultationScreen = ({ navigation, route }) => {
   const timeSlotID = route.params.timeSlotID;
   const messageID = route.params.item.id;
 
-  // console.log("datetime", datetime);
-  // console.log("slot", slot);
-  console.log(
-    "participants",
-    route.params.item.participantsArray.filter(
-      (item) => item != doctorData.email
-    )
-  );
+  useEffect(() => {
+    async function checkifquestionexist() {
+      const question = unfilteredQuestions.find(
+        (question) =>
+          question.participantsArray.includes(userData.email) &&
+          question.participantsArray.includes(doctorData.email)
+      );
 
-  // const rating = route.params.rating;
-  // console.log("item", item);
+      // console.log(question);
+      const questionID = question ? question.id : randomID;
+      const questionRef = doc(db, "questions", questionID);
+      // const questionMessagesRef = collection(
+      //   db,
+      //   "questions",
+      //   questionID,
+      //   "messages"
+      // );
+      setQuestionReference(questionRef);
+      if (!question) {
+        const currUserData = {
+          displayName: userData.displayName,
+          email: userData.email,
+        };
+        if (userData.photoURL) {
+          currUserData.photoURL = userData.photoURL;
+        }
+        const userBData = {
+          displayName: doctorData.contactName || doctorData.displayName || "",
+          email: doctorData.email,
+        };
+        if (doctorData.photoURL) {
+          userBData.photoURL = doctorData.photoURL;
+        }
+        const questionData = {
+          participants: [currUserData, userBData],
+          participantsArray: [user.email, userB.email],
+        };
+        try {
+          await setDoc(questionRef, questionData);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+    checkifquestionexist();
+  }, []);
+
   return (
-    <View style={{ flex: 1, backgroundColor: "white" }}>
+    <Screen style={{ flex: 1, backgroundColor: "white" }}>
       {header()}
       {doctorInfo()}
       {divider()}
@@ -75,7 +119,7 @@ const ConsultationScreen = ({ navigation, route }) => {
       {/* {addPatient()} */}
       {userData.role.label == "Doctor" && deleteButton()}
       {userData.role.label == "Client" && bookButton()}
-    </View>
+    </Screen>
   );
 
   function doctorInfo() {
@@ -164,7 +208,6 @@ const ConsultationScreen = ({ navigation, route }) => {
         <View
           style={{
             flexDirection: "row",
-
             marginLeft: 10,
           }}
         >
@@ -267,21 +310,38 @@ const ConsultationScreen = ({ navigation, route }) => {
   function bookButton() {
     const navigation = useNavigation();
     const docRef = doc(db, "timeSlots", timeSlotID, "messages", messageID);
+    // console.log("slot", slot);
+    const handelBookButton = () => {
+      updateDoc(docRef, {
+        participantsArray: arrayUnion({
+          displayName: userData.displayName,
+          email: userData.email,
+          photoURL: userData.photoURL,
+        }),
+      })
+        .then(() => {
+          navigation.navigate("Questions", { screen: "Listings" });
+          // setModalVisible(false);
+          // console.log("test");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      try {
+        updateDoc(questionReference, {
+          datetime: datetime.toDate(),
+          slot: slot,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     return (
       <TouchableOpacity
         activeOpacity={0.99}
         style={styles.confirmAndPayButtonStyle}
-        onPress={() => {
-          updateDoc(docRef, { participantsArray: arrayUnion(userData) })
-            .then(() => {
-              navigation.navigate("Questions", { screen: "Listings" });
-              setModalVisible(false);
-              // console.log("test");
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        }}
+        onPress={handelBookButton}
       >
         <View style={styles.confirmButtonStyle}>
           <Text style={{ ...Fonts.white20Regular }}>Book schedule</Text>

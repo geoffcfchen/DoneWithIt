@@ -63,6 +63,8 @@ function App() {
   //   unsubscribe();
   // }, [user]);
 
+  console.log(user);
+
   const onNavigationContainerReady = useCallback(async () => {
     if (isReady) await SplashScreen.hideAsync();
   }, [isReady]);

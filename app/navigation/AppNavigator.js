@@ -32,7 +32,8 @@ function AppNavigator() {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
-      querySnapshot.docs.map((doc) => setUserData(doc.data()));
+      const data = querySnapshot.docs.map((doc) => doc.data());
+      setUserData(data);
     });
     return () => unsubscribe();
   }, []);
@@ -41,6 +42,9 @@ function AppNavigator() {
     collection(db, "timeSlots"),
     where("participantsArray", "array-contains", user.email)
   );
+
+  // console.log(userData);
+  // console.log(user);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(timeSlotsQuery, (querySnapshot) => {
