@@ -138,7 +138,7 @@ export default function MessagesDetailsScreen() {
           return { ...message, createdAt: message.createdAt.toDate() };
         })
         .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-      console.log("messagesFirestore = ", messagesFirestore);
+      // console.log("messagesFirestore = ", messagesFirestore);
       appendMessages(messagesFirestore);
     });
     return () => unsubscribe();

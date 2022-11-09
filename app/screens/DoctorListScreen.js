@@ -270,7 +270,7 @@ const DoctorListScreen = ({ navigation, route }) => {
                   // experience: item.yearsOfExperience,
                   // rating: item.rating,
                   item: item,
-                  timeSlots: timeSlots.filter(
+                  timeSlotsfromClientView: timeSlots.filter(
                     (timeSlot) => timeSlot.participantsArray[0] == item.email
                   ),
                 })

@@ -70,11 +70,11 @@ const IndividualDayScreen = ({ timeSlots }) => {
   let timeSlotID;
   let doctorData;
   if (userData.role.label == "Client") {
-    timeSlots = route.params.timeSlots[0];
+    timeSlots = route.params.timeSlotsfromClientView[0];
     timeSlotID = timeSlots ? timeSlots.id : randomID;
     doctorData = route.params.item;
-    console.log("timeSlotID", timeSlotID);
-    console.log("doctorData", doctorData);
+    // console.log("timeSlotID", timeSlotID);
+    // console.log("doctorData", doctorData);
   } else {
     timeSlotID = timeSlots ? timeSlots.id : randomID;
     doctorData = userData;
@@ -141,7 +141,7 @@ const IndividualDayScreen = ({ timeSlots }) => {
           datetime: moment(message.slotStartingTime.toDate()),
         };
       });
-      console.log("messagesFirestore", messagesFirestore);
+      // console.log("messagesFirestore", messagesFirestore);
       setDatesWhitelist(messagesFirestore);
     });
     return () => unsubscribe();
@@ -471,6 +471,7 @@ const IndividualDayScreen = ({ timeSlots }) => {
   }
 
   function calander() {
+    // console.log("test");
     return (
       <View>
         <CalendarStrip
@@ -484,20 +485,20 @@ const IndividualDayScreen = ({ timeSlots }) => {
             alignItems: "center",
             justifyContent: "center",
           }}
-          dateNumberStyle={{ color: "black", fontSize: 17.0 }}
+          dateNumberStyle={{ color: "black", fontSize: 18.0 }}
           dateNameStyle={{ color: "black", fontSize: 15.0 }}
           highlightDateNameStyle={{ color: "white", fontSize: 15.0 }}
           highlightDateNumberStyle={{ color: "white", fontSize: 17.0 }}
           // markedDates={markedDatesFunc}
           // datesBlacklist={datesBlacklistFunc}
           datesWhitelist={datesWhitelist.map((item) => item.slot)}
-          disabledDateOpacity={0.6}
-          disabledDateNameStyle={{ color: "gray", fontSize: 15.0 }}
-          disabledDateNumberStyle={{ color: "gray", fontSize: 17.0 }}
+          disabledDateOpacity={0.5}
+          // disabledDateNameStyle={{ color: "gray", fontSize: 15.0 }}
+          disabledDateNumberStyle={{ color: "gray", fontSize: 15.0 }}
           useIsoWeekday={false}
-          scrollable={true}
+          // scrollable={true}
           upperCaseDays={false}
-          styleWeekend={true}
+          // styleWeekend={true}
           onDateSelected={SelectedDate}
         />
       </View>

@@ -56,9 +56,10 @@ function Card({
                 style={{
                   ...Fonts.black16Regular,
                   marginLeft: Sizes.fixPadding + 2,
+                  color: "red",
                 }}
               >
-                not yet!
+                Please reserve a time slot!
               </Text>
             )}
           </View>
