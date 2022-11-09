@@ -71,12 +71,13 @@ const IndividualDayScreen = ({ timeSlots }) => {
   let doctorData;
   if (userData.role.label == "Client") {
     timeSlots = route.params.timeSlots[0];
-    timeSlotID = timeSlots.id;
+    timeSlotID = timeSlots ? timeSlots.id : randomID;
     doctorData = route.params.item;
     console.log("timeSlotID", timeSlotID);
     console.log("doctorData", doctorData);
   } else {
     timeSlotID = timeSlots ? timeSlots.id : randomID;
+    doctorData = userData;
   }
   // console.log("DoctorInfo", route.params.item);
   // console.log("timeSlots", route.params.timeSlots);
@@ -93,8 +94,8 @@ const IndividualDayScreen = ({ timeSlots }) => {
     (async () => {
       if (!timeSlots) {
         const timeSlotData = {
-          participants: [userData],
-          participantsArray: [userData.email],
+          participants: [doctorData],
+          participantsArray: [doctorData.email],
         };
         try {
           await setDoc(timeSlotRef, timeSlotData);
@@ -196,7 +197,7 @@ const IndividualDayScreen = ({ timeSlots }) => {
       // description: listing.description,
       createdAt: new Date(),
       slotStartingTime: slot,
-      user: userData,
+      user: doctorData,
       participantsArray: [],
       duration: 1,
       numberOfPeopleLimit: 10,
@@ -226,7 +227,7 @@ const IndividualDayScreen = ({ timeSlots }) => {
 
   const handleConfirmStart1 = (Datetime) => {
     // setDatesWhitelist([...datesWhitelist, moment(Datetime)]);
-    handleSubmit(Datetime, userData);
+    handleSubmit(Datetime, doctorData);
     hideStartDatetime1Picker();
   };
   // console.log("datesWhitelist", typeof datesWhitelist[0]);
