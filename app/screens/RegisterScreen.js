@@ -106,7 +106,7 @@ function RegisterScreen({ navigation }) {
     if (photoURL) {
       userData.photoURL = photoURL;
     }
-
+    // console.log("userData", userData);
     try {
       await Promise.all([
         updateProfile(user, userData),

@@ -35,7 +35,11 @@ function AppNavigator() {
     const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
       const data = querySnapshot.docs.map((doc) => doc.data());
       setUserData(...data);
-      setRole(data[0].role.label);
+      // console.log("data[0].role", data[0].role);
+      console.log("data[0]", data[0]);
+      if (data[0] && data[0].role) {
+        setRole(data[0].role.label);
+      }
     });
     return () => unsubscribe();
   }, []);
