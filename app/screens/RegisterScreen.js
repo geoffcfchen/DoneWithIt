@@ -115,8 +115,6 @@ function RegisterScreen({ navigation }) {
     } catch (error) {
       console.log(error);
     }
-
-    setUser(user);
   };
 
   useEffect(() => {
