@@ -133,7 +133,7 @@ const IndividualDayScreen = ({ timeSlots }) => {
       //   .map(({ doc }) => console.log("doc_id", doc.id));
       const messagesFirestore = querySnapshot.docs.map((doc) => {
         const message = doc.data();
-        console.log("message", message.slotStartingTime.toDate());
+        // console.log("message", message.slotStartingTime.toDate());
         return {
           ...message,
           id: doc.id,
