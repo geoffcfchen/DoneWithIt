@@ -3,6 +3,7 @@
     "userInterfaceStyle": "automatic",
     "name": "Vetcation",
     "slug": "Vetcation",
+    "owner": "vetcation",
     "platforms": ["ios", "android", "web"],
     "version": "1.0.0",
     "orientation": "portrait",
