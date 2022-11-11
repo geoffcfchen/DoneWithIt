@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Image, StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 import { updateProfile } from "@firebase/auth";
 import { doc, setDoc, updateDoc } from "@firebase/firestore";
 import * as Yup from "yup";
@@ -42,17 +42,22 @@ const roles = [
 ];
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Email is required"),
-  password: Yup.string().required("Password is required"),
-  passwordConfirmation: Yup.string().oneOf(
-    [Yup.ref("password"), null],
-    "Passwords must match"
-  ),
+  name: Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Name is required"),
+  // email: Yup.string().email("Invalid email").required("Email is required"),
+  // password: Yup.string().required("Password is required"),
+  // passwordConfirmation: Yup.string().oneOf(
+  //   [Yup.ref("password"), null],
+  //   "Passwords must match"
+  // ),
   // price: Yup.number().required().min(1).max(10000).label("Price"),
+  image: Yup.array().required("Profile Image is required").min(1),
 });
 
-function RegisterScreen({ navigation }) {
-  const { setUser } = useContext(AuthContext);
+function ProfileScreen({ navigation }) {
+  const { user, setUser } = useContext(AuthContext);
   // const registerApi = useApi(usersApi.register);
   // const loginApi = useApi(authApi.login);
 
@@ -79,20 +84,42 @@ function RegisterScreen({ navigation }) {
   // };
 
   const handleSubmitFirebase = async (userInfo) => {
-    await signUp(userInfo.email, userInfo.password);
-    // console.log(auth.currentUser);
-    setUser(auth.currentUser);
-  };
+    const userID = user.uid;
+    const userRef = doc(db, "customers", userID);
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((authUser) => {
-      if (authUser) {
-        // console.log(authUser);
-        setUser(authUser);
-      }
-    });
-    return unsubscribe;
-  }, []);
+    let photoURL;
+    if (userInfo.image.length === 1) {
+      const { url } = await uploadImage(
+        userInfo.image[0],
+        `images/test/${user.uid}`,
+        "profilePicture"
+      );
+      photoURL = url;
+    }
+    console.log("check");
+    const userData = {
+      displayName: userInfo.name,
+      role: userInfo.role,
+    };
+    if (photoURL) {
+      userData.photoURL = photoURL;
+    }
+    // console.log("userData", userData);
+    // console.log("user", user);
+    try {
+      console.log("check");
+      await Promise.all([
+        updateProfile(user, userData),
+        updateDoc(userRef, { ...userData, uid: user.uid, email: user.email }),
+      ]).then(() => {
+        console.log("currentUser", auth.currentUser);
+        setUser(auth.currentUser);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    // navigation.navigate("App");
+  };
 
   return (
     <>
@@ -100,54 +127,42 @@ function RegisterScreen({ navigation }) {
         visible={registerApi.loading || loginApi.loading}
       ></ActivityIndicator> */}
       <ScreenScrollView>
-        <Ionicons
+        {/* <Ionicons
           name="arrow-back-sharp"
           size={24}
           color="black"
           style={{ marginLeft: 10 }}
           onPress={() => navigation.goBack()}
-        />
+        /> */}
         <AppForm
           initialValues={{
-            email: "",
-            password: "",
+            name: "",
+            image: [],
+            role: "",
           }}
           onSubmit={handleSubmitFirebase}
           validationSchema={validationSchema}
         >
           <ErrorMessage error={error} visible={error}></ErrorMessage>
-          <Image
-            style={styles.logo}
-            source={require("../assets/icon.png")}
-          ></Image>
-
+          <View style={styles.profileimage}>
+            <FormProfileImagePicker name="image"></FormProfileImagePicker>
+          </View>
           <AppFormField
             autoCapitalize="none"
             autoCorrect={false}
-            icon="email"
-            keyboardType="email-address"
-            name="email"
-            placeholder="Email"
-            textContentType="emailAddress"
+            icon="account"
+            name="name"
+            placeholder="Name"
+            textContentType="name"
           ></AppFormField>
-          <AppFormField
-            autoCapitalize="none"
-            autoCorrect={false}
-            icon="lock"
-            name="password"
-            placeholder="Password"
-            textContentType="password"
-            secureTextEntry
-          ></AppFormField>
-          <AppFormField
-            autoCapitalize="none"
-            autoCorrect={false}
-            icon="lock"
-            name="passwordConfirmation"
-            placeholder="Comfirm Password"
-            textContentType="password"
-            secureTextEntry
-          ></AppFormField>
+          <AppFormPicker
+            items={roles}
+            name="role"
+            numberOfColumns={3}
+            PickerItemComponent={CategoryPickerItem}
+            placeholder="Role"
+            width="50%"
+          ></AppFormPicker>
           <SubmitButton title="Register"></SubmitButton>
         </AppForm>
       </ScreenScrollView>
@@ -160,14 +175,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  logo: {
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-    alignSelf: "center",
-    marginTop: 50,
-    marginBottom: 20,
-  },
 });
 
-export default RegisterScreen;
+export default ProfileScreen;

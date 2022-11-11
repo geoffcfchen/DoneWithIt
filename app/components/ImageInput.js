@@ -37,7 +37,7 @@ function ImageInput({ imageUri, onChangeImage }) {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         // allowsEditing: true,
         // aspect: [3, 5],
-        quality: 0.2,
+        quality: 0,
       });
       if (!result.cancelled) onChangeImage(result.uri);
     } catch (error) {

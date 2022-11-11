@@ -17,6 +17,9 @@ import logger from "./app/utility/logger";
 import ContextWrapper from "./app/context/ContextWrapper";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import GlobalContext from "./app/context/Context";
+import ProfileScreen from "./app/screens/ProfileScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import colors from "./app/config/colors";
 
 LogBox.ignoreLogs([
   "Setting a timer",
@@ -58,6 +61,8 @@ function App() {
 
   if (!isReady) return null;
 
+  const Stack = createNativeStackNavigator();
+
   return (
     <AuthContext.Provider value={{ user, setUser }}>
       <OfflineNotice></OfflineNotice>
@@ -66,7 +71,30 @@ function App() {
         theme={navigationTheme}
         onReady={onNavigationContainerReady}
       >
-        {user ? <AppNavigator></AppNavigator> : <AuthNavigator></AuthNavigator>}
+        {!user ? (
+          <AuthNavigator></AuthNavigator>
+        ) : (
+          <Stack.Navigator
+            screenOptions={{
+              headerStyle: {
+                backgroundColor: colors.foreground,
+                shadowOpacity: 0,
+                elevation: 0,
+              },
+              headerTintColor: colors.white,
+              headerShown: false,
+            }}
+          >
+            {!user.displayName && (
+              <Stack.Screen
+                name="profile"
+                component={ProfileScreen}
+                options={{ headerShown: false }}
+              ></Stack.Screen>
+            )}
+            <Stack.Screen name="App" component={AppNavigator}></Stack.Screen>
+          </Stack.Navigator>
+        )}
       </NavigationContainer>
     </AuthContext.Provider>
   );

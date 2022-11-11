@@ -74,6 +74,8 @@ function ListingsScreen({ navigation }) {
   const { questions, setQuestions, setUnfilteredQuestions } =
     useContext(GlobalContext);
 
+  console.log("user", user);
+
   const questionsQuery = query(
     collection(db, "questions"),
     where("participantsArray", "array-contains", user.email)
