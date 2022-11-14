@@ -20,6 +20,8 @@ import GlobalContext from "./app/context/Context";
 import ProfileScreen from "./app/screens/ProfileScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import colors from "./app/config/colors";
+import NewTweetScreen from "./app/screens/NewTweetScreen";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
 LogBox.ignoreLogs([
   "Setting a timer",
@@ -92,11 +94,22 @@ function App() {
                 options={{ headerShown: false }}
               ></Stack.Screen>
             )}
-            <Stack.Screen name="App" component={AppNavigator}></Stack.Screen>
+            <Stack.Screen name="root" component={RootNavigator}></Stack.Screen>
           </Stack.Navigator>
         )}
       </NavigationContainer>
     </AuthContext.Provider>
+  );
+}
+
+function RootNavigator() {
+  const Stack = createNativeStackNavigator();
+
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="App" component={AppNavigator} />
+      <Stack.Screen name="NewTweet" component={NewTweetScreen} />
+    </Stack.Navigator>
   );
 }
 

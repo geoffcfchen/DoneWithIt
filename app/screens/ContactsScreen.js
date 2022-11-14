@@ -32,7 +32,7 @@ export default function Contacts() {
           photoURL: item.photoURL,
         };
       });
-      console.log(parsedcustomers);
+      // console.log(parsedcustomers);
       // console.log("customers", parsedcustomers);
       setContacts(parsedcustomers);
       // setDatesWhitelist(messagesFirestore);

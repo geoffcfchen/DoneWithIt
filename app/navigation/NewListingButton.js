@@ -8,7 +8,7 @@ function NewListingButton({ onPress }) {
     <TouchableOpacity onPress={onPress}>
       <View style={styles.container}>
         <MaterialCommunityIcons
-          name="plus-circle"
+          name="calendar-month"
           color={colors.white}
           size={35}
         ></MaterialCommunityIcons>

@@ -1,6 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
+import {
+  Ionicons,
+  MaterialCommunityIcons,
+  FontAwesome5,
+} from "@expo/vector-icons";
 
 import AccountNavigator from "./AccountNavigator";
 
@@ -17,6 +21,11 @@ import { auth, db } from "../../firebase";
 import GlobalContext from "../context/Context";
 import OpenScheduleScreen from "../screens/OpenScheduleScreen";
 import SubmitNavigator from "./SubmitNavigator";
+import HomeNavigator from "./HomeNavigator";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import ProfilePicture from "../components/ProfilePicture";
+import colors from "../config/colors";
+import { DrawerActions, useNavigation } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
@@ -65,14 +74,17 @@ function AppNavigator() {
     timeSlot.participantsArray.includes(user.email)
   );
 
-  useNotifications();
+  // useNotifications();
   return (
     <Tab.Navigator
-      screenOptions={{ headerShown: false, tabBarShowLabel: false }}
+      screenOptions={{
+        // headerShown: true,
+        tabBarShowLabel: false,
+      }}
     >
       <Tab.Screen
-        name="Questions"
-        component={FeedNavigator}
+        name="Home"
+        component={HomeNavigator}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
@@ -84,7 +96,20 @@ function AppNavigator() {
           ),
         }}
       ></Tab.Screen>
-
+      <Tab.Screen
+        name="Questions"
+        component={FeedNavigator}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="message-question-outline"
+              color={color}
+              size={size}
+            ></MaterialCommunityIcons>
+          ),
+        }}
+      ></Tab.Screen>
       {role && role != "Doctor" && (
         <Tab.Screen
           name="Schedules"
@@ -138,6 +163,42 @@ function AppNavigator() {
   );
 }
 
+function AppNavigatorWrapper() {
+  const Stack = createNativeStackNavigator();
+  const navigation = useNavigation();
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerRightContainerStyle: {
+          marginRight: 15,
+        },
+        headerLeftContainerStyle: {
+          marginLeft: 15,
+        },
+        headerTitle: () => (
+          <Ionicons name={"logo-twitter"} size={30} color={colors.tint} />
+        ),
+        headerRight: () => (
+          <MaterialCommunityIcons
+            name={"star-four-points-outline"}
+            size={30}
+            color={colors.tint}
+          />
+        ),
+        headerLeft: () => (
+          <ProfilePicture
+            // onPress={() => navigation.dispatch(DrawerActions)}
+            size={40}
+            image={"https://picsum.photos/200"}
+          />
+        ),
+      }}
+    >
+      <Stack.Screen name="AppScreen" component={AppNavigator} />
+    </Stack.Navigator>
+  );
+}
+
 const styles = StyleSheet.create({
   circleStyle: {
     height: 60.0,
@@ -149,4 +210,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AppNavigator;
+export default AppNavigatorWrapper;

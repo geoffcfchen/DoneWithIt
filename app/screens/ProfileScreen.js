@@ -91,7 +91,7 @@ function ProfileScreen({ navigation }) {
     if (userInfo.image.length === 1) {
       const { url } = await uploadImage(
         userInfo.image[0],
-        `images/test/${user.uid}`,
+        `images/profilePhotos/${user.email + user.uid}`,
         "profilePicture"
       );
       photoURL = url;
@@ -118,7 +118,7 @@ function ProfileScreen({ navigation }) {
     } catch (error) {
       console.log(error);
     }
-    // navigation.navigate("App");
+    navigation.navigate("App");
   };
 
   return (
@@ -127,13 +127,13 @@ function ProfileScreen({ navigation }) {
         visible={registerApi.loading || loginApi.loading}
       ></ActivityIndicator> */}
       <ScreenScrollView>
-        {/* <Ionicons
+        <Ionicons
           name="arrow-back-sharp"
           size={24}
           color="black"
           style={{ marginLeft: 10 }}
-          onPress={() => navigation.goBack()}
-        /> */}
+          onPress={() => setUser(null)}
+        />
         <AppForm
           initialValues={{
             name: "",

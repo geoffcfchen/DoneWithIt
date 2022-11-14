@@ -56,7 +56,7 @@ const initialMessages = [
 function AccountScreen({ navigation }) {
   const { setUser } = useContext(AuthContext);
   const { userData } = useContext(GlobalContext);
-  console.log(userData);
+  // console.log(userData);
 
   const signOutUser = () => {
     auth.signOut().then(() => {
