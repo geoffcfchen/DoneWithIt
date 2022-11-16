@@ -59,7 +59,7 @@ function Card({
                   color: "red",
                 }}
               >
-                Please reserve a time slot!
+                Not yet reserve a time slot!
               </Text>
             )}
           </View>

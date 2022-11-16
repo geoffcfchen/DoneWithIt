@@ -108,10 +108,11 @@ export async function uploadImage(uri, path, fName) {
   //     // Upload completed successfully, now we can get the download URL
   //     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
   //       console.log(downloadURL);
+  //       const url = downloadURL;
+  //       return { url, fileName };
   //     });
   //   }
   // );
   const url = await getDownloadURL(uploadTask.snapshot.ref);
-
   return { url, fileName };
 }

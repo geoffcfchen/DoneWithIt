@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 
 import ActivityIndicator from "../components/ActivityIndicator";
 import AppButton from "../components/AppButton";
@@ -107,7 +107,7 @@ function ListingsScreen({ navigation }) {
   // console.log("questions", questions[0].datetime.toDate());
   // console.log(user);
   return (
-    <Screen style={styles.screen}>
+    <View style={styles.screen}>
       <FlatList
         data={questions}
         keyExtractor={(question) => question.lastMessage._id.toString()}
@@ -128,13 +128,15 @@ function ListingsScreen({ navigation }) {
       {userData.role.label == "Client" && (
         <NewQuestionButton></NewQuestionButton>
       )}
-    </Screen>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
-    padding: 20,
+    paddingTop: 2,
+    paddingLeft: 20,
+    paddingRight: 20,
     backgroundColor: colors.light,
     flex: 1,
   },
