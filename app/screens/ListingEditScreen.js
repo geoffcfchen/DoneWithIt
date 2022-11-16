@@ -93,15 +93,10 @@ const categories = [
 ];
 
 function ListingEditScreen({ onCloseQuestion }) {
-  const navigation = useNavigation();
   const randomID = useMemo(() => nanoid(), []);
-  const [questionHash, setQuestionHash] = useState("");
-  // const contacts = useContacts();
+  const [questionHash] = useState("");
   const [contacts, setContacts] = useState([]);
   const { unfilteredQuestions } = useContext(GlobalContext);
-  // const contacts = [{ contactName: "Kate Bell", email: "kate-bell@mac.com" }];
-  // const [question, setQuestion] = useState();
-  // const location = useLocation();
   const [uploadVisible, setUploadVisible] = useState(false);
   const [progress, setProgress] = useState(0);
   const { user } = useContext(AuthContext);
@@ -199,6 +194,7 @@ function ListingEditScreen({ onCloseQuestion }) {
     // }
 
     resetForm();
+    onCloseQuestion();
   };
 
   async function sendQuestion(

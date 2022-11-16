@@ -9,31 +9,23 @@ import {
 import AccountNavigator from "./AccountNavigator";
 
 import FeedNavigator from "./FeedNavigator";
-import ListingEditScreen from "../screens/ListingEditScreen";
-import NewListingButton from "./NewListingButton";
-import routes from "./routes";
-import useNotifications from "../hooks/useNotifications";
 import { StyleSheet, View } from "react-native";
 import ScheduleNavigator from "./ScheduleNavigator";
 import AuthContext from "../auth/context";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { auth, db } from "../../firebase";
+import { db } from "../../firebase";
 import GlobalContext from "../context/Context";
-import OpenScheduleScreen from "../screens/OpenScheduleScreen";
 import SubmitNavigator from "./SubmitNavigator";
 import HomeNavigator from "./HomeNavigator";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ProfilePicture from "../components/ProfilePicture";
 import colors from "../config/colors";
-import { DrawerActions, useNavigation } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
 function AppNavigator() {
   const { user } = useContext(AuthContext);
   const { setUserData, userData, setTimeSlots } = useContext(GlobalContext);
-
-  const [role, setRole] = useState();
 
   const questionsQuery = query(
     collection(db, "customers"),
@@ -44,11 +36,6 @@ function AppNavigator() {
     const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
       const data = querySnapshot.docs.map((doc) => doc.data());
       setUserData(...data);
-      // console.log("data[0].role", data[0].role);
-      // console.log("data[0]", data[0]);
-      if (data[0] && data[0].role) {
-        setRole(data[0].role.label);
-      }
     });
     return () => unsubscribe();
   }, []);
@@ -73,10 +60,6 @@ function AppNavigator() {
     });
     return () => unsubscribe();
   }, []);
-
-  // const timeSlot = timeSlots.find((timeSlot) =>
-  //   timeSlot.participantsArray.includes(user.email)
-  // );
 
   // useNotifications();
   return (
@@ -114,7 +97,7 @@ function AppNavigator() {
           ),
         }}
       ></Tab.Screen>
-      {role && role != "Doctor" && (
+      {userData && userData.role.label == "Client" && (
         <Tab.Screen
           name="Schedules"
           component={ScheduleNavigator}
@@ -126,28 +109,29 @@ function AppNavigator() {
           }}
         ></Tab.Screen>
       )}
-
-      <Tab.Screen
-        name="SubmitSchedule"
-        component={SubmitNavigator}
-        options={() => ({
-          headerShown: false,
-          // tabBarButton: () => (
-          //   <NewListingButton
-          //     onPress={() =>
-          //       navigation.navigate(routes.SUBMITSCHEDULE, { timeSlots })
-          //     }
-          //   ></NewListingButton>
-          // ),
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="calendar-month"
-              color={color}
-              size={size}
-            ></MaterialCommunityIcons>
-          ),
-        })}
-      ></Tab.Screen>
+      {userData && userData.role.label == "Doctor" && (
+        <Tab.Screen
+          name="SubmitSchedule"
+          component={SubmitNavigator}
+          options={() => ({
+            headerShown: false,
+            // tabBarButton: () => (
+            //   <NewListingButton
+            //     onPress={() =>
+            //       navigation.navigate(routes.SUBMITSCHEDULE, { timeSlots })
+            //     }
+            //   ></NewListingButton>
+            // ),
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons
+                name="calendar-month"
+                color={color}
+                size={size}
+              ></MaterialCommunityIcons>
+            ),
+          })}
+        ></Tab.Screen>
+      )}
 
       <Tab.Screen
         name="AccountNav"

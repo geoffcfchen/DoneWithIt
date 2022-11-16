@@ -58,8 +58,8 @@ import { useRoute } from "@react-navigation/native";
 
 const Tab = createMaterialTopTabNavigator();
 
-function OpenScheduleScreen({ navigation, timeSlots }) {
-  const { userData } = useContext(GlobalContext);
+function OpenScheduleScreen({ navigation }) {
+  const { userData, timeSlots } = useContext(GlobalContext);
   // console.log("timeSlots", timeSlots);
   // const route = useRoute();
   // console.log("route", route.params);
@@ -90,18 +90,13 @@ function OpenScheduleScreen({ navigation, timeSlots }) {
   // console.log("test1");
 
   return (
-    <Screen>
-      <Tab.Navigator>
-        <Tab.Screen
-          name="IndividualDay"
-          // component={IndividualDayScreen}
-          children={() => (
-            <IndividualDayScreen timeSlots={timeSlots}></IndividualDayScreen>
-          )}
-        ></Tab.Screen>
-        <Tab.Screen name="MutipleDay" component={MutipleDayScreen}></Tab.Screen>
-      </Tab.Navigator>
-    </Screen>
+    <Tab.Navigator screenOptions={{ headerShown: true }}>
+      <Tab.Screen
+        name="IndividualDay"
+        component={IndividualDayScreen}
+      ></Tab.Screen>
+      {/* <Tab.Screen name="MutipleDay" component={MutipleDayScreen}></Tab.Screen> */}
+    </Tab.Navigator>
   );
 }
 

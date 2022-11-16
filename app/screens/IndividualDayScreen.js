@@ -43,12 +43,13 @@ import {
 import { db } from "../../firebase";
 import { async } from "@firebase/util";
 import { useRoute } from "@react-navigation/native";
+import NewTimeButton from "../components/NewTimeButton";
 
 const { width } = Dimensions.get("screen");
 
-const IndividualDayScreen = ({ timeSlots }) => {
+const IndividualDayScreen = () => {
   const randomID = useMemo(() => nanoid(), []);
-  const { userData } = useContext(GlobalContext);
+  const { userData, timeSlots } = useContext(GlobalContext);
   const [datesWhitelist, setDatesWhitelist] = useState([]);
   const [filteredDates, setFilteredDates] = useState([]);
   const [selectedDay, setSelectedDay] = useState([]);
@@ -339,7 +340,6 @@ const IndividualDayScreen = ({ timeSlots }) => {
 
   return (
     <Screen>
-      {userData.role.label == "Doctor" && selectDate()}
       {userData.role.label == "Client" && doctorInfo()}
       {calander()}
       {divider()}
@@ -379,6 +379,7 @@ const IndividualDayScreen = ({ timeSlots }) => {
       />
 
       {/* {bookingInfo()} */}
+      {userData.role.label == "Doctor" && selectDate()}
     </Screen>
   );
 
@@ -512,10 +513,7 @@ const IndividualDayScreen = ({ timeSlots }) => {
   function selectDate() {
     return (
       <View style={styles.container}>
-        <AppButton
-          title="Add starting time"
-          onPress={showStartDatetime1Picker}
-        />
+        <NewTimeButton title="plus" onPress={showStartDatetime1Picker} />
         {/* <AppTextInput
           keyboardType="numeric"
           maxLength={8}

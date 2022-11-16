@@ -9,10 +9,10 @@ import NewTweetButton from "../components/NewTweetButton";
 
 export default function HomeScreen() {
   return (
-    <View style={styles.container}>
+    <Screen>
       <Feed></Feed>
       <NewTweetButton />
-    </View>
+    </Screen>
   );
 }
 

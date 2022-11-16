@@ -94,7 +94,7 @@ function App() {
                 options={{ headerShown: false }}
               ></Stack.Screen>
             )}
-            <Stack.Screen name="app" component={AppNavigator}></Stack.Screen>
+            <Stack.Screen name="App" component={AppNavigator}></Stack.Screen>
           </Stack.Navigator>
         )}
       </NavigationContainer>
