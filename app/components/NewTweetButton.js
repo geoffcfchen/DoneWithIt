@@ -34,7 +34,7 @@ function NewTweetButton() {
         style={styles.button}
         onPress={onPress}
       >
-        <MaterialCommunityIcons name={"feather"} size={30} color="white" />
+        <MaterialCommunityIcons name={"beach"} size={30} color="white" />
       </TouchableOpacity>
     </>
   );

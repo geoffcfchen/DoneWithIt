@@ -37,9 +37,9 @@ import NewTimeButton from "../components/NewTimeButton";
 
 const { width } = Dimensions.get("screen");
 
-const IndividualDayScreen = () => {
+const IndividualDayScreen = ({ timeSlots }) => {
   const randomID = useMemo(() => nanoid(), []);
-  const { userData, timeSlots } = useContext(GlobalContext);
+  const { userData } = useContext(GlobalContext);
   const [datesWhitelist, setDatesWhitelist] = useState([]);
   const [filteredDates, setFilteredDates] = useState([]);
   const [selectedDay, setSelectedDay] = useState([]);
@@ -61,7 +61,7 @@ const IndividualDayScreen = () => {
   let timeSlotID;
   let doctorData;
   if (userData.role.label == "Client") {
-    timeSlots = route.params.timeSlotsfromClientView[0];
+    const timeSlots = route.params.timeSlotsfromClientView[0];
     timeSlotID = timeSlots ? timeSlots.id : randomID;
     doctorData = route.params.item;
     // console.log("timeSlotID", timeSlotID);

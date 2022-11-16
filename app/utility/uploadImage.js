@@ -46,19 +46,21 @@ import { useState } from "react";
 export async function uploadImage(uri, path, fName) {
   // Why are we using XMLHttpRequest? See:
   // https://github.com/expo/expo/issues/2402#issuecomment-443726662
-  const blob = await new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-      resolve(xhr.response);
-    };
-    xhr.onerror = function (e) {
-      console.log(e);
-      reject(new TypeError("Network request failed"));
-    };
-    xhr.responseType = "blob";
-    xhr.open("GET", uri, true);
-    xhr.send(null);
-  });
+  // const blob = await new Promise((resolve, reject) => {
+  //   const xhr = new XMLHttpRequest();
+  //   xhr.onload = function () {
+  //     resolve(xhr.response);
+  //   };
+  //   xhr.onerror = function (e) {
+  //     console.log(e);
+  //     reject(new TypeError("Network request failed"));
+  //   };
+  //   xhr.responseType = "blob";
+  //   xhr.open("GET", uri, true);
+  //   xhr.send(null);
+  // });
+  const img = await fetch(uri);
+  const blob = await img.blob();
 
   const metadata = {
     contentType: "image/jpeg",

@@ -76,7 +76,7 @@ function ListingsScreen({ navigation }) {
   const { questions, setQuestions, setUnfilteredQuestions } =
     useContext(GlobalContext);
 
-  console.log("user", userData);
+  // console.log("user", userData);
 
   const questionsQuery = query(
     collection(db, "questions"),
