@@ -15,6 +15,7 @@ import { auth, db } from "../../firebase";
 import GlobalContext from "../context/Context";
 import AuthContext from "../auth/context";
 import moment from "moment";
+import NewQuestionButton from "../components/NewQuestionButton";
 
 const listings = [
   {
@@ -70,15 +71,16 @@ const listings = [
 // }
 
 function ListingsScreen({ navigation }) {
-  const { user } = useContext(AuthContext);
+  // const { user } = useContext(AuthContext);
+  const { userData } = useContext(GlobalContext);
   const { questions, setQuestions, setUnfilteredQuestions } =
     useContext(GlobalContext);
 
-  console.log("user", user);
+  console.log("user", userData);
 
   const questionsQuery = query(
     collection(db, "questions"),
-    where("participantsArray", "array-contains", user.email)
+    where("participantsArray", "array-contains", userData.email)
   );
 
   useEffect(() => {
@@ -87,7 +89,7 @@ function ListingsScreen({ navigation }) {
       const parsedQuestions = querySnapshot.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
-        userB: doc.data().participants.find((p) => p.email !== user.email),
+        userB: doc.data().participants.find((p) => p.email !== userData.email),
       }));
       // .sort(
       //   (a, b) =>
@@ -103,7 +105,7 @@ function ListingsScreen({ navigation }) {
 
   // console.log("unfilteredQuestions", unfilteredQuestions);
   // console.log("questions", questions[0].datetime.toDate());
-
+  // console.log(user);
   return (
     <Screen style={styles.screen}>
       <FlatList
@@ -122,6 +124,10 @@ function ListingsScreen({ navigation }) {
           />
         )}
       />
+
+      {userData.role.label == "Client" && (
+        <NewQuestionButton></NewQuestionButton>
+      )}
     </Screen>
   );
 }

@@ -135,13 +135,13 @@ function AppNavigator() {
               }
             ></NewListingButton>
           ),
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="plus-circle"
-              color={color}
-              size={size}
-            ></MaterialCommunityIcons>
-          ),
+          // tabBarIcon: ({ color, size }) => (
+          //   <MaterialCommunityIcons
+          //     name="plus-circle"
+          //     color={color}
+          //     size={size}
+          //   ></MaterialCommunityIcons>
+          // ),
         })}
       ></Tab.Screen>
 
@@ -165,7 +165,6 @@ function AppNavigator() {
 
 function AppNavigatorWrapper() {
   const Stack = createNativeStackNavigator();
-  const navigation = useNavigation();
   return (
     <Stack.Navigator
       screenOptions={{

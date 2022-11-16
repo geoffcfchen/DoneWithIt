@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
+  Modal,
 } from "react-native";
 
 // import { Text, View } from "../components/Themed";
@@ -13,7 +14,7 @@ import ProfilePicture from "../components/ProfilePicture";
 import colors from "../config/colors";
 import { useNavigation } from "@react-navigation/native";
 
-export default function NewTweetScreen() {
+export default function NewTweetScreen({ onCloseTweet }) {
   const [tweet, setTweet] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
@@ -21,7 +22,6 @@ export default function NewTweetScreen() {
     console.log(`Posting the tweet: ${tweet}
     Image: ${imageUrl}`);
   };
-  const navigation = useNavigation();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -30,9 +30,7 @@ export default function NewTweetScreen() {
           name="close"
           size={30}
           color={colors.tint}
-          onPress={() => {
-            navigation.navigate("App");
-          }}
+          onPress={onCloseTweet}
         />
         <TouchableOpacity style={styles.button} onPress={onPostTweet}>
           <Text style={styles.buttonText}>Tweet</Text>

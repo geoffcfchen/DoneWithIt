@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import { TouchableOpacity, StyleSheet, View, Modal } from "react-native";
+import { TouchableOpacity, StyleSheet, Modal } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../config/colors";
-import NewTweetScreen from "../screens/NewTweetScreen";
+import ListingEditScreen from "../screens/ListingEditScreen";
 
-function NewTweetButton() {
+function NewQuestionButton() {
   const [modalVisible, setModalVisible] = useState(false);
 
   const onPress = () => {
     setModalVisible(true);
   };
 
-  const onCloseTweet = () => {
+  const onCloseQuestion = () => {
     setModalVisible(false);
   };
 
@@ -20,21 +20,27 @@ function NewTweetButton() {
     <>
       <Modal
         animationType="slide"
-        transparent={true}
+        transparent={false}
         visible={modalVisible}
         onRequestClose={() => {
           Alert.alert("Modal has been closed.");
           setModalVisible(!modalVisible);
         }}
       >
-        <NewTweetScreen onCloseTweet={onCloseTweet}></NewTweetScreen>
+        <ListingEditScreen
+          onCloseQuestion={onCloseQuestion}
+        ></ListingEditScreen>
       </Modal>
       <TouchableOpacity
         activeOpacity={0.8}
         style={styles.button}
         onPress={onPress}
       >
-        <MaterialCommunityIcons name={"feather"} size={30} color="white" />
+        <MaterialCommunityIcons
+          name={"comment-question"}
+          size={30}
+          color="white"
+        />
       </TouchableOpacity>
     </>
   );
@@ -54,4 +60,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewTweetButton;
+export default NewQuestionButton;

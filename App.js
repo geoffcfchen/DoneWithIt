@@ -21,7 +21,7 @@ import ProfileScreen from "./app/screens/ProfileScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import colors from "./app/config/colors";
 import NewTweetScreen from "./app/screens/NewTweetScreen";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import ListingEditScreen from "./app/screens/ListingEditScreen";
 
 LogBox.ignoreLogs([
   "Setting a timer",
@@ -108,7 +108,7 @@ function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="App" component={AppNavigator} />
-      <Stack.Screen name="NewTweet" component={NewTweetScreen} />
+      <Stack.Screen name="NewQuestion" component={ListingEditScreen} />
     </Stack.Navigator>
   );
 }
