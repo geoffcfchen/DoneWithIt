@@ -94,22 +94,11 @@ function App() {
                 options={{ headerShown: false }}
               ></Stack.Screen>
             )}
-            <Stack.Screen name="root" component={RootNavigator}></Stack.Screen>
+            <Stack.Screen name="app" component={AppNavigator}></Stack.Screen>
           </Stack.Navigator>
         )}
       </NavigationContainer>
     </AuthContext.Provider>
-  );
-}
-
-function RootNavigator() {
-  const Stack = createNativeStackNavigator();
-
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="App" component={AppNavigator} />
-      <Stack.Screen name="NewQuestion" component={ListingEditScreen} />
-    </Stack.Navigator>
   );
 }
 

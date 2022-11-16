@@ -23,6 +23,9 @@ const GlobalContext = React.createContext({
   setDoctors: () => {},
   unfilteredDoctors: [],
   setUnfilteredDoctors: () => {},
+
+  timeSlots: [],
+  setTimeSlots: () => {},
 });
 
 export default GlobalContext;

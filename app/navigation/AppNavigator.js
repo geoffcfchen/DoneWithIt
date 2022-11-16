@@ -31,8 +31,8 @@ const Tab = createBottomTabNavigator();
 
 function AppNavigator() {
   const { user } = useContext(AuthContext);
-  const { setUserData, userData } = useContext(GlobalContext);
-  const [timeSlots, setTimeSlots] = useState([]);
+  const { setUserData, userData, setTimeSlots } = useContext(GlobalContext);
+
   const [role, setRole] = useState();
 
   const questionsQuery = query(
@@ -65,14 +65,18 @@ function AppNavigator() {
         id: doc.id,
       }));
 
-      setTimeSlots(parsedTimesSlots);
+      setTimeSlots(
+        parsedTimesSlots.find((timeSlot) =>
+          timeSlot.participantsArray.includes(user.email)
+        )
+      );
     });
     return () => unsubscribe();
   }, []);
 
-  const timeSlot = timeSlots.find((timeSlot) =>
-    timeSlot.participantsArray.includes(user.email)
-  );
+  // const timeSlot = timeSlots.find((timeSlot) =>
+  //   timeSlot.participantsArray.includes(user.email)
+  // );
 
   // useNotifications();
   return (
@@ -126,22 +130,22 @@ function AppNavigator() {
       <Tab.Screen
         name="SubmitSchedule"
         component={SubmitNavigator}
-        options={({ navigation }) => ({
+        options={() => ({
           headerShown: false,
-          tabBarButton: () => (
-            <NewListingButton
-              onPress={() =>
-                navigation.navigate(routes.SUBMITSCHEDULE, { timeSlot })
-              }
-            ></NewListingButton>
-          ),
-          // tabBarIcon: ({ color, size }) => (
-          //   <MaterialCommunityIcons
-          //     name="plus-circle"
-          //     color={color}
-          //     size={size}
-          //   ></MaterialCommunityIcons>
+          // tabBarButton: () => (
+          //   <NewListingButton
+          //     onPress={() =>
+          //       navigation.navigate(routes.SUBMITSCHEDULE, { timeSlots })
+          //     }
+          //   ></NewListingButton>
           // ),
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="calendar-month"
+              color={color}
+              size={size}
+            ></MaterialCommunityIcons>
+          ),
         })}
       ></Tab.Screen>
 
@@ -175,14 +179,14 @@ function AppNavigatorWrapper() {
           marginLeft: 15,
         },
         headerTitle: () => (
-          <Ionicons name={"logo-twitter"} size={30} color={colors.tint} />
-        ),
-        headerRight: () => (
           <MaterialCommunityIcons
-            name={"star-four-points-outline"}
-            size={30}
+            name={"palm-tree"}
+            size={40}
             color={colors.tint}
           />
+        ),
+        headerRight: () => (
+          <MaterialCommunityIcons name={"paw"} size={30} color={colors.tint} />
         ),
         headerLeft: () => (
           <ProfilePicture

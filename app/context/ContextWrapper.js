@@ -11,6 +11,7 @@ export default function ContextWrapper(props) {
   const [petOwners, setPetOwners] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [unfilteredDoctors, setUnfilteredDoctors] = useState([]);
+  const [timeSlots, setTimeSlots] = useState([]);
   return (
     <Context.Provider
       value={{
@@ -31,6 +32,8 @@ export default function ContextWrapper(props) {
         setDoctors,
         unfilteredDoctors,
         setUnfilteredDoctors,
+        timeSlots,
+        setTimeSlots,
       }}
     >
       {props.children}

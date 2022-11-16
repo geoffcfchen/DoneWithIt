@@ -11,9 +11,10 @@ import { useRoute } from "@react-navigation/native";
 const Stack = createNativeStackNavigator();
 
 function SubmitNavigator() {
-  const { userData } = useContext(GlobalContext);
-  const route = useRoute();
-  const timeSlots = route.params.timeSlot;
+  const { userData, timeSlots } = useContext(GlobalContext);
+
+  // const route = useRoute();
+  // const timeSlots = route.params.timeSlots;
   return (
     <Stack.Navigator
       screenOptions={{ presentation: "modal", headerShown: false }}
