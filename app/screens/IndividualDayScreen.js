@@ -18,16 +18,10 @@ import {
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useNavigation } from "@react-navigation/native";
+import moment from "moment";
 
 import { Fonts, Colors, Sizes } from "../constant/styles";
-import { MaterialIcons } from "@expo/vector-icons";
-import moment from "moment";
-import dayjs from "dayjs";
-import AuthContext from "../auth/context";
 import Screen from "../components/Screen";
-import AppButton from "../components/AppButton";
-import colors from "../config/colors";
-import AppTextInput from "../components/AppTextInput";
 import { nanoid } from "nanoid";
 import GlobalContext from "../context/Context";
 import {
@@ -35,12 +29,9 @@ import {
   collection,
   doc,
   onSnapshot,
-  query,
   setDoc,
-  where,
 } from "firebase/firestore";
 import { db } from "../../firebase";
-import { async } from "@firebase/util";
 import { useRoute } from "@react-navigation/native";
 import NewTimeButton from "../components/NewTimeButton";
 
@@ -79,9 +70,6 @@ const IndividualDayScreen = () => {
     timeSlotID = timeSlots ? timeSlots.id : randomID;
     doctorData = userData;
   }
-  // console.log("DoctorInfo", route.params.item);
-  // console.log("timeSlots", route.params.timeSlots);
-  // console.log("item", item);
 
   const timeSlotRef = doc(db, "timeSlots", timeSlotID);
   const timeSlotMessagesRef = collection(
