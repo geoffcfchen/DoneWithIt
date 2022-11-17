@@ -34,6 +34,7 @@ import {
 import { db } from "../../firebase";
 import { useRoute } from "@react-navigation/native";
 import NewTimeButton from "../components/NewTimeButton";
+import colors from "../config/colors";
 
 const { width } = Dimensions.get("screen");
 
@@ -601,6 +602,13 @@ const IndividualDayScreen = ({ timeSlots }) => {
 };
 
 const styles = StyleSheet.create({
+  screen: {
+    paddingTop: 2,
+    // paddingLeft: 20,
+    // paddingRight: 20,
+    // backgroundColor: colors.light,
+    flex: 1,
+  },
   container: {
     justifyContent: "center",
     alignItems: "center",

@@ -107,12 +107,12 @@ function ProfileScreen({ navigation }) {
     // console.log("userData", userData);
     // console.log("user", user);
     try {
-      console.log("check");
+      // console.log("check");
       await Promise.all([
         updateProfile(user, userData),
         updateDoc(userRef, { ...userData, uid: user.uid, email: user.email }),
       ]).then(() => {
-        console.log("currentUser", auth.currentUser);
+        // console.log("currentUser", auth.currentUser);
         setUser(auth.currentUser);
       });
     } catch (error) {

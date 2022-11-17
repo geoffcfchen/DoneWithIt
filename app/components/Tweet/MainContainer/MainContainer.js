@@ -8,7 +8,7 @@ import moment from "moment";
 import Footer from "./Footer";
 
 function MainContainer({ tweet }) {
-  console.log("tweet", tweet.user.name);
+  // console.log("tweet", tweet.user.name);
   return (
     <View style={styles.container}>
       {/* <Text>test</Text> */}

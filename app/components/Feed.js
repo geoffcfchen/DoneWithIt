@@ -4,7 +4,7 @@ import tweets from "../data/tweets";
 import Tweet from "./Tweet/Tweet";
 
 function Feed() {
-  console.log("tweets", tweets);
+  // console.log("tweets", tweets);
   return (
     <View style={{ width: "100%" }}>
       <FlatList
