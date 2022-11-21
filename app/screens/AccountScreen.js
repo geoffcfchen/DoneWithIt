@@ -13,13 +13,14 @@ import AuthContext from "../auth/context";
 import GlobalContext from "../context/Context";
 
 const menuItems = [
-  // {
-  //   title: "My Questions",
-  //   icon: {
-  //     name: "format-list-bulleted",
-  //     backgroundColor: colors.primary,
-  //   },
-  // },
+  {
+    title: "My Balance",
+    icon: {
+      name: "format-list-bulleted",
+      backgroundColor: colors.primary,
+    },
+    targetScreen: "Balance",
+  },
   {
     title: "My Messages",
     icon: {

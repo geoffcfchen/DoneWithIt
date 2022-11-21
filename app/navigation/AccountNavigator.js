@@ -4,6 +4,7 @@ import AccountScreen from "../screens/AccountScreen";
 import MessagesScreen from "../screens/MessagesScreen";
 import MessagesDetailsScreen from "../screens/MessagesDetailScreen.js";
 import ContactsScreen from "../screens/ContactsScreen";
+import BalanceScreen from "../screens/BalanceScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -11,6 +12,7 @@ function AccountNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Account" component={AccountScreen}></Stack.Screen>
+      <Stack.Screen name="Balance" component={BalanceScreen}></Stack.Screen>
       <Stack.Screen name="Messages" component={MessagesScreen}></Stack.Screen>
       <Stack.Screen
         name="MessagesDetail"

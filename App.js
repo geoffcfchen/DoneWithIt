@@ -102,6 +102,8 @@ function App() {
   );
 }
 
+import { StripeProvider } from "@stripe/stripe-react-native";
+
 function Main() {
   return (
     <ContextWrapper>
