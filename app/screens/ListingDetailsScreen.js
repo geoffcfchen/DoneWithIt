@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   StyleSheet,
@@ -18,22 +18,26 @@ import { useNavigation } from "@react-navigation/native";
 import { deleteField, doc, updateDoc } from "firebase/firestore";
 import { async } from "@firebase/util";
 import { db } from "../../firebase";
+import GlobalContext from "../context/Context";
 
 function ListingDetailsScreen({ route }) {
   const { item: listing } = route.params;
   console.log("listing = ", listing);
+  const { userData } = useContext(GlobalContext);
   // const userB = listing.participants.find((p) => p.email !== currentUser.email);
 
-  function deleteButton() {
+  function cancelButton() {
     const navigation = useNavigation();
     const questionRef = doc(db, "questions", listing.id);
     return (
       <TouchableOpacity
         activeOpacity={0.99}
-        style={styles.confirmAndPayButtonStyle}
+        style={styles.cancelButtonStyle}
         onPress={async () => {
           await updateDoc(questionRef, {
+            datetime: deleteField(),
             lastMessage: deleteField(),
+            slot: deleteField(),
           })
             // deleteDoc(questionRef)
             .then(() => {
@@ -44,8 +48,37 @@ function ListingDetailsScreen({ route }) {
             });
         }}
       >
-        <View style={styles.confirmButtonStyle}>
+        <View style={styles.ButtonStyle}>
           <Text style={{ ...Fonts.white20Regular }}>Cancel schedule</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  }
+
+  function rescheduleButton() {
+    const navigation = useNavigation();
+    const questionRef = doc(db, "questions", listing.id);
+    console.log("listing.id", listing.id);
+    return (
+      <TouchableOpacity
+        activeOpacity={0.99}
+        style={styles.rescheduleButtonStyle}
+        onPress={async () => {
+          await updateDoc(questionRef, {
+            datetime: deleteField(),
+            slot: deleteField(),
+          })
+            // deleteDoc(questionRef)
+            .then(() => {
+              navigation.goBack();
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }}
+      >
+        <View style={styles.ButtonStyle}>
+          <Text style={{ ...Fonts.white20Regular }}>Reschedule</Text>
         </View>
       </TouchableOpacity>
     );
@@ -100,7 +133,8 @@ function ListingDetailsScreen({ route }) {
             endIcon="phone"
           ></ListItem>
         </View>
-        {deleteButton()}
+        {rescheduleButton()}
+        {userData.role.label == "doctor" && cancelButton()}
 
         {/* <ContactSellerForm listing={listing}></ContactSellerForm> */}
       </View>
@@ -131,13 +165,19 @@ const styles = StyleSheet.create({
   userContainer: {
     marginVertical: 5,
   },
-  confirmAndPayButtonStyle: {
+  rescheduleButtonStyle: {
     position: "absolute",
     left: Sizes.fixPadding * 2.0,
     right: Sizes.fixPadding * 2.0,
-    bottom: Sizes.fixPadding,
+    bottom: Sizes.fixPadding - 37,
   },
-  confirmButtonStyle: {
+  cancelButtonStyle: {
+    position: "absolute",
+    left: Sizes.fixPadding * 2.0,
+    right: Sizes.fixPadding * 2.0,
+    bottom: Sizes.fixPadding - 90,
+  },
+  ButtonStyle: {
     backgroundColor: Colors.primary,
     borderRadius: Sizes.fixPadding + 5.0,
     alignItems: "center",

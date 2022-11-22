@@ -86,28 +86,33 @@ function ListingsScreen({ navigation }) {
   useEffect(() => {
     const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
       // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
-      const parsedQuestions = querySnapshot.docs
-        .map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-          userB: doc
-            .data()
-            .participants.find((p) => p.email !== userData.email),
-        }))
+      const parsedQuestions = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+        userB: doc.data().participants.find((p) => p.email !== userData.email),
+      }));
+      // console.log("parsedQuestions", parsedQuestions);
+      setUnfilteredQuestions(parsedQuestions);
+      const filteredQuestionsWithMessageAndTime = parsedQuestions
+        .filter((doc) => doc.lastMessage && doc.datetime)
         .sort(
           (a, b) =>
             a.datetime.toDate().getTime() - b.datetime.toDate().getTime()
         );
-      // console.log("parsedQuestions", parsedQuestions);
-      setUnfilteredQuestions(parsedQuestions);
-      setQuestions(parsedQuestions.filter((doc) => doc.lastMessage));
+      const filteredQuestionsWithMessage = parsedQuestions.filter(
+        (doc) => doc.lastMessage && !doc.datetime
+      );
+      setQuestions([
+        ...filteredQuestionsWithMessageAndTime,
+        ...filteredQuestionsWithMessage,
+      ]);
     });
     return () => unsubscribe();
   }, []);
 
   // console.log("unfilteredQuestions", unfilteredQuestions);
   // console.log("questions", questions[0].datetime.toDate());
-  console.log("questions", questions);
+  // console.log("questions", questions);
 
   return (
     <View style={styles.screen}>
