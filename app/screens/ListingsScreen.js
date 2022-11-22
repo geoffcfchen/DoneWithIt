@@ -17,6 +17,12 @@ import AuthContext from "../auth/context";
 import moment from "moment";
 import NewQuestionButton from "../components/NewQuestionButton";
 
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import ListingsActiveScreen from "./ListingsActiveScreen";
+import ListingsFilterScreen from "./ListingsFilterScreen";
+
+const Tab = createMaterialTopTabNavigator();
+
 const listings = [
   {
     id: 1,
@@ -76,6 +82,10 @@ function ListingsScreen({ navigation }) {
   const { questions, setQuestions, setUnfilteredQuestions } =
     useContext(GlobalContext);
 
+  const [activeQuestions, setActiveQuestions] = useState([]);
+  const [pastQuestions, setPastQuestions] = useState([]);
+  const [unscheduledQuestions, setUnscheduledQuestions] = useState([]);
+
   // console.log("user", userData);
 
   const questionsQuery = query(
@@ -93,19 +103,37 @@ function ListingsScreen({ navigation }) {
       }));
       // console.log("parsedQuestions", parsedQuestions);
       setUnfilteredQuestions(parsedQuestions);
-      const filteredQuestionsWithMessageAndTime = parsedQuestions
-        .filter((doc) => doc.lastMessage && doc.datetime)
+      const nowDate = new Date();
+      const activeQuestions = parsedQuestions
+        .filter(
+          (doc) =>
+            doc.lastMessage &&
+            doc.datetime &&
+            doc.datetime.toDate().getTime() > nowDate
+        )
         .sort(
           (a, b) =>
             a.datetime.toDate().getTime() - b.datetime.toDate().getTime()
         );
-      const filteredQuestionsWithMessage = parsedQuestions.filter(
+      setActiveQuestions(activeQuestions);
+
+      const pastQuestions = parsedQuestions
+        .filter(
+          (doc) =>
+            doc.lastMessage &&
+            doc.datetime &&
+            doc.datetime.toDate().getTime() < nowDate
+        )
+        .sort(
+          (a, b) =>
+            a.datetime.toDate().getTime() - b.datetime.toDate().getTime()
+        );
+      setPastQuestions(pastQuestions);
+
+      const unscheduledQuestions = parsedQuestions.filter(
         (doc) => doc.lastMessage && !doc.datetime
       );
-      setQuestions([
-        ...filteredQuestionsWithMessageAndTime,
-        ...filteredQuestionsWithMessage,
-      ]);
+      setUnscheduledQuestions(unscheduledQuestions);
     });
     return () => unsubscribe();
   }, []);
@@ -115,29 +143,22 @@ function ListingsScreen({ navigation }) {
   // console.log("questions", questions);
 
   return (
-    <View style={styles.screen}>
-      <FlatList
-        data={questions}
-        keyExtractor={(question) => question.lastMessage._id.toString()}
-        renderItem={({ item }) => (
-          <Card
-            userB={item.userB}
-            title={item.lastMessage.title}
-            subTitle={item.lastMessage.description}
-            imageUrl={item.lastMessage.image}
-            datetime={item.datetime}
-            slot={item.slot}
-            onPress={() =>
-              navigation.navigate(routes.LISTING_DETAILS, { item })
-            }
-          />
+    <Tab.Navigator screenOptions={{ headerShown: true }}>
+      <Tab.Screen
+        name="Active"
+        children={() => <ListingsActiveScreen questions={activeQuestions} />}
+      ></Tab.Screen>
+      <Tab.Screen
+        name="Past"
+        children={() => <ListingsFilterScreen questions={pastQuestions} />}
+      ></Tab.Screen>
+      <Tab.Screen
+        name="Unscheduled"
+        children={() => (
+          <ListingsFilterScreen questions={unscheduledQuestions} />
         )}
-      />
-
-      {userData.role.label == "Client" && (
-        <NewQuestionButton></NewQuestionButton>
-      )}
-    </View>
+      ></Tab.Screen>
+    </Tab.Navigator>
   );
 }
 
