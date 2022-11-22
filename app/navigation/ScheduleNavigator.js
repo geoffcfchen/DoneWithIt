@@ -19,7 +19,7 @@ function ScheduleNavigator() {
         component={IndividualDayScreen}
       ></Stack.Screen>
       <Stack.Screen
-        screenOptions={{ presentation: "modal" }}
+        // screenOptions={{ presentation: "modal" }}
         name="Consultation"
         component={ConsultationScreen}
       ></Stack.Screen>

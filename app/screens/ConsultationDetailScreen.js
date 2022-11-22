@@ -246,6 +246,7 @@ const ConsultationScreen = ({ navigation, route }) => {
 
   function patients() {
     const renderItem = ({ item }) => {
+      console.log(item);
       return (
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <View style={styles.patientImageContainer}>

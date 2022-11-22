@@ -86,16 +86,18 @@ function ListingsScreen({ navigation }) {
   useEffect(() => {
     const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
       // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
-      const parsedQuestions = querySnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-        userB: doc.data().participants.find((p) => p.email !== userData.email),
-      }));
-      // .sort(
-      //   (a, b) =>
-      //     b.lastMessage.createdAt.toDate().getTime() -
-      //     a.lastMessage.createdAt.toDate().getTime()
-      // );
+      const parsedQuestions = querySnapshot.docs
+        .map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+          userB: doc
+            .data()
+            .participants.find((p) => p.email !== userData.email),
+        }))
+        .sort(
+          (a, b) =>
+            a.datetime.toDate().getTime() - b.datetime.toDate().getTime()
+        );
       // console.log("parsedQuestions", parsedQuestions);
       setUnfilteredQuestions(parsedQuestions);
       setQuestions(parsedQuestions.filter((doc) => doc.lastMessage));
@@ -105,7 +107,8 @@ function ListingsScreen({ navigation }) {
 
   // console.log("unfilteredQuestions", unfilteredQuestions);
   // console.log("questions", questions[0].datetime.toDate());
-  // console.log(user);
+  console.log("questions", questions);
+
   return (
     <View style={styles.screen}>
       <FlatList
@@ -113,6 +116,7 @@ function ListingsScreen({ navigation }) {
         keyExtractor={(question) => question.lastMessage._id.toString()}
         renderItem={({ item }) => (
           <Card
+            userB={item.userB}
             title={item.lastMessage.title}
             subTitle={item.lastMessage.description}
             imageUrl={item.lastMessage.image}

@@ -1,16 +1,56 @@
 import React from "react";
-import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
+import {
+  View,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import { Image } from "react-native-expo-image-cache";
 
+import { Fonts, Colors, Sizes } from "../constant/styles";
 import AppText from "../components/AppText";
 import colors from "../config/colors";
 import ListItem from "../components/lists/ListItem";
 import Icon from "../components/Icon";
+import { useNavigation } from "@react-navigation/native";
+import { deleteField, doc, updateDoc } from "firebase/firestore";
+import { async } from "@firebase/util";
+import { db } from "../../firebase";
 
 function ListingDetailsScreen({ route }) {
   const { item: listing } = route.params;
-  // console.log("listing = ", listing);
+  console.log("listing = ", listing);
   // const userB = listing.participants.find((p) => p.email !== currentUser.email);
+
+  function deleteButton() {
+    const navigation = useNavigation();
+    const questionRef = doc(db, "questions", listing.id);
+    return (
+      <TouchableOpacity
+        activeOpacity={0.99}
+        style={styles.confirmAndPayButtonStyle}
+        onPress={async () => {
+          await updateDoc(questionRef, {
+            lastMessage: deleteField(),
+          })
+            // deleteDoc(questionRef)
+            .then(() => {
+              navigation.goBack();
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }}
+      >
+        <View style={styles.confirmButtonStyle}>
+          <Text style={{ ...Fonts.white20Regular }}>Cancel schedule</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  }
+
   return (
     <KeyboardAvoidingView
       behavior="position"
@@ -60,6 +100,7 @@ function ListingDetailsScreen({ route }) {
             endIcon="phone"
           ></ListItem>
         </View>
+        {deleteButton()}
 
         {/* <ContactSellerForm listing={listing}></ContactSellerForm> */}
       </View>
@@ -89,6 +130,19 @@ const styles = StyleSheet.create({
   },
   userContainer: {
     marginVertical: 5,
+  },
+  confirmAndPayButtonStyle: {
+    position: "absolute",
+    left: Sizes.fixPadding * 2.0,
+    right: Sizes.fixPadding * 2.0,
+    bottom: Sizes.fixPadding,
+  },
+  confirmButtonStyle: {
+    backgroundColor: Colors.primary,
+    borderRadius: Sizes.fixPadding + 5.0,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: Sizes.fixPadding + 3.0,
   },
 });
 

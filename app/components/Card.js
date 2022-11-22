@@ -8,8 +8,10 @@ import { Fonts, Colors, Sizes } from "../constant/styles";
 import colors from "../config/colors";
 import AppText from "./AppText";
 import moment from "moment";
+import { ListItem } from "./lists";
 
 function Card({
+  userB,
   title,
   subTitle,
   imageUrl,
@@ -32,6 +34,19 @@ function Card({
           preview={{ uri: thumbnailUrl }}
           uri={imageUrl}
         ></Image>
+        <View style={styles.userBContainer}>
+          <ListItem
+            image={
+              userB.photoURL
+                ? {
+                    uri: userB.photoURL,
+                  }
+                : require("../assets/icon-square.png")
+            }
+            title={userB.displayName || userB.email}
+            // endIcon="phone"
+          ></ListItem>
+        </View>
         <View style={styles.dateAndTimeContainerStyle}>
           <View
             style={{
@@ -72,6 +87,7 @@ function Card({
             </Text>
           </View>
         </View>
+
         <View style={styles.detailsContainer}>
           <AppText style={styles.title} numberOfLines={1}>
             {title}
@@ -105,6 +121,9 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginBottom: 7,
     fontWeight: "500",
+  },
+  userBContainer: {
+    marginVertical: 1,
   },
   subTitle: {
     color: colors.primary,
