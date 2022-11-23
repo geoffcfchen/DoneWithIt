@@ -21,14 +21,14 @@ import { db } from "../../firebase";
 import GlobalContext from "../context/Context";
 
 function ListingDetailsScreen({ route }) {
-  const { item: listing } = route.params;
-  console.log("listing = ", listing);
+  const { item } = route.params;
+  // console.log("listing = ", listing);
   const { userData } = useContext(GlobalContext);
   // const userB = listing.participants.find((p) => p.email !== currentUser.email);
 
   function cancelButton() {
     const navigation = useNavigation();
-    const questionRef = doc(db, "questions", listing.id);
+    const questionRef = doc(db, "questions", item.id);
     return (
       <TouchableOpacity
         activeOpacity={0.99}
@@ -57,8 +57,8 @@ function ListingDetailsScreen({ route }) {
 
   function rescheduleButton() {
     const navigation = useNavigation();
-    const questionRef = doc(db, "questions", listing.id);
-    console.log("listing.id", listing.id);
+    const questionRef = doc(db, "questions", item.id);
+    console.log("listing.id", item.id);
     return (
       <TouchableOpacity
         activeOpacity={0.99}
@@ -94,49 +94,47 @@ function ListingDetailsScreen({ route }) {
         style={styles.image}
         // preview={{ uri: listing.images[0].thumbnailUrl }}
         tint="light"
-        uri={listing.lastMessage.image}
+        uri={item.lastMessage.image}
         // source={listing.image} // if from image-cache, there is no source prop
       ></Image>
       <View style={styles.detailContainer}>
-        <AppText style={styles.title}>{listing.lastMessage.title}</AppText>
+        <AppText style={styles.title}>{item.lastMessage.title}</AppText>
         <AppText style={styles.description}>
-          {listing.lastMessage.description}
+          {item.lastMessage.description}
         </AppText>
 
         <View style={styles.userContainer}>
           <ListItem
             IconComponent={<Icon name="paw" backgroundColor="green"></Icon>}
-            title={listing.lastMessage.petName}
+            title={item.lastMessage.petName}
           ></ListItem>
         </View>
         <View style={styles.userContainer}>
           <ListItem
             IconComponent={
               <Icon
-                name={listing.lastMessage.category.icon}
-                backgroundColor={listing.lastMessage.category.backgroundColor}
+                name={item.lastMessage.category.icon}
+                backgroundColor={item.lastMessage.category.backgroundColor}
               ></Icon>
             }
-            title={listing.lastMessage.category.label}
+            title={item.lastMessage.category.label}
           ></ListItem>
         </View>
         <View style={styles.userBContainer}>
           <ListItem
             image={
-              listing.userB.photoURL
+              item.userB.photoURL
                 ? {
-                    uri: listing.userB.photoURL,
+                    uri: item.userB.photoURL,
                   }
                 : require("../assets/icon-square.png")
             }
-            title={listing.userB.displayName || listing.userB.email}
+            title={item.userB.displayName || item.userB.email}
             endIcon="phone"
           ></ListItem>
         </View>
-        {rescheduleButton()}
-        {userData.role.label == "doctor" && cancelButton()}
-
-        {/* <ContactSellerForm listing={listing}></ContactSellerForm> */}
+        {item.datetime && rescheduleButton()}
+        {cancelButton()}
       </View>
     </KeyboardAvoidingView>
   );

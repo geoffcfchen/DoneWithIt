@@ -17,29 +17,15 @@ import AuthContext from "../auth/context";
 import moment from "moment";
 import NewQuestionButton from "../components/NewQuestionButton";
 import { useNavigation } from "@react-navigation/native";
+import ListingCard from "../components/ListingCard";
 
 function ListingsFilterScreen({ questions }) {
   const navigation = useNavigation();
   const { userData } = useContext(GlobalContext);
+  // console.log("questions", questions);
   return (
     <View style={styles.screen}>
-      <FlatList
-        data={questions}
-        keyExtractor={(question) => question.lastMessage._id.toString()}
-        renderItem={({ item }) => (
-          <Card
-            userB={item.userB}
-            title={item.lastMessage.title}
-            subTitle={item.lastMessage.description}
-            imageUrl={item.lastMessage.image}
-            datetime={item.datetime}
-            slot={item.slot}
-            onPress={() =>
-              navigation.navigate(routes.LISTING_DETAILS, { item })
-            }
-          />
-        )}
-      />
+      <ListingCard questions={questions}></ListingCard>
     </View>
   );
 }

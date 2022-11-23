@@ -1,25 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 
-import ActivityIndicator from "../components/ActivityIndicator";
-import AppButton from "../components/AppButton";
-import AppText from "../components/AppText";
-import Card from "../components/Card";
 import colors from "../config/colors";
-import listingsApi from "../api/listing";
-import routes from "../navigation/routes";
-import Screen from "../components/Screen";
-import useApi from "../hooks/useApi";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import GlobalContext from "../context/Context";
-import AuthContext from "../auth/context";
-import moment from "moment";
-import NewQuestionButton from "../components/NewQuestionButton";
 
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import ListingsActiveScreen from "./ListingsActiveScreen";
 import ListingsFilterScreen from "./ListingsFilterScreen";
+import NewQuestionButton from "../components/NewQuestionButton";
+import ListingsSubmitScreen from "./ListingsSubmitScreen";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -79,8 +70,7 @@ const listings = [
 function ListingsScreen({ navigation }) {
   // const { user } = useContext(AuthContext);
   const { userData } = useContext(GlobalContext);
-  const { questions, setQuestions, setUnfilteredQuestions } =
-    useContext(GlobalContext);
+  const { setUnfilteredQuestions } = useContext(GlobalContext);
 
   const [activeQuestions, setActiveQuestions] = useState([]);
   const [pastQuestions, setPastQuestions] = useState([]);
@@ -143,7 +133,16 @@ function ListingsScreen({ navigation }) {
   // console.log("questions", questions);
 
   return (
-    <Tab.Navigator screenOptions={{ headerShown: true }}>
+    <Tab.Navigator
+      screenOptions={{ headerShown: true }}
+      initialRouteName="Submit"
+    >
+      <Tab.Screen
+        name="Submit"
+        children={() => (
+          <ListingsSubmitScreen questions={unscheduledQuestions} />
+        )}
+      ></Tab.Screen>
       <Tab.Screen
         name="Active"
         children={() => <ListingsActiveScreen questions={activeQuestions} />}
@@ -151,12 +150,6 @@ function ListingsScreen({ navigation }) {
       <Tab.Screen
         name="Past"
         children={() => <ListingsFilterScreen questions={pastQuestions} />}
-      ></Tab.Screen>
-      <Tab.Screen
-        name="Unscheduled"
-        children={() => (
-          <ListingsFilterScreen questions={unscheduledQuestions} />
-        )}
       ></Tab.Screen>
     </Tab.Navigator>
   );

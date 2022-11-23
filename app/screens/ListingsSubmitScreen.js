@@ -19,12 +19,16 @@ import NewQuestionButton from "../components/NewQuestionButton";
 import { useNavigation } from "@react-navigation/native";
 import ListingCard from "../components/ListingCard";
 
-function ListingsActiveScreen({ questions }) {
+function ListingsSubmitScreen({ questions }) {
   const navigation = useNavigation();
   const { userData } = useContext(GlobalContext);
+  // console.log("questions", questions);
   return (
     <View style={styles.screen}>
       <ListingCard questions={questions}></ListingCard>
+      {userData.role.label == "Client" && (
+        <NewQuestionButton></NewQuestionButton>
+      )}
     </View>
   );
 }
@@ -39,4 +43,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ListingsActiveScreen;
+export default ListingsSubmitScreen;
