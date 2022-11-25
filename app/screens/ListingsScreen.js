@@ -67,16 +67,9 @@ const listings = [
 //   );
 // }
 
-function ListingsScreen({ navigation }) {
-  // const { user } = useContext(AuthContext);
+function ListingsScreen() {
   const { userData } = useContext(GlobalContext);
   const { setUnfilteredQuestions } = useContext(GlobalContext);
-
-  const [activeQuestions, setActiveQuestions] = useState([]);
-  const [pastQuestions, setPastQuestions] = useState([]);
-  const [unscheduledQuestions, setUnscheduledQuestions] = useState([]);
-
-  // console.log("user", userData);
 
   const questionsQuery = query(
     collection(db, "questions"),
@@ -85,52 +78,15 @@ function ListingsScreen({ navigation }) {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(questionsQuery, (querySnapshot) => {
-      // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
       const parsedQuestions = querySnapshot.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
         userB: doc.data().participants.find((p) => p.email !== userData.email),
       }));
-      // console.log("parsedQuestions", parsedQuestions);
       setUnfilteredQuestions(parsedQuestions);
-      const nowDate = new Date();
-      const activeQuestions = parsedQuestions
-        .filter(
-          (doc) =>
-            doc.lastMessage &&
-            doc.datetime &&
-            doc.datetime.toDate().getTime() > nowDate
-        )
-        .sort(
-          (a, b) =>
-            a.datetime.toDate().getTime() - b.datetime.toDate().getTime()
-        );
-      setActiveQuestions(activeQuestions);
-
-      const pastQuestions = parsedQuestions
-        .filter(
-          (doc) =>
-            doc.lastMessage &&
-            doc.datetime &&
-            doc.datetime.toDate().getTime() < nowDate
-        )
-        .sort(
-          (a, b) =>
-            a.datetime.toDate().getTime() - b.datetime.toDate().getTime()
-        );
-      setPastQuestions(pastQuestions);
-
-      const unscheduledQuestions = parsedQuestions.filter(
-        (doc) => doc.lastMessage && !doc.datetime
-      );
-      setUnscheduledQuestions(unscheduledQuestions);
     });
     return () => unsubscribe();
   }, []);
-
-  // console.log("unfilteredQuestions", unfilteredQuestions);
-  // console.log("questions", questions[0].datetime.toDate());
-  // console.log("questions", questions);
 
   return (
     <Tab.Navigator
@@ -139,17 +95,20 @@ function ListingsScreen({ navigation }) {
     >
       <Tab.Screen
         name="Submit"
-        children={() => (
-          <ListingsSubmitScreen questions={unscheduledQuestions} />
-        )}
+        component={ListingsSubmitScreen}
+        // children={() => (
+        //   <ListingsSubmitScreen questions={unscheduledQuestions} />
+        // )}
       ></Tab.Screen>
       <Tab.Screen
         name="Active"
-        children={() => <ListingsActiveScreen questions={activeQuestions} />}
+        component={ListingsActiveScreen}
+        // children={() => <ListingsActiveScreen questions={activeQuestions} />}
       ></Tab.Screen>
       <Tab.Screen
         name="Past"
-        children={() => <ListingsFilterScreen questions={pastQuestions} />}
+        component={ListingsFilterScreen}
+        // children={() => <ListingsFilterScreen questions={pastQuestions} />}
       ></Tab.Screen>
     </Tab.Navigator>
   );

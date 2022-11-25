@@ -26,6 +26,9 @@ const GlobalContext = React.createContext({
 
   timeSlots: [],
   setTimeSlots: () => {},
+
+  whereTab: [],
+  setWhereTab: () => {},
 });
 
 export default GlobalContext;

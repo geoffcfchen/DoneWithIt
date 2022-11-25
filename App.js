@@ -4,6 +4,7 @@ import "expo-dev-menu";
 import { onAuthStateChanged } from "firebase/auth";
 import * as SplashScreen from "expo-splash-screen";
 import { LogBox } from "react-native";
+import "react-native-gesture-handler";
 
 import { auth, db } from "./firebase";
 import navigationTheme from "./app/navigation/navigationTheme";
