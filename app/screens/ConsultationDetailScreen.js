@@ -112,7 +112,7 @@ const ConsultationScreen = ({ navigation, route }) => {
 
   return (
     <Screen style={{ flex: 1, backgroundColor: "white" }}>
-      {header()}
+      {/* {header()} */}
       {doctorInfo()}
       {divider()}
       {dateAndTime()}

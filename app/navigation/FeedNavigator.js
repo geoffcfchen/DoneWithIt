@@ -8,13 +8,17 @@ import ProfilePicture from "../components/ProfilePicture";
 import colors from "../config/colors";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 import ProfileTestScreen from "../screens/ProfileTestScreen";
+import GlobalContext from "../context/Context";
 
 const Stack = createNativeStackNavigator();
 
+Stack.navigationOptions;
+
 function FeedNavigator() {
   const navigation = useNavigation();
+  const { userData } = useContext(GlobalContext);
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="Listings">
       <Stack.Group
         screenOptions={{
           headerRightContainerStyle: {
@@ -41,18 +45,14 @@ function FeedNavigator() {
             <ProfilePicture
               onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
               size={40}
-              image={"https://picsum.photos/200"}
+              image={userData.photoURL}
             />
           ),
         }}
       >
         <Stack.Screen name="Listings" component={ListingsScreen}></Stack.Screen>
       </Stack.Group>
-      <Stack.Screen
-        options={{ presentation: "modal", headerShown: false }}
-        name="ListingDetails"
-        component={ListingDetailsScreen}
-      ></Stack.Screen>
+
       <Stack.Group
         screenOptions={{
           headerRightContainerStyle: {
@@ -71,6 +71,11 @@ function FeedNavigator() {
           ),
         }}
       >
+        <Stack.Screen
+          options={{ headerShown: true }}
+          name="ListingDetails"
+          component={ListingDetailsScreen}
+        ></Stack.Screen>
         <Stack.Screen
           options={{ headerShown: true }}
           name="ProfileTest"

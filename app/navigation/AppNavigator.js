@@ -34,11 +34,15 @@ import {
   DrawerContentScrollView,
   DrawerItem,
 } from "@react-navigation/drawer";
-import { DrawerActions, useNavigation } from "@react-navigation/native";
+import {
+  DrawerActions,
+  getFocusedRouteNameFromRoute,
+  useNavigation,
+} from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
-function AppNavigator() {
+export default function AppNavigator() {
   const { user } = useContext(AuthContext);
   const { setUserData, userData, setTimeSlots, setWhereTab } =
     useContext(GlobalContext);
@@ -80,7 +84,10 @@ function AppNavigator() {
 
   // useNotifications();
   return (
-    <Tab.Navigator screenOptions={{ tabBarShowLabel: false }}>
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={{ tabBarShowLabel: false }}
+    >
       <Tab.Screen
         name="Home"
         component={HomeNavigator}
@@ -92,15 +99,6 @@ function AppNavigator() {
               color={color}
               size={size}
             ></MaterialCommunityIcons>
-          ),
-          tabBarButton: (props) => (
-            <TouchableOpacity
-              {...props}
-              onPress={() => {
-                navigation.navigate("Home");
-                setWhereTab("Home");
-              }}
-            />
           ),
         }}
       ></Tab.Screen>
@@ -116,15 +114,6 @@ function AppNavigator() {
               size={size}
             ></MaterialCommunityIcons>
           ),
-          tabBarButton: (props) => (
-            <TouchableOpacity
-              {...props}
-              onPress={() => {
-                navigation.navigate("Questions");
-                setWhereTab("Questions");
-              }}
-            />
-          ),
         }}
       ></Tab.Screen>
       {userData && userData.role.label == "Client" && (
@@ -135,15 +124,6 @@ function AppNavigator() {
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <FontAwesome5 name="calendar-alt" size={size} color={color} />
-            ),
-            tabBarButton: (props) => (
-              <TouchableOpacity
-                {...props}
-                onPress={() => {
-                  navigation.navigate("Schedules");
-                  setWhereTab("Schedules");
-                }}
-              />
             ),
           }}
         ></Tab.Screen>
@@ -168,15 +148,6 @@ function AppNavigator() {
                 size={size}
               ></MaterialCommunityIcons>
             ),
-            tabBarButton: (props) => (
-              <TouchableOpacity
-                {...props}
-                onPress={() => {
-                  navigation.navigate("SubmitSchedule");
-                  setWhereTab("SubmitSchedule");
-                }}
-              />
-            ),
           })}
         ></Tab.Screen>
       )}
@@ -193,30 +164,21 @@ function AppNavigator() {
               size={size}
             ></MaterialCommunityIcons>
           ),
-          tabBarButton: (props) => (
-            <TouchableOpacity
-              {...props}
-              onPress={() => {
-                navigation.navigate("AccountNav");
-                setWhereTab("AccountNav");
-              }}
-            />
-          ),
         }}
       ></Tab.Screen>
     </Tab.Navigator>
   );
 }
 
-function AppNavigatorWrapper() {
-  const navigation = useNavigation();
-  const Stack = createNativeStackNavigator();
-  return (
-    <Stack.Navigator initialRouteName="AppScreen">
-      <Stack.Screen name="AppScreen" component={AppNavigator} />
-    </Stack.Navigator>
-  );
-}
+// function AppNavigatorWrapper() {
+//   const navigation = useNavigation();
+//   const Stack = createNativeStackNavigator();
+//   return (
+//     <Stack.Navigator initialRouteName="AppScreen">
+//       <Stack.Screen name="AppScreen" component={AppNavigator} />
+//     </Stack.Navigator>
+//   );
+// }
 
 const styles = StyleSheet.create({
   circleStyle: {
@@ -311,373 +273,3 @@ const styles = StyleSheet.create({
     width: 40,
   },
 });
-
-function CustomDrawerContent(props) {
-  // console.log("test", props.state.routes[0].state.index);
-  // console.log(whereTab);
-  const { whereTab } = useContext(GlobalContext);
-  console.log(whereTab);
-  return (
-    <View style={{ flex: 1, backgroundColor: "#141f27" }}>
-      <DrawerContentScrollView {...props}>
-        <View style={styles.topContainer}>
-          <Image
-            source={require("../assets/icon_black.png")}
-            style={styles.profile}
-          />
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text style={styles.title}>appdevblog</Text>
-            <Ionicons name="ios-arrow-down" size={20} color="#00acee" />
-          </View>
-
-          <Text style={styles.username}>APPDEVBLOG_2020</Text>
-          <View style={styles.data}>
-            <View style={styles.following}>
-              <Text style={styles.number}>22</Text>
-              <Text style={styles.text}> Following</Text>
-            </View>
-            <View style={styles.followers}>
-              <Text style={styles.number}>44</Text>
-              <Text style={styles.text}> Followers</Text>
-            </View>
-          </View>
-        </View>
-        <DrawerItem
-          label={() => <Text style={styles.label}>Profile</Text>}
-          onPress={() =>
-            props.navigation.navigate("Tabs", {
-              screen: whereTab,
-              params: { screen: "ProfileTest" },
-            })
-          }
-          icon={() => (
-            <MaterialCommunityIcons
-              name="account-outline"
-              size={22}
-              color="#898f93"
-            />
-          )}
-        />
-        <DrawerItem
-          label={() => <Text style={styles.label}>Lists</Text>}
-          onPress={() => props.navigation.navigate("Lists")}
-          icon={() => (
-            <MaterialCommunityIcons name="text" size={22} color="#898f93" />
-          )}
-        />
-        <DrawerItem
-          label={() => <Text style={styles.label}>Topics</Text>}
-          onPress={() => props.navigation.navigate("Topics")}
-          icon={() => (
-            <MaterialCommunityIcons
-              name="chat-processing"
-              size={22}
-              color="#898f93"
-            />
-          )}
-        />
-        <DrawerItem
-          label={() => <Text style={styles.label}>Bookmarks</Text>}
-          onPress={() => props.navigation.navigate("Bookmarks")}
-          icon={() => (
-            <MaterialCommunityIcons
-              name="bookmark-outline"
-              size={22}
-              color="#898f93"
-            />
-          )}
-        />
-        <DrawerItem
-          label={() => <Text style={styles.label}>Moments</Text>}
-          onPress={() => props.navigation.navigate("Moments")}
-          icon={() => (
-            <MaterialCommunityIcons
-              name="flash-outline"
-              size={22}
-              color="#898f93"
-            />
-          )}
-        />
-        <View style={{ height: 0.2, backgroundColor: "#2b353c" }} />
-        <TouchableOpacity
-          style={{ padding: 10, paddingLeft: 15 }}
-          onPress={() => props.navigation.navigate("Settings")}
-        >
-          <Text style={styles.optionText}>Settings and privacy</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{ padding: 10, paddingLeft: 15 }}
-          onPress={() => props.navigation.navigate("Help")}
-        >
-          <Text style={styles.optionText}>Help and Centre</Text>
-        </TouchableOpacity>
-      </DrawerContentScrollView>
-      <View style={styles.bottomContainer}>
-        <TouchableWithoutFeedback>
-          <Image
-            source={require("../assets/2.jpg")}
-            style={styles.bottomIcon}
-          />
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback>
-          <Image
-            source={require("../assets/1.jpg")}
-            style={styles.bottomIcon}
-          />
-        </TouchableWithoutFeedback>
-      </View>
-    </View>
-  );
-}
-
-const Drawer = createDrawerNavigator();
-
-// export default AppNavigatorWrapper;
-
-function HomeScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Button
-        onPress={() => navigation.navigate("Notifications")}
-        title="Go to notifications"
-      />
-    </View>
-  );
-}
-
-function NotificationsScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Button onPress={() => navigation.goBack()} title="Go back home" />
-    </View>
-  );
-}
-
-function Profile() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#333333",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text style={{ color: "#fff", fontWeight: "bold" }}>Profile</Text>
-    </View>
-  );
-}
-
-function Lists() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#333333",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text style={{ color: "#fff", fontWeight: "bold" }}>Lists</Text>
-    </View>
-  );
-}
-
-function Topics() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#333333",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text style={{ color: "#fff", fontWeight: "bold" }}>Topics</Text>
-    </View>
-  );
-}
-
-function Bookmarks() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#333333",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text style={{ color: "#fff", fontWeight: "bold" }}>Bookmarks</Text>
-    </View>
-  );
-}
-
-function Moments() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#333333",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text style={{ color: "#fff", fontWeight: "bold" }}>Moments</Text>
-    </View>
-  );
-}
-
-function Settings() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#333333",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text style={{ color: "#fff", fontWeight: "bold" }}>Settings</Text>
-    </View>
-  );
-}
-
-function Help() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#333333",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text style={{ color: "#fff", fontWeight: "bold" }}>Help</Text>
-    </View>
-  );
-}
-
-function Home({ navigation }) {
-  return (
-    <View style={{ flex: 1, backgroundColor: "#424b52" }}>
-      <View style={styles.header}>
-        <TouchableWithoutFeedback
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-        >
-          <Image
-            source={require("../assets/icon_black.png")}
-            style={styles.image}
-          />
-        </TouchableWithoutFeedback>
-        <Icon name="twitter" size={28} color="#00acee" />
-        <Image source={require("../assets/2.jpg")} style={styles.icon} />
-      </View>
-    </View>
-  );
-}
-
-function Search({ navigation }) {
-  return (
-    <View style={{ flex: 1, backgroundColor: "#424b52" }}>
-      <View style={styles.header}>
-        <TouchableWithoutFeedback
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-        >
-          <Image
-            source={require("../assets/icon_black.png")}
-            style={styles.image}
-          />
-        </TouchableWithoutFeedback>
-      </View>
-    </View>
-  );
-}
-
-function Notification({ navigation }) {
-  return (
-    <View style={{ flex: 1, backgroundColor: "#424b52" }}>
-      <View style={styles.header}>
-        <TouchableWithoutFeedback
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-        >
-          <Image
-            source={require("../assets/icon_black.png")}
-            style={styles.image}
-          />
-        </TouchableWithoutFeedback>
-      </View>
-    </View>
-  );
-}
-
-function Messages({ navigation }) {
-  return (
-    <View style={{ flex: 1, backgroundColor: "#424b52" }}>
-      <View style={styles.header}>
-        <TouchableWithoutFeedback
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-        >
-          <Image
-            source={require("../assets/icon_black.png")}
-            style={styles.image}
-          />
-        </TouchableWithoutFeedback>
-      </View>
-    </View>
-  );
-}
-
-export default function MyDrawer({ navigation }) {
-  return (
-    <Drawer.Navigator
-      drawerType="front"
-      edgeWidth={100}
-      initialRouteName="Tabs"
-      useLegacyImplementation={true}
-      drawerContent={(props) => <CustomDrawerContent {...props} />}
-      // screenOptions={{ headerShown: false }}
-    >
-      <Drawer.Group screenOptions={{ headerShown: false }}>
-        <Drawer.Screen name="Tabs" component={AppNavigator} />
-      </Drawer.Group>
-      <Drawer.Group
-        screenOptions={{
-          headerRightContainerStyle: {
-            marginRight: 15,
-          },
-          headerLeftContainerStyle: {
-            marginLeft: 15,
-          },
-          headerLeft: () => (
-            <MaterialCommunityIcons
-              name="arrow-left"
-              color={"black"}
-              size={24}
-              onPress={() => navigation.navigate("Tabs")}
-            />
-          ),
-        }}
-      >
-        <Drawer.Screen name="Profile" component={Profile} />
-        <Drawer.Screen name="Lists" component={Lists} />
-        <Drawer.Screen name="Topics" component={Topics} />
-        <Drawer.Screen name="Bookmarks" component={Bookmarks} />
-        <Drawer.Screen name="Moments" component={Moments} />
-        <Drawer.Screen name="Settings" component={Settings} />
-        <Drawer.Screen name="Help" component={Help} />
-      </Drawer.Group>
-    </Drawer.Navigator>
-  );
-}
-
-function App() {
-  return (
-    <Drawer.Navigator useLegacyImplementation={true} initialRouteName="Home">
-      <Drawer.Screen name="Home" component={HomeScreen} />
-      <Drawer.Screen name="Notifications" component={NotificationsScreen} />
-    </Drawer.Navigator>
-  );
-}

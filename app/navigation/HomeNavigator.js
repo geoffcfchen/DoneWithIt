@@ -13,6 +13,7 @@ const Stack = createNativeStackNavigator();
 
 function HomeNavigator() {
   const navigation = useNavigation();
+  const { userData } = useContext(GlobalContext);
 
   return (
     <Stack.Navigator>
@@ -42,7 +43,7 @@ function HomeNavigator() {
             <ProfilePicture
               onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
               size={40}
-              image={"https://picsum.photos/200"}
+              image={userData.photoURL}
             />
           ),
         }}
@@ -67,7 +68,7 @@ function HomeNavigator() {
               name="arrow-left"
               color={"black"}
               size={24}
-              onPress={() => navigation.navigate("HomeScreen")}
+              onPress={() => navigation.goBack()}
             />
           ),
         }}

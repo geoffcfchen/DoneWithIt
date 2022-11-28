@@ -95,7 +95,10 @@ function App() {
                 options={{ headerShown: false }}
               ></Stack.Screen>
             )}
-            <Stack.Screen name="App" component={AppNavigator}></Stack.Screen>
+            <Stack.Screen
+              name="DrawerNavigator"
+              component={DrawerNavigator}
+            ></Stack.Screen>
           </Stack.Navigator>
         )}
       </NavigationContainer>
@@ -104,6 +107,7 @@ function App() {
 }
 
 import { StripeProvider } from "@stripe/stripe-react-native";
+import DrawerNavigator from "./app/navigation/DrawerNavigator";
 
 function Main() {
   return (

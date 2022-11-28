@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -10,11 +10,13 @@ import ProfilePicture from "../components/ProfilePicture";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 import colors from "../config/colors";
 import ProfileTestScreen from "../screens/ProfileTestScreen";
+import GlobalContext from "../context/Context";
 
 const Stack = createNativeStackNavigator();
 
 function ScheduleNavigator() {
   const navigation = useNavigation();
+  const { userData } = useContext(GlobalContext);
   return (
     <Stack.Navigator>
       <Stack.Group
@@ -43,7 +45,7 @@ function ScheduleNavigator() {
             <ProfilePicture
               onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
               size={40}
-              image={"https://picsum.photos/200"}
+              image={userData.photoURL}
             />
           ),
         }}
@@ -52,6 +54,26 @@ function ScheduleNavigator() {
           name="DoctorList"
           component={DoctorListScreen}
         ></Stack.Screen>
+      </Stack.Group>
+      <Stack.Group
+        screenOptions={{ headerBackTitleVisible: false }}
+        // screenOptions={{
+        //   headerRightContainerStyle: {
+        //     marginRight: 15,
+        //   },
+        //   headerLeftContainerStyle: {
+        //     marginLeft: 15,
+        //   },
+        //   headerLeft: () => (
+        //     <MaterialCommunityIcons
+        //       name="arrow-left"
+        //       color={"black"}
+        //       size={24}
+        //       // onPress={() => navigation.navigate("DoctorList")}
+        //     />
+        //   ),
+        // }}
+      >
         <Stack.Screen
           name="IndividualDay"
           component={IndividualDayScreen}
@@ -61,25 +83,6 @@ function ScheduleNavigator() {
           name="Consultation"
           component={ConsultationScreen}
         ></Stack.Screen>
-      </Stack.Group>
-      <Stack.Group
-        screenOptions={{
-          headerRightContainerStyle: {
-            marginRight: 15,
-          },
-          headerLeftContainerStyle: {
-            marginLeft: 15,
-          },
-          headerLeft: () => (
-            <MaterialCommunityIcons
-              name="arrow-left"
-              color={"black"}
-              size={24}
-              onPress={() => navigation.navigate("DoctorList")}
-            />
-          ),
-        }}
-      >
         <Stack.Screen
           options={{ headerShown: true }}
           name="ProfileTest"

@@ -45,7 +45,7 @@ function SubmitNavigator() {
             <ProfilePicture
               onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
               size={40}
-              image={"https://picsum.photos/200"}
+              image={userData.photoURL}
             />
           ),
         }}
@@ -59,11 +59,6 @@ function SubmitNavigator() {
         ></Stack.Screen>
       </Stack.Group>
 
-      <Stack.Screen
-        options={{ presentation: "modal", headerShown: false }}
-        name="Consultation"
-        component={ConsultationScreen}
-      ></Stack.Screen>
       <Stack.Group
         screenOptions={{
           headerRightContainerStyle: {
@@ -82,6 +77,11 @@ function SubmitNavigator() {
           ),
         }}
       >
+        <Stack.Screen
+          options={{ headerShown: true }}
+          name="Consultation"
+          component={ConsultationScreen}
+        ></Stack.Screen>
         <Stack.Screen
           options={{ headerShown: true }}
           name="ProfileTest"
