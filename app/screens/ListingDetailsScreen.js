@@ -58,7 +58,7 @@ function ListingDetailsScreen({ route }) {
   function rescheduleButton() {
     const navigation = useNavigation();
     const questionRef = doc(db, "questions", item.id);
-    console.log("listing.id", item.id);
+    // console.log("listing.id", item.id);
     return (
       <TouchableOpacity
         activeOpacity={0.99}

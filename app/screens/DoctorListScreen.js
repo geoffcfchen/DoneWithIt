@@ -109,7 +109,7 @@ const DoctorListScreen = ({ navigation, route }) => {
         ...doc.data(),
         id: doc.id,
       }));
-      console.log(parsedDoctors);
+      // console.log(parsedDoctors);
       setDoctorsList(parsedDoctors);
     });
     return () => unsubscribe();

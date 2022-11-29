@@ -14,7 +14,7 @@ const Stack = createNativeStackNavigator();
 function HomeNavigator() {
   const navigation = useNavigation();
   const { userData } = useContext(GlobalContext);
-  console.log(userData);
+  // console.log(userData);
 
   return (
     <Stack.Navigator>
