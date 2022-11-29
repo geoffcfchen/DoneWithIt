@@ -4,7 +4,7 @@ import ProfilePicture from "../ProfilePicture";
 
 const LeftContainer = ({ user }) => (
   <View>
-    <ProfilePicture image={user.image} size={45} />
+    <ProfilePicture userData={user} size={45} />
   </View>
 );
 

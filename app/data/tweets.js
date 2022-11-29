@@ -4,8 +4,8 @@ const tweets = [
     user: {
       id: "u1",
       username: "SavinVadim_",
-      name: "Vadim Savin",
-      image: "https://picsum.photos/200",
+      displayName: "Vadim Savin",
+      photoURL: "https://picsum.photos/200",
     },
     createdAt: "2020-08-27T12:00:00.000Z",
     content:
@@ -20,8 +20,8 @@ const tweets = [
     user: {
       id: "u1",
       username: "SavinVadim_",
-      name: "Vadim Savin",
-      image: "https://picsum.photos/200",
+      displayName: "Vadim Savin",
+      photoURL: "https://picsum.photos/200",
     },
     createdAt: "2020-08-27T12:00:00.000Z",
     content:
@@ -36,8 +36,8 @@ const tweets = [
     user: {
       id: "u1",
       username: "SavinVadim_",
-      name: "Vadim Savin",
-      image: "https://picsum.photos/200",
+      displayName: "Vadim Savin",
+      photoURL: "https://picsum.photos/200",
     },
     createdAt: "2020-08-27T12:00:00.000Z",
     content: "Hello World",
@@ -50,8 +50,8 @@ const tweets = [
     user: {
       id: "u1",
       username: "SavinVadim_",
-      name: "Vadim Savin",
-      image: "https://picsum.photos/200",
+      displayName: "Vadim Savin",
+      photoURL: "https://picsum.photos/200",
     },
     createdAt: "2020-08-27T12:00:00.000Z",
     content:

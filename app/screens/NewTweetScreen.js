@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
@@ -13,10 +13,12 @@ import { AntDesign } from "@expo/vector-icons";
 import ProfilePicture from "../components/ProfilePicture";
 import colors from "../config/colors";
 import { useNavigation } from "@react-navigation/native";
+import GlobalContext from "../context/Context";
 
 export default function NewTweetScreen({ onCloseTweet }) {
   const [tweet, setTweet] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const { userData } = useContext(GlobalContext);
 
   const onPostTweet = () => {
     console.log(`Posting the tweet: ${tweet}
@@ -37,7 +39,7 @@ export default function NewTweetScreen({ onCloseTweet }) {
         </TouchableOpacity>
       </View>
       <View style={styles.newTweetContainer}>
-        <ProfilePicture image={"https://picsum.photos/200"} />
+        <ProfilePicture userData={userData} />
         <View style={styles.inputsContainer}>
           <TextInput
             value={tweet}

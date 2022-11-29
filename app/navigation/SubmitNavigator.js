@@ -45,7 +45,7 @@ function SubmitNavigator() {
             <ProfilePicture
               onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
               size={40}
-              image={userData.photoURL}
+              userData={userData}
             />
           ),
         }}

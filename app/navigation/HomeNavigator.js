@@ -44,7 +44,7 @@ function HomeNavigator() {
             <ProfilePicture
               onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
               size={40}
-              image={"https://picsum.photos/200"}
+              userData={userData}
             />
           ),
         }}

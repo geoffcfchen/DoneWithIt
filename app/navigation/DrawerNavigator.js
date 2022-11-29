@@ -145,6 +145,10 @@ export default function DrawerNavigator({ navigation }) {
   const { whereTab, setWhereTab } = useContext(GlobalContext);
   // console.log("whereTab", whereTab);
 
+  const setRouteName = (routeName) => {
+    setWhereTab(routeName);
+  };
+
   return (
     <Drawer.Navigator
       drawerType="front"
@@ -158,11 +162,13 @@ export default function DrawerNavigator({ navigation }) {
         <Drawer.Screen
           name="AppNavigator"
           component={AppNavigator}
+          listeners
           options={({ route }) => {
             // console.log("route", route);
             const routeName =
               getFocusedRouteNameFromRoute(route) ?? "AppNavigator";
             // console.log("routeName", routeName);
+            // setRouteName(routeName);
             setWhereTab(routeName);
 
             // if (routeName == "SubmitSchedule") return { swipeEnabled: false };
