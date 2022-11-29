@@ -9,7 +9,7 @@ import OpenScheduleScreen from "../screens/OpenScheduleScreen";
 import ProfilePicture from "../components/ProfilePicture";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 import colors from "../config/colors";
-import ProfileTestScreen from "../screens/ProfileTestScreen";
+import ProfileInfoScreen from "../screens/ProfileInfoScreen";
 // import { useRoute } from "@react-navigation/native";
 
 const Stack = createNativeStackNavigator();
@@ -84,8 +84,8 @@ function SubmitNavigator() {
         ></Stack.Screen>
         <Stack.Screen
           options={{ headerShown: true }}
-          name="ProfileTest"
-          component={ProfileTestScreen}
+          name="ProfileInfo"
+          component={ProfileInfoScreen}
         ></Stack.Screen>
       </Stack.Group>
     </Stack.Navigator>

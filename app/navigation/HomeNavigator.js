@@ -1,19 +1,20 @@
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useContext, useEffect } from "react";
+import react, { useContext, useEffect } from "react";
 
 import ProfilePicture from "../components/ProfilePicture";
 import colors from "../config/colors";
 import GlobalContext from "../context/Context";
 import HomeScreen from "../screens/HomeScreen";
-import ProfileTestScreen from "../screens/ProfileTestScreen";
+import ProfileInfoScreen from "../screens/ProfileInfoScreen";
 
 const Stack = createNativeStackNavigator();
 
 function HomeNavigator() {
   const navigation = useNavigation();
   const { userData } = useContext(GlobalContext);
+  console.log(userData);
 
   return (
     <Stack.Navigator>
@@ -43,7 +44,7 @@ function HomeNavigator() {
             <ProfilePicture
               onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
               size={40}
-              image={userData.photoURL}
+              image={"https://picsum.photos/200"}
             />
           ),
         }}
@@ -75,8 +76,8 @@ function HomeNavigator() {
       >
         <Stack.Screen
           options={{ headerShown: true }}
-          name="ProfileTest"
-          component={ProfileTestScreen}
+          name="ProfileInfo"
+          component={ProfileInfoScreen}
         ></Stack.Screen>
       </Stack.Group>
     </Stack.Navigator>

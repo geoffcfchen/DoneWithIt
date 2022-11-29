@@ -10,7 +10,7 @@ import ContactsScreen from "../screens/ContactsScreen";
 import BalanceScreen from "../screens/BalanceScreen";
 import ProfilePicture from "../components/ProfilePicture";
 import colors from "../config/colors";
-import ProfileTestScreen from "../screens/ProfileTestScreen";
+import ProfileInfoScreen from "../screens/ProfileInfoScreen";
 import GlobalContext from "../context/Context";
 
 const Stack = createNativeStackNavigator();
@@ -82,8 +82,8 @@ function AccountNavigator() {
         <Stack.Screen name="Contacts" component={ContactsScreen}></Stack.Screen>
         <Stack.Screen
           options={{ headerShown: true }}
-          name="ProfileTest"
-          component={ProfileTestScreen}
+          name="ProfileInfo"
+          component={ProfileInfoScreen}
         ></Stack.Screen>
       </Stack.Group>
     </Stack.Navigator>

@@ -45,12 +45,14 @@ function CustomDrawerContent(props) {
   // console.log("test", props.state.routes[0].state.index);
   // console.log(whereTab);
   const { whereTab, userData } = useContext(GlobalContext);
-  // console.log(whereTab);
+  // console.log("userData", userData);
   return (
     <View style={{ flex: 1, backgroundColor: "#141f27" }}>
       <DrawerContentScrollView {...props}>
         <View style={styles.topContainer}>
-          <Image source={{ uri: userData.photoURL }} style={styles.profile} />
+          {userData && (
+            <Image source={{ uri: userData.photoURL }} style={styles.profile} />
+          )}
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
@@ -75,7 +77,10 @@ function CustomDrawerContent(props) {
           onPress={() =>
             props.navigation.navigate("AppNavigator", {
               screen: whereTab,
-              params: { screen: "ProfileTest" },
+              params: {
+                screen: "ProfileInfo",
+                params: { ProfileUser: userData },
+              },
             })
           }
           icon={() => (
@@ -91,17 +96,6 @@ function CustomDrawerContent(props) {
           onPress={() => props.navigation.navigate("Lists")}
           icon={() => <Ionicons name="wallet" size={22} color="#898f93" />}
         />
-        {/* <DrawerItem
-            label={() => <Text style={styles.label}>Topics</Text>}
-            onPress={() => props.navigation.navigate("Topics")}
-            icon={() => (
-              <MaterialCommunityIcons
-                name="chat-processing"
-                size={22}
-                color="#898f93"
-              />
-            )}
-          /> */}
 
         <View style={{ height: 0.2, backgroundColor: "#2b353c" }} />
         <TouchableOpacity
@@ -139,17 +133,6 @@ const Drawer = createDrawerNavigator();
 
 // export default AppNavigatorWrapper;
 
-function HomeScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Button
-        onPress={() => navigation.navigate("Notifications")}
-        title="Go to notifications"
-      />
-    </View>
-  );
-}
-
 function NotificationsScreen({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -158,184 +141,9 @@ function NotificationsScreen({ navigation }) {
   );
 }
 
-function Profile() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#333333",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text style={{ color: "#fff", fontWeight: "bold" }}>Profile</Text>
-    </View>
-  );
-}
-
-function Lists() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#333333",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text style={{ color: "#fff", fontWeight: "bold" }}>Lists</Text>
-    </View>
-  );
-}
-
-function Topics() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#333333",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text style={{ color: "#fff", fontWeight: "bold" }}>Topics</Text>
-    </View>
-  );
-}
-
-function Bookmarks() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#333333",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text style={{ color: "#fff", fontWeight: "bold" }}>Bookmarks</Text>
-    </View>
-  );
-}
-
-function Moments() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#333333",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text style={{ color: "#fff", fontWeight: "bold" }}>Moments</Text>
-    </View>
-  );
-}
-
-function Settings() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#333333",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text style={{ color: "#fff", fontWeight: "bold" }}>Settings</Text>
-    </View>
-  );
-}
-
-function Help() {
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#333333",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text style={{ color: "#fff", fontWeight: "bold" }}>Help</Text>
-    </View>
-  );
-}
-
-function Home({ navigation }) {
-  return (
-    <View style={{ flex: 1, backgroundColor: "#424b52" }}>
-      <View style={styles.header}>
-        <TouchableWithoutFeedback
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-        >
-          <Image
-            source={require("../assets/icon_black.png")}
-            style={styles.image}
-          />
-        </TouchableWithoutFeedback>
-        <Icon name="twitter" size={28} color="#00acee" />
-        <Image source={require("../assets/2.jpg")} style={styles.icon} />
-      </View>
-    </View>
-  );
-}
-
-function Search({ navigation }) {
-  return (
-    <View style={{ flex: 1, backgroundColor: "#424b52" }}>
-      <View style={styles.header}>
-        <TouchableWithoutFeedback
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-        >
-          <Image
-            source={require("../assets/icon_black.png")}
-            style={styles.image}
-          />
-        </TouchableWithoutFeedback>
-      </View>
-    </View>
-  );
-}
-
-function Notification({ navigation }) {
-  return (
-    <View style={{ flex: 1, backgroundColor: "#424b52" }}>
-      <View style={styles.header}>
-        <TouchableWithoutFeedback
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-        >
-          <Image
-            source={require("../assets/icon_black.png")}
-            style={styles.image}
-          />
-        </TouchableWithoutFeedback>
-      </View>
-    </View>
-  );
-}
-
-function Messages({ navigation }) {
-  return (
-    <View style={{ flex: 1, backgroundColor: "#424b52" }}>
-      <View style={styles.header}>
-        <TouchableWithoutFeedback
-          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-        >
-          <Image
-            source={require("../assets/icon_black.png")}
-            style={styles.image}
-          />
-        </TouchableWithoutFeedback>
-      </View>
-    </View>
-  );
-}
-
 export default function DrawerNavigator({ navigation }) {
   const { whereTab, setWhereTab } = useContext(GlobalContext);
-  console.log("whereTab", whereTab);
+  // console.log("whereTab", whereTab);
 
   return (
     <Drawer.Navigator
@@ -351,10 +159,10 @@ export default function DrawerNavigator({ navigation }) {
           name="AppNavigator"
           component={AppNavigator}
           options={({ route }) => {
-            console.log("route", route);
+            // console.log("route", route);
             const routeName =
               getFocusedRouteNameFromRoute(route) ?? "AppNavigator";
-            console.log("routeName", routeName);
+            // console.log("routeName", routeName);
             setWhereTab(routeName);
 
             // if (routeName == "SubmitSchedule") return { swipeEnabled: false };
@@ -378,15 +186,7 @@ export default function DrawerNavigator({ navigation }) {
             />
           ),
         }}
-      >
-        <Drawer.Screen name="Profile" component={Profile} />
-        <Drawer.Screen name="Lists" component={Lists} />
-        <Drawer.Screen name="Topics" component={Topics} />
-        <Drawer.Screen name="Bookmarks" component={Bookmarks} />
-        <Drawer.Screen name="Moments" component={Moments} />
-        <Drawer.Screen name="Settings" component={Settings} />
-        <Drawer.Screen name="Help" component={Help} />
-      </Drawer.Group>
+      ></Drawer.Group>
     </Drawer.Navigator>
   );
 }

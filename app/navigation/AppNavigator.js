@@ -25,7 +25,6 @@ import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../../firebase";
 import GlobalContext from "../context/Context";
 import SubmitNavigator from "./SubmitNavigator";
-import HomeNavigator from "./HomeNavigator";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ProfilePicture from "../components/ProfilePicture";
 import colors from "../config/colors";
@@ -39,6 +38,7 @@ import {
   getFocusedRouteNameFromRoute,
   useNavigation,
 } from "@react-navigation/native";
+import HomeNavigator from "./HomeNavigator";
 
 const Tab = createBottomTabNavigator();
 

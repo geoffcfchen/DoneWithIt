@@ -9,7 +9,7 @@ import IndividualDayScreen from "../screens/IndividualDayScreen";
 import ProfilePicture from "../components/ProfilePicture";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 import colors from "../config/colors";
-import ProfileTestScreen from "../screens/ProfileTestScreen";
+import ProfileInfoScreen from "../screens/ProfileInfoScreen";
 import GlobalContext from "../context/Context";
 
 const Stack = createNativeStackNavigator();
@@ -85,8 +85,8 @@ function ScheduleNavigator() {
         ></Stack.Screen>
         <Stack.Screen
           options={{ headerShown: true }}
-          name="ProfileTest"
-          component={ProfileTestScreen}
+          name="ProfileInfo"
+          component={ProfileInfoScreen}
         ></Stack.Screen>
       </Stack.Group>
     </Stack.Navigator>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, TouchableWithoutFeedback } from "react-native";
 
-const ProfilePicture = ({ onPress, image, size = 50 }) => (
+const ProfilePicture = ({ onPress, image, userData, size = 50 }) => (
   <TouchableWithoutFeedback onPress={onPress}>
     <Image
       source={{ uri: image }}

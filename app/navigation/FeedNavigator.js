@@ -7,7 +7,7 @@ import ListingDetailsScreen from "../screens/ListingDetailsScreen";
 import ProfilePicture from "../components/ProfilePicture";
 import colors from "../config/colors";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
-import ProfileTestScreen from "../screens/ProfileTestScreen";
+import ProfileInfoScreen from "../screens/ProfileInfoScreen";
 import GlobalContext from "../context/Context";
 
 const Stack = createNativeStackNavigator();
@@ -78,8 +78,8 @@ function FeedNavigator() {
         ></Stack.Screen>
         <Stack.Screen
           options={{ headerShown: true }}
-          name="ProfileTest"
-          component={ProfileTestScreen}
+          name="ProfileInfo"
+          component={ProfileInfoScreen}
         ></Stack.Screen>
       </Stack.Group>
     </Stack.Navigator>

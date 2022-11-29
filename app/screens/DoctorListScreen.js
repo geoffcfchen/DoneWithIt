@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Dimensions,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { Fonts, Colors, Sizes } from "../constant/styles";
 import {
@@ -20,6 +21,7 @@ import {
 } from "@expo/vector-icons";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../../firebase";
+import ProfilePicture from "../components/ProfilePicture";
 
 const { width } = Dimensions.get("screen");
 
@@ -107,7 +109,7 @@ const DoctorListScreen = ({ navigation, route }) => {
         ...doc.data(),
         id: doc.id,
       }));
-      // console.log(parsedDoctors);
+      console.log(parsedDoctors);
       setDoctorsList(parsedDoctors);
     });
     return () => unsubscribe();
@@ -136,7 +138,7 @@ const DoctorListScreen = ({ navigation, route }) => {
       <StatusBar translucent={false} backgroundColor={Colors.primary} />
       <View style={{ flex: 1, backgroundColor: "white" }}>
         {/* {header()} */}
-        {search()}
+        {/* {search()} */}
         {doctors()}
       </View>
     </SafeAreaView>
@@ -176,21 +178,31 @@ const DoctorListScreen = ({ navigation, route }) => {
 
   function doctors() {
     const renderItem = ({ item }) => {
+      // console.log("item", item);
       return (
         <View style={{ justifyContent: "center", marginTop: 15.0 }}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <View style={styles.doctorImageContainerStyle}>
-              <Image
-                source={{ uri: item.photoURL }}
-                resizeMode="contain"
-                style={{
-                  height: 109.0,
-                  width: 109.0,
-                  borderRadius: 75.0,
-                  overflow: "hidden",
-                }}
-              />
+              <TouchableWithoutFeedback
+                onPress={() =>
+                  navigation.navigate("ProfileInfo", {
+                    ProfileUser: item,
+                  })
+                }
+              >
+                <Image
+                  source={{ uri: item.photoURL }}
+                  resizeMode="contain"
+                  style={{
+                    height: 109.0,
+                    width: 109.0,
+                    borderRadius: 75.0,
+                    overflow: "hidden",
+                  }}
+                />
+              </TouchableWithoutFeedback>
             </View>
+
             <View>
               <Text style={{ ...Fonts.black16Bold }}>
                 Dr. {item.displayName}
