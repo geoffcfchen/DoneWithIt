@@ -12,8 +12,6 @@ import GlobalContext from "../context/Context";
 
 const Stack = createNativeStackNavigator();
 
-Stack.navigationOptions;
-
 function FeedNavigator() {
   const navigation = useNavigation();
   const { userData } = useContext(GlobalContext);

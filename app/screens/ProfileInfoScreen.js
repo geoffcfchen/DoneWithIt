@@ -24,7 +24,8 @@ export default function ProfileInfoScreen({ route }) {
   console.log("userBData", userBData.uid);
   console.log("userData", userData.uid);
 
-  const userRef = doc(db, "following", userData.uid);
+  const userFollowingRef = doc(db, "following", userData.uid);
+  const userBFollowersRef = doc(db, "followers", userBData.uid);
   const userBThatUserFollowingRef = doc(
     db,
     "following",
@@ -32,6 +33,15 @@ export default function ProfileInfoScreen({ route }) {
     "userFollowing",
     userBData.uid
   );
+
+  const FollowersOfUserBRef = doc(
+    db,
+    "followers",
+    userBData.uid,
+    "userFollower",
+    userData.uid
+  );
+
   const allUsersThatUserFollowingRef = collection(
     db,
     "following",
@@ -64,8 +74,10 @@ export default function ProfileInfoScreen({ route }) {
 
   async function onFollow() {
     try {
-      await setDoc(userRef, {});
+      await setDoc(userFollowingRef, {});
       await setDoc(userBThatUserFollowingRef, {});
+      await setDoc(userBFollowersRef, {});
+      await setDoc(FollowersOfUserBRef, {});
     } catch (error) {
       console.log(error);
     }
@@ -76,6 +88,7 @@ export default function ProfileInfoScreen({ route }) {
     try {
       // await setDoc(userRef, {});
       await deleteDoc(userBThatUserFollowingRef, {});
+      await deleteDoc(FollowersOfUserBRef, {});
     } catch (error) {
       console.log(error);
     }

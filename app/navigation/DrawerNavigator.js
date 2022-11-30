@@ -22,7 +22,7 @@ import {
 import ScheduleNavigator from "./ScheduleNavigator";
 import AuthContext from "../auth/context";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { db } from "../../firebase";
+import { auth, db } from "../../firebase";
 import GlobalContext from "../context/Context";
 import SubmitNavigator from "./SubmitNavigator";
 import HomeNavigator from "./HomeNavigator";
@@ -41,11 +41,54 @@ import {
 } from "@react-navigation/native";
 import AppNavigator from "./AppNavigator";
 
-function CustomDrawerContent(props) {
-  // console.log("test", props.state.routes[0].state.index);
-  // console.log(whereTab);
+function CustomDrawerContent(props, { route }) {
   const { whereTab, userData } = useContext(GlobalContext);
-  // console.log("userData", userData);
+  const [followingNumber, setFollowingNumber] = useState(0);
+  const [followerNumber, setFollowerNumber] = useState(0);
+  console.log(auth.currentUser.uid);
+  // console.log(route);
+
+  const allUsersThatUserFollowingRef = collection(
+    db,
+    "following",
+    auth.currentUser.uid,
+    "userFollowing"
+  );
+
+  const FollowersOfUserRef = collection(
+    db,
+    "followers",
+    auth.currentUser.uid,
+    "userFollower"
+  );
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      allUsersThatUserFollowingRef,
+      (querySnapshot) => {
+        const allUsersThatUserFollowing = querySnapshot.docs.map((doc) => {
+          const id = doc.id;
+          return id;
+        });
+        setFollowingNumber(allUsersThatUserFollowing.length);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(FollowersOfUserRef, (querySnapshot) => {
+      const FollowersOfUser = querySnapshot.docs.map((doc) => {
+        const id = doc.id;
+        return id;
+      });
+      setFollowerNumber(FollowersOfUser.length);
+    });
+    return () => unsubscribe();
+  }, []);
+  console.log("followerNumber", followerNumber);
+  console.log("followingNumber", followingNumber);
+
   return (
     <View style={{ flex: 1, backgroundColor: "#141f27" }}>
       <DrawerContentScrollView {...props}>
@@ -63,11 +106,11 @@ function CustomDrawerContent(props) {
           <Text style={styles.username}>APPDEVBLOG_2020</Text>
           <View style={styles.data}>
             <View style={styles.following}>
-              <Text style={styles.number}>22</Text>
+              <Text style={styles.number}>{followingNumber}</Text>
               <Text style={styles.text}> Following</Text>
             </View>
             <View style={styles.followers}>
-              <Text style={styles.number}>44</Text>
+              <Text style={styles.number}>{followerNumber}</Text>
               <Text style={styles.text}> Followers</Text>
             </View>
           </View>
