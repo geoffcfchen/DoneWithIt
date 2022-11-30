@@ -45,7 +45,7 @@ function CustomDrawerContent(props, { route }) {
   const { whereTab, userData } = useContext(GlobalContext);
   const [followingNumber, setFollowingNumber] = useState(0);
   const [followerNumber, setFollowerNumber] = useState(0);
-  console.log(auth.currentUser.uid);
+  // console.log(auth.currentUser.uid);
   // console.log(route);
 
   const allUsersThatUserFollowingRef = collection(
@@ -86,8 +86,8 @@ function CustomDrawerContent(props, { route }) {
     });
     return () => unsubscribe();
   }, []);
-  console.log("followerNumber", followerNumber);
-  console.log("followingNumber", followingNumber);
+  // console.log("followerNumber", followerNumber);
+  // console.log("followingNumber", followingNumber);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#141f27" }}>
@@ -103,7 +103,7 @@ function CustomDrawerContent(props, { route }) {
             {/* <Ionicons name="ios-arrow-down" size={20} color="#00acee" /> */}
           </View>
 
-          <Text style={styles.username}>APPDEVBLOG_2020</Text>
+          <Text style={styles.username}>@{auth.currentUser.displayName}</Text>
           <View style={styles.data}>
             <View style={styles.following}>
               <Text style={styles.number}>{followingNumber}</Text>
