@@ -1,5 +1,10 @@
 import * as React from "react";
-import { View, StyleSheet } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 
 // import Feed from '../components/Feed';
 import Screen, { ScreenScrollView } from "../components/Screen";
@@ -11,9 +16,11 @@ import Search from "../components/Search";
 
 export default function SearchScreen() {
   return (
-    <View>
-      <Search></Search>
-      {/* <NewTweetButton /> */}
-    </View>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View>
+        <Search></Search>
+        {/* <NewTweetButton /> */}
+      </View>
+    </TouchableWithoutFeedback>
   );
 }

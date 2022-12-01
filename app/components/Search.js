@@ -54,7 +54,7 @@ function Search() {
         value={searchTerm}
         onChangeText={setSearchTerm}
         style={styles.serachInput}
-        placeholder="Serach..."
+        placeholder="Search..."
       ></TextInput>
       <FlatList
         // style={{ flex: 1 }}
