@@ -4,7 +4,7 @@ const tweets = [
   {
     id: "t1",
     user: {
-      id: "u1",
+      uid: "u1",
       username: "SavinVadim_",
       displayName: "Vadim Savin",
       photoURL: "https://picsum.photos/200",
@@ -20,7 +20,7 @@ const tweets = [
   {
     id: "t2",
     user: {
-      id: "u1",
+      uid: "u1",
       username: "SavinVadim_",
       displayName: "Vadim Savin",
       photoURL: "https://picsum.photos/200",
@@ -36,7 +36,7 @@ const tweets = [
   {
     id: "t3",
     user: {
-      id: "u1",
+      uid: "u1",
       username: "SavinVadim_",
       displayName: "Vadim Savin",
       photoURL: "https://picsum.photos/200",
@@ -50,7 +50,7 @@ const tweets = [
   {
     id: "t4",
     user: {
-      id: "u1",
+      uid: "u1",
       username: "SavinVadim_",
       displayName: "Vadim Savin",
       photoURL: "https://picsum.photos/200",

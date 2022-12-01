@@ -44,7 +44,7 @@ export default function NewTweetScreen({ onCloseTweet }) {
       await setDoc(userPostsRef, {
         id: randomID,
         user: {
-          id: currentUser.uid,
+          uid: currentUser.uid,
           username: currentUser.displayName,
           displayName: currentUser.displayName,
           photoURL: currentUser.photoURL,

@@ -10,18 +10,14 @@ import { View, FlatList, Text } from "react-native";
 import { auth, db } from "../../firebase";
 import GlobalContext from "../context/Context";
 import tweets from "../data/tweets";
+import SearchUser from "./SearchUser/Searchuser";
 import Tweet from "./Tweet/Tweet";
 
 const postsQuery = query(collection(db, "posts"));
 
-function Feed() {
+function Search() {
   const [parsedPosts, setParsedPosts] = useState([]);
   const { allUsersThatUserFollowing } = useContext(GlobalContext);
-
-  const allUsersThatUserFollowingAndSelf = [
-    ...allUsersThatUserFollowing,
-    auth.currentUser.uid,
-  ];
 
   useEffect(() => {
     const unsubscribe = onSnapshot(postsQuery, (querySnapshot) => {
@@ -31,9 +27,7 @@ function Feed() {
           ...doc.data(),
           id: doc.id,
         }))
-        .filter((doc) =>
-          allUsersThatUserFollowingAndSelf.includes(doc.user.uid)
-        )
+        .filter((doc) => allUsersThatUserFollowing.includes(doc.user.uid))
         .sort(
           (a, b) =>
             b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime()
@@ -46,17 +40,18 @@ function Feed() {
   const newTweets = [...tweets, ...parsedPosts].sort(
     (a, b) => b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime()
   );
+  // console.log("newTweets", newTweets);
 
   return (
     <View style={{ width: "100%" }}>
       <FlatList
         // style={{ flex: 1 }}
         data={newTweets}
-        renderItem={({ item }) => <Tweet tweet={item} />}
+        renderItem={({ item }) => <SearchUser tweet={item} />}
         keyExtractor={(item) => item.id}
       />
     </View>
   );
 }
 
-export default Feed;
+export default Search;

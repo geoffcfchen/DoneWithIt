@@ -3,8 +3,10 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   Ionicons,
   MaterialCommunityIcons,
-  FontAwesome5,
+  Feather,
   MaterialIcons,
+  FontAwesome5,
+  EvilIcons,
 } from "@expo/vector-icons";
 
 import AccountNavigator from "./AccountNavigator";
@@ -39,6 +41,7 @@ import {
   useNavigation,
 } from "@react-navigation/native";
 import HomeNavigator from "./HomeNavigator";
+import SearchNavigator from "./SearchNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -99,6 +102,16 @@ export default function AppNavigator() {
               color={color}
               size={size}
             ></MaterialCommunityIcons>
+          ),
+        })}
+      ></Tab.Screen>
+      <Tab.Screen
+        name="Search"
+        component={SearchNavigator}
+        options={({ route }) => ({
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Feather name="search" color={color} size={size}></Feather>
           ),
         })}
       ></Tab.Screen>
