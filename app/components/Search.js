@@ -67,6 +67,7 @@ function Search() {
         placeholder="Search..."
       ></TextInput>
       <FlatList
+        contentContainerStyle={{ paddingBottom: 73.5 }}
         // style={{ flex: 1 }}
         data={filteredContacts}
         renderItem={({ item }) => <SearchUser tweet={item} />}

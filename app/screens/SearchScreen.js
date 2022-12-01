@@ -4,6 +4,7 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   Keyboard,
+  SafeAreaView,
 } from "react-native";
 
 // import Feed from '../components/Feed';
@@ -16,11 +17,11 @@ import Search from "../components/Search";
 
 export default function SearchScreen() {
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View>
-        <Search></Search>
-        {/* <NewTweetButton /> */}
-      </View>
-    </TouchableWithoutFeedback>
+    // <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+    <SafeAreaView>
+      <Search></Search>
+      {/* <NewTweetButton /> */}
+    </SafeAreaView>
+    // </TouchableWithoutFeedback>
   );
 }
