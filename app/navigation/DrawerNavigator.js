@@ -41,6 +41,77 @@ import {
 } from "@react-navigation/native";
 import AppNavigator from "./AppNavigator";
 
+const Drawer = createDrawerNavigator();
+
+// export default AppNavigatorWrapper;
+
+function NotificationsScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Button onPress={() => navigation.goBack()} title="Go back home" />
+    </View>
+  );
+}
+
+const sideMenuDisabledScreens = ["Questions", "Schedules"];
+
+export default function DrawerNavigator({ navigation }) {
+  const { whereTab, setWhereTab } = useContext(GlobalContext);
+  // console.log("whereTab", whereTab);
+
+  const setRouteName = (routeName) => {
+    setWhereTab(routeName);
+  };
+
+  return (
+    <Drawer.Navigator
+      drawerType="front"
+      edgeWidth={100}
+      initialRouteName="AppNavigator"
+      useLegacyImplementation={true}
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      // screenOptions={{ swipeEnabled: false }}
+    >
+      <Drawer.Group screenOptions={{ headerShown: false }}>
+        <Drawer.Screen
+          name="AppNavigator"
+          component={AppNavigator}
+          listeners
+          options={({ route }) => {
+            // console.log("route", route);
+            const routeName = getFocusedRouteNameFromRoute(route) ?? "";
+            // console.log("routeName", routeName);
+            // setRouteName(routeName);
+            // if (sideMenuDisabledScreens.includes(routeName))
+            //   return { swipeEnabled: false };
+            setWhereTab(routeName);
+
+            // if (routeName == "SubmitSchedule") return { swipeEnabled: false };
+          }}
+        />
+      </Drawer.Group>
+      <Drawer.Group
+        screenOptions={{
+          headerRightContainerStyle: {
+            marginRight: 15,
+          },
+          headerLeftContainerStyle: {
+            marginLeft: 15,
+          },
+          headerLeft: () => (
+            <MaterialCommunityIcons
+              name="arrow-left"
+              color={"black"}
+              size={24}
+              onPress={() => navigation.navigate("AppNavigator")}
+            />
+          ),
+        }}
+      ></Drawer.Group>
+    </Drawer.Navigator>
+  );
+}
+
 function CustomDrawerContent(props, { route }) {
   const { whereTab, userData } = useContext(GlobalContext);
   const [followingNumber, setFollowingNumber] = useState(0);
@@ -169,74 +240,6 @@ function CustomDrawerContent(props, { route }) {
         </TouchableWithoutFeedback>
       </View>
     </View>
-  );
-}
-
-const Drawer = createDrawerNavigator();
-
-// export default AppNavigatorWrapper;
-
-function NotificationsScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Button onPress={() => navigation.goBack()} title="Go back home" />
-    </View>
-  );
-}
-
-export default function DrawerNavigator({ navigation }) {
-  const { whereTab, setWhereTab } = useContext(GlobalContext);
-  // console.log("whereTab", whereTab);
-
-  const setRouteName = (routeName) => {
-    setWhereTab(routeName);
-  };
-
-  return (
-    <Drawer.Navigator
-      drawerType="front"
-      edgeWidth={100}
-      initialRouteName="AppNavigator"
-      useLegacyImplementation={true}
-      drawerContent={(props) => <CustomDrawerContent {...props} />}
-      // screenOptions={{ swipeEnabled: false }}
-    >
-      <Drawer.Group screenOptions={{ headerShown: false }}>
-        <Drawer.Screen
-          name="AppNavigator"
-          component={AppNavigator}
-          listeners
-          options={({ route }) => {
-            // console.log("route", route);
-            const routeName =
-              getFocusedRouteNameFromRoute(route) ?? "AppNavigator";
-            // console.log("routeName", routeName);
-            // setRouteName(routeName);
-            setWhereTab(routeName);
-
-            // if (routeName == "SubmitSchedule") return { swipeEnabled: false };
-          }}
-        />
-      </Drawer.Group>
-      <Drawer.Group
-        screenOptions={{
-          headerRightContainerStyle: {
-            marginRight: 15,
-          },
-          headerLeftContainerStyle: {
-            marginLeft: 15,
-          },
-          headerLeft: () => (
-            <MaterialCommunityIcons
-              name="arrow-left"
-              color={"black"}
-              size={24}
-              onPress={() => navigation.navigate("AppNavigator")}
-            />
-          ),
-        }}
-      ></Drawer.Group>
-    </Drawer.Navigator>
   );
 }
 

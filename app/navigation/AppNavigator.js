@@ -91,7 +91,7 @@ export default function AppNavigator() {
       <Tab.Screen
         name="Home"
         component={HomeNavigator}
-        options={{
+        options={({ route }) => ({
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
@@ -100,7 +100,7 @@ export default function AppNavigator() {
               size={size}
             ></MaterialCommunityIcons>
           ),
-        }}
+        })}
       ></Tab.Screen>
       <Tab.Screen
         name="Questions"

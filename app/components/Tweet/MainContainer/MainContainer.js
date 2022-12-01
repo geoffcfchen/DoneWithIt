@@ -17,7 +17,7 @@ function MainContainer({ tweet }) {
           <Text style={styles.name}>{tweet.user.name}</Text>
           <Text style={styles.username}>@{tweet.user.username}</Text>
           <Text style={styles.createdAt}>
-            {moment(tweet.createdAt).fromNow()}
+            {moment(tweet.createdAt.toDate()).fromNow()}
           </Text>
         </View>
         <Entypo name={"chevron-down"} size={16} color={"grey"} />

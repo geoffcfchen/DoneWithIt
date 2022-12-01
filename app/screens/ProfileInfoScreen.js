@@ -21,8 +21,8 @@ export default function ProfileInfoScreen({ route }) {
   // console.log("route", route);
   const userBData = route.params.ProfileUser;
   const { userData } = useContext(GlobalContext);
-  console.log("userBData", userBData.uid);
-  console.log("userData", userData.uid);
+  // console.log("userBData", userBData.uid);
+  // console.log("userData", userData.uid);
 
   const userFollowingRef = doc(db, "following", userData.uid);
   const userBFollowersRef = doc(db, "followers", userBData.uid);

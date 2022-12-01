@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useLayoutEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -14,9 +14,12 @@ import GlobalContext from "../context/Context";
 
 const Stack = createNativeStackNavigator();
 
-function ScheduleNavigator() {
+function ScheduleNavigator(props) {
   const navigation = useNavigation();
   const { userData } = useContext(GlobalContext);
+  useLayoutEffect(() => {
+    console.log(props);
+  }, []);
   return (
     <Stack.Navigator>
       <Stack.Group
@@ -57,6 +60,7 @@ function ScheduleNavigator() {
       </Stack.Group>
       <Stack.Group
         screenOptions={{ headerBackTitleVisible: false }}
+
         // screenOptions={{
         //   headerRightContainerStyle: {
         //     marginRight: 15,

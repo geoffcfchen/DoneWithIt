@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
@@ -14,16 +14,53 @@ import ProfilePicture from "../components/ProfilePicture";
 import colors from "../config/colors";
 import { useNavigation } from "@react-navigation/native";
 import GlobalContext from "../context/Context";
+import { auth, db } from "../../firebase";
+import { doc, setDoc } from "firebase/firestore";
+import { async } from "@firebase/util";
+import { nanoid } from "nanoid";
 
 export default function NewTweetScreen({ onCloseTweet }) {
+  const randomID = useMemo(() => nanoid(), []);
   const [tweet, setTweet] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const { userData } = useContext(GlobalContext);
+  // console.log(auth.currentUser);
+  const currentUser = auth.currentUser;
 
-  const onPostTweet = () => {
-    console.log(`Posting the tweet: ${tweet}
-    Image: ${imageUrl}`);
-  };
+  console.log(tweet);
+
+  const userPostsRef = doc(db, "posts", randomID);
+  // const userEachPostRef = doc(
+  //   db,
+  //   "posts",
+  //   currentUser.uid,
+  //   "userPosts",
+  //   randomID
+  // );
+
+  async function onPostTweet() {
+    try {
+      // await setDoc(userPostsRef, {});
+      await setDoc(userPostsRef, {
+        id: randomID,
+        user: {
+          id: currentUser.uid,
+          username: currentUser.displayName,
+          displayName: currentUser.displayName,
+          photoURL: currentUser.photoURL,
+        },
+        createdAt: new Date(),
+        content: tweet,
+        // image: "https://picsum.photos/200",
+        numberOfComments: 4,
+        numberOfRetweets: 11,
+        numberOfLikes: 99,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    onCloseTweet();
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -49,12 +86,12 @@ export default function NewTweetScreen({ onCloseTweet }) {
             style={styles.tweetInput}
             placeholder={"What's happening?"}
           />
-          <TextInput
+          {/* <TextInput
             value={imageUrl}
             onChangeText={(value) => setImageUrl(value)}
             style={styles.imageInput}
             placeholder={"Image url (optional)"}
-          />
+          /> */}
         </View>
       </View>
     </SafeAreaView>
