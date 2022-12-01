@@ -103,18 +103,14 @@ function FollowButton({ userBData }) {
             style={[styles.button, { backgroundColor: "white" }]}
             onPress={() => onUnFollow()}
           >
-            <Text style={[styles.text, { fontSize: 15, color: "black" }]}>
-              Following
-            </Text>
+            <Text style={[styles.text, { color: "black" }]}>Following</Text>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
             style={[styles.button, { backgroundColor: "black" }]}
             onPress={() => onFollow()}
           >
-            <Text style={[styles.text, { fontSize: 15, color: "white" }]}>
-              Follow
-            </Text>
+            <Text style={[styles.text, { color: "white" }]}>Follow</Text>
           </TouchableOpacity>
         )
       ) : null}
@@ -136,7 +132,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: colors.white,
-    fontSize: 15,
+    fontSize: 13,
     // textTransform: "uppercase",
     fontWeight: "bold",
   },

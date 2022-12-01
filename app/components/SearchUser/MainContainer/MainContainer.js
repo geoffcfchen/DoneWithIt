@@ -10,27 +10,23 @@ import AppButton from "../../AppButton";
 import FollowButton from "../../FollowButton";
 
 function MainContainer({ tweet }) {
-  console.log("tweet", tweet.user);
+  // console.log("tweet", tweet.user);
   return (
     <View style={styles.container}>
       {/* <Text>test</Text> */}
       <View style={styles.tweetHeaderContainer}>
         <View style={styles.tweetHeaderNames}>
-          <Text style={styles.name}>{tweet.user.displayName}</Text>
-          {/* <Text style={styles.username}>@{tweet.user.username}</Text> */}
+          <Text style={styles.name}>{tweet.displayName}</Text>
+          {tweet.selfIntro && (
+            <Text style={styles.content}>{tweet.content}</Text>
+          )}
+          {!tweet.selfIntro && (
+            <Text style={styles.content}>
+              Hi! this is Dr. {tweet.displayName}!
+            </Text>
+          )}
         </View>
-        <FollowButton userBData={tweet.user}></FollowButton>
-      </View>
-      <View>
-        {tweet.selfIntro && <Text style={styles.content}>{tweet.content}</Text>}
-        {!tweet.selfIntro && (
-          <Text style={styles.content}>
-            Hi! this is Dr. {tweet.user.displayName}!
-          </Text>
-        )}
-        {/* {!!tweet.selfIntro && (
-          <Image style={styles.image} source={{ uri: tweet.image }} />
-        )} */}
+        <FollowButton userBData={tweet}></FollowButton>
       </View>
       {/* <Footer tweet={tweet} /> */}
     </View>
@@ -47,7 +43,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   tweetHeaderNames: {
-    flexDirection: "row",
+    // flexDirection: "row",
   },
   name: {
     marginRight: 5,

@@ -6,7 +6,7 @@ import MainContainer from "./MainContainer/MainContainer";
 function SearchUser({ tweet }) {
   return (
     <View style={styles.container}>
-      <LeftContainer user={tweet.user} />
+      <LeftContainer user={tweet} />
       <MainContainer tweet={tweet} />
     </View>
   );
