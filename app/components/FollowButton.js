@@ -24,7 +24,7 @@ function FollowButton({ userBData }) {
   // console.log("route", route);
   // const userBData = route.params.ProfileUser;
   const { userData } = useContext(GlobalContext);
-  console.log("userBData", userBData);
+  // console.log("userBData", userBData);
   // console.log("userBData", userBData.uid);
   // console.log("userData", userData.uid);
 
