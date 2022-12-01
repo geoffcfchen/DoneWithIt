@@ -53,8 +53,6 @@ function NotificationsScreen({ navigation }) {
   );
 }
 
-const sideMenuDisabledScreens = ["Questions", "Schedules"];
-
 export default function DrawerNavigator({ navigation }) {
   const { whereTab, setWhereTab } = useContext(GlobalContext);
   // console.log("whereTab", whereTab);

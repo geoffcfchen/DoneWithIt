@@ -70,8 +70,6 @@ export default function ProfileInfoScreen({ route }) {
     return () => unsubscribe();
   }, []);
 
-  console.log("allUsersThatUserFollowing", allUsersThatUserFollowing);
-
   async function onFollow() {
     try {
       await setDoc(userFollowingRef, {});

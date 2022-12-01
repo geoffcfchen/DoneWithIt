@@ -14,12 +14,10 @@ import GlobalContext from "../context/Context";
 
 const Stack = createNativeStackNavigator();
 
-function ScheduleNavigator(props) {
+function ScheduleNavigator() {
   const navigation = useNavigation();
   const { userData } = useContext(GlobalContext);
-  useLayoutEffect(() => {
-    console.log(props);
-  }, []);
+
   return (
     <Stack.Navigator>
       <Stack.Group

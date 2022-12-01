@@ -81,7 +81,7 @@ const ConsultationScreen = ({ navigation, route }) => {
       //   "messages"
       // );
       setQuestionReference(questionRef);
-      if (!question) {
+      if (!question && userData.email != doctorData.email) {
         const currUserData = {
           displayName: userData.displayName,
           email: userData.email,
@@ -246,7 +246,7 @@ const ConsultationScreen = ({ navigation, route }) => {
 
   function patients() {
     const renderItem = ({ item }) => {
-      console.log(item);
+      // console.log(item);
       return (
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <View style={styles.patientImageContainer}>

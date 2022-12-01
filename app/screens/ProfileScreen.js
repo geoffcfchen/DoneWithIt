@@ -118,7 +118,7 @@ function ProfileScreen({ navigation }) {
     } catch (error) {
       console.log(error);
     }
-    navigation.navigate("App");
+    navigation.navigate("DrawerNavigator");
   };
 
   return (
