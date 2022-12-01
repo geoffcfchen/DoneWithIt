@@ -29,6 +29,9 @@ const GlobalContext = React.createContext({
 
   whereTab: [],
   setWhereTab: () => {},
+
+  allUsersThatUserFollowing: [],
+  setAllUsersThatUserFollowing: () => {},
 });
 
 export default GlobalContext;

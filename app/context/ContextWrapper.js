@@ -13,6 +13,9 @@ export default function ContextWrapper(props) {
   const [unfilteredDoctors, setUnfilteredDoctors] = useState([]);
   const [timeSlots, setTimeSlots] = useState([]);
   const [whereTab, setWhereTab] = useState("");
+  const [allUsersThatUserFollowing, setAllUsersThatUserFollowing] = useState(
+    []
+  );
   return (
     <Context.Provider
       value={{
@@ -37,6 +40,8 @@ export default function ContextWrapper(props) {
         setTimeSlots,
         whereTab,
         setWhereTab,
+        allUsersThatUserFollowing,
+        setAllUsersThatUserFollowing,
       }}
     >
       {props.children}

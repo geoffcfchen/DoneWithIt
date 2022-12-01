@@ -19,31 +19,19 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import ScheduleNavigator from "./ScheduleNavigator";
-import AuthContext from "../auth/context";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import GlobalContext from "../context/Context";
-import SubmitNavigator from "./SubmitNavigator";
-import HomeNavigator from "./HomeNavigator";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import ProfilePicture from "../components/ProfilePicture";
-import colors from "../config/colors";
+
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItem,
 } from "@react-navigation/drawer";
-import {
-  DrawerActions,
-  getFocusedRouteNameFromRoute,
-  useNavigation,
-} from "@react-navigation/native";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import AppNavigator from "./AppNavigator";
 
 const Drawer = createDrawerNavigator();
-
-// export default AppNavigatorWrapper;
 
 function NotificationsScreen({ navigation }) {
   return (
@@ -54,12 +42,8 @@ function NotificationsScreen({ navigation }) {
 }
 
 export default function DrawerNavigator({ navigation }) {
-  const { whereTab, setWhereTab } = useContext(GlobalContext);
-  // console.log("whereTab", whereTab);
-
-  const setRouteName = (routeName) => {
-    setWhereTab(routeName);
-  };
+  const { setWhereTab, setAllUsersThatUserFollowing } =
+    useContext(GlobalContext);
 
   return (
     <Drawer.Navigator
@@ -68,7 +52,6 @@ export default function DrawerNavigator({ navigation }) {
       initialRouteName="AppNavigator"
       useLegacyImplementation={true}
       drawerContent={(props) => <CustomDrawerContent {...props} />}
-      // screenOptions={{ swipeEnabled: false }}
     >
       <Drawer.Group screenOptions={{ headerShown: false }}>
         <Drawer.Screen
@@ -76,15 +59,8 @@ export default function DrawerNavigator({ navigation }) {
           component={AppNavigator}
           listeners
           options={({ route }) => {
-            // console.log("route", route);
             const routeName = getFocusedRouteNameFromRoute(route) ?? "";
-            // console.log("routeName", routeName);
-            // setRouteName(routeName);
-            // if (sideMenuDisabledScreens.includes(routeName))
-            //   return { swipeEnabled: false };
             setWhereTab(routeName);
-
-            // if (routeName == "SubmitSchedule") return { swipeEnabled: false };
           }}
         />
       </Drawer.Group>
@@ -111,11 +87,10 @@ export default function DrawerNavigator({ navigation }) {
 }
 
 function CustomDrawerContent(props, { route }) {
-  const { whereTab, userData } = useContext(GlobalContext);
+  const { whereTab, userData, setAllUsersThatUserFollowing } =
+    useContext(GlobalContext);
   const [followingNumber, setFollowingNumber] = useState(0);
   const [followerNumber, setFollowerNumber] = useState(0);
-  // console.log(auth.currentUser.uid);
-  // console.log(route);
 
   const allUsersThatUserFollowingRef = collection(
     db,
@@ -140,6 +115,7 @@ function CustomDrawerContent(props, { route }) {
           return id;
         });
         setFollowingNumber(allUsersThatUserFollowing.length);
+        setAllUsersThatUserFollowing(allUsersThatUserFollowing);
       }
     );
     return () => unsubscribe();
@@ -155,8 +131,6 @@ function CustomDrawerContent(props, { route }) {
     });
     return () => unsubscribe();
   }, []);
-  // console.log("followerNumber", followerNumber);
-  // console.log("followingNumber", followingNumber);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#141f27" }}>
