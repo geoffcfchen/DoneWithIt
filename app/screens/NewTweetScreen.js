@@ -27,7 +27,7 @@ export default function NewTweetScreen({ onCloseTweet }) {
   // console.log(auth.currentUser);
   const currentUser = auth.currentUser;
 
-  console.log(tweet);
+  // console.log(tweet);
 
   const userPostsRef = doc(db, "posts", randomID);
   // const userEachPostRef = doc(

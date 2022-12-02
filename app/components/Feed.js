@@ -18,12 +18,11 @@ function Feed() {
   const [parsedPosts, setParsedPosts] = useState([]);
   const { allUsersThatUserFollowing } = useContext(GlobalContext);
 
-  const allUsersThatUserFollowingAndSelf = [
-    ...allUsersThatUserFollowing,
-    auth.currentUser.uid,
-  ];
-
   useEffect(() => {
+    const allUsersThatUserFollowingAndSelf = [
+      ...allUsersThatUserFollowing,
+      auth.currentUser.uid,
+    ];
     const unsubscribe = onSnapshot(postsQuery, (querySnapshot) => {
       // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
       const parsedPosts = querySnapshot.docs
@@ -41,7 +40,7 @@ function Feed() {
       setParsedPosts(parsedPosts);
     });
     return () => unsubscribe();
-  }, []);
+  }, [allUsersThatUserFollowing]);
 
   const newTweets = [...tweets, ...parsedPosts].sort(
     (a, b) => b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime()
