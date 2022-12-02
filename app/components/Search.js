@@ -48,23 +48,4 @@ function Search() {
   );
 }
 
-const styles = StyleSheet.create({
-  page: {
-    padding: 15,
-    backgroundColor: "white",
-    flex: 1,
-  },
-  contactName: { fontSize: 16, marginVertical: 10 },
-  separator: {
-    width: "100%",
-    height: 1,
-    backgroundColor: "#f0f0f0",
-  },
-  serachInput: {
-    backgroundColor: "#f0f0f0",
-    padding: 10,
-    borderRadius: 10,
-  },
-});
-
 export default Search;

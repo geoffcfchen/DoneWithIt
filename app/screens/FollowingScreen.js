@@ -10,9 +10,28 @@ import GlobalContext from "../context/Context";
 import NewQuestionButton from "../components/NewQuestionButton";
 import { useNavigation } from "@react-navigation/native";
 import ListingCard from "../components/ListingCard";
+import useGetCustomers from "../hooks/useGetCustomers";
+import ListUser from "../components/ListUser/ListUser";
 
 function FollowingScreen() {
-  return <View style={styles.screen}></View>;
+  const { userData, allUsersThatUserFollowing } = useContext(GlobalContext);
+  const parsedCustomers = useGetCustomers(userData);
+
+  const filterParsedCustomers = parsedCustomers.filter(
+    (item) => allUsersThatUserFollowing.indexOf(item.uid) > -1
+  );
+
+  return (
+    <View style={{ width: "100%" }}>
+      <FlatList
+        contentContainerStyle={{ paddingBottom: 109 }}
+        // style={{ flex: 1 }}
+        data={filterParsedCustomers}
+        renderItem={({ item }) => <ListUser tweet={item} />}
+        keyExtractor={(item) => item.id}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

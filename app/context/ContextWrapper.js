@@ -16,6 +16,7 @@ export default function ContextWrapper(props) {
   const [allUsersThatUserFollowing, setAllUsersThatUserFollowing] = useState(
     []
   );
+  const [followersOfUser, setFollowersOfUser] = useState([]);
   return (
     <Context.Provider
       value={{
@@ -42,6 +43,8 @@ export default function ContextWrapper(props) {
         setWhereTab,
         allUsersThatUserFollowing,
         setAllUsersThatUserFollowing,
+        followersOfUser,
+        setFollowersOfUser,
       }}
     >
       {props.children}

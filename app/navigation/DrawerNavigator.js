@@ -88,8 +88,12 @@ export default function DrawerNavigator({ navigation }) {
 }
 
 function CustomDrawerContent(props, { route }) {
-  const { whereTab, userData, setAllUsersThatUserFollowing } =
-    useContext(GlobalContext);
+  const {
+    whereTab,
+    userData,
+    setAllUsersThatUserFollowing,
+    setFollowersOfUser,
+  } = useContext(GlobalContext);
   const [followingNumber, setFollowingNumber] = useState(0);
   const [followerNumber, setFollowerNumber] = useState(0);
 
@@ -129,6 +133,7 @@ function CustomDrawerContent(props, { route }) {
         return id;
       });
       setFollowerNumber(FollowersOfUser.length);
+      setFollowersOfUser(FollowersOfUser);
     });
     return () => unsubscribe();
   }, []);
