@@ -7,7 +7,7 @@ import ProfilePicture from "../ProfilePicture";
 function LeftContainer({ user }) {
   const navigation = useNavigation();
   const { whereTab, userData } = useContext(GlobalContext);
-  console.log("user", user);
+  // console.log("user", user);
   return (
     <View>
       <ProfilePicture

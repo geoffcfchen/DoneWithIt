@@ -3,7 +3,7 @@ import { View, StyleSheet, Text } from "react-native";
 import LeftContainer from "./LeftContainer";
 import MainContainer from "./MainContainer/MainContainer";
 
-function SearchUser({ tweet }) {
+function ListUser({ tweet }) {
   return (
     <View style={styles.container}>
       <LeftContainer user={tweet} />
@@ -22,4 +22,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchUser;
+export default ListUser;

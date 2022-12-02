@@ -12,7 +12,7 @@ import Screen, { ScreenScrollView } from "../components/Screen";
 import AppText from "../components/AppText";
 import Feed from "../components/Feed";
 import NewTweetButton from "../components/NewTweetButton";
-import SearchUser from "../components/SearchUser/Searchuser";
+// import SearchUser from "../components/ListUser/ListUser";
 import Search from "../components/Search";
 
 export default function SearchScreen() {

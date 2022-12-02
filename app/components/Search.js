@@ -9,68 +9,39 @@ import React, { useContext, useEffect, useState } from "react";
 import { View, FlatList, TextInput, StyleSheet } from "react-native";
 import { auth, db } from "../../firebase";
 import GlobalContext from "../context/Context";
-
-import SearchUser from "./SearchUser/Searchuser";
-
-const postsQuery = query(collection(db, "customers"));
+import useGetCustomers from "../hooks/useGetCustomers";
+import AppTextInput from "./AppTextInput";
+import ListUser from "./ListUser/ListUser";
 
 function Search() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [parsedCustomers, setParsedCustomers] = useState([]);
-  const [filteredContacts, setFilteredContacts] = useState([]);
+  const [filteredContacts, setFilteredContacts] = useState(parsedCustomers);
   const { userData } = useContext(GlobalContext);
-  console.log(userData);
+
+  const parsedCustomers = useGetCustomers(userData);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(postsQuery, (querySnapshot) => {
-      // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
-
-      let parsedCustomers;
-      if (userData.role.label == "Client") {
-        parsedCustomers = querySnapshot.docs
-          .map((doc) => ({
-            ...doc.data(),
-            id: doc.id,
-          }))
-          .filter((item) => item.role.label == "Doctor");
-      } else {
-        parsedCustomers = querySnapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-      }
-
-      setParsedCustomers(parsedCustomers);
-      setFilteredContacts(parsedCustomers);
-    });
-    return () => unsubscribe();
-  }, []);
-
-  // const newTweets = [...tweets, ...parsedPosts];
-  // console.log("parsedCustomers", parsedCustomers);
-
-  useEffect(() => {
+    // console.log("parsedCustomers", parsedCustomers);
     const newContacts = parsedCustomers.filter((contact) =>
       contact.displayName
         .toLocaleLowerCase()
         .includes(searchTerm.toLocaleLowerCase())
     );
     setFilteredContacts(newContacts);
-  }, [searchTerm]);
+  }, [searchTerm, parsedCustomers]);
 
   return (
     <View style={{ width: "100%" }}>
-      <TextInput
+      <AppTextInput
+        icon="account-search"
         value={searchTerm}
         onChangeText={setSearchTerm}
-        style={styles.serachInput}
-        placeholder="Search..."
-      ></TextInput>
+      ></AppTextInput>
       <FlatList
-        contentContainerStyle={{ paddingBottom: 73.5 }}
+        contentContainerStyle={{ paddingBottom: 109 }}
         // style={{ flex: 1 }}
         data={filteredContacts}
-        renderItem={({ item }) => <SearchUser tweet={item} />}
+        renderItem={({ item }) => <ListUser tweet={item} />}
         keyExtractor={(item) => item.id}
       />
     </View>
