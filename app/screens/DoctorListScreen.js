@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -22,6 +22,7 @@ import {
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../../firebase";
 import ProfilePicture from "../components/ProfilePicture";
+import GlobalContext from "../context/Context";
 
 const { width } = Dimensions.get("screen");
 
@@ -96,6 +97,7 @@ const DoctorListScreen = ({ navigation, route }) => {
   const type = "General practice";
   const [doctorsList, setDoctorsList] = useState([]);
   const [timeSlots, setTimeSlots] = useState([]);
+  const { allUsersThatUserFollowing } = useContext(GlobalContext);
 
   const doctorsQuery = query(
     collection(db, "customers"),
@@ -105,15 +107,17 @@ const DoctorListScreen = ({ navigation, route }) => {
   useEffect(() => {
     const unsubscribe = onSnapshot(doctorsQuery, (querySnapshot) => {
       // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
-      const parsedDoctors = querySnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      // console.log(parsedDoctors);
+      const parsedDoctors = querySnapshot.docs
+        .map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }))
+        .filter((item) => allUsersThatUserFollowing.indexOf(item.uid) > -1);
+      console.log(parsedDoctors);
       setDoctorsList(parsedDoctors);
     });
     return () => unsubscribe();
-  }, []);
+  }, [allUsersThatUserFollowing]);
 
   const timeSlotsQuery = query(
     collection(db, "timeSlots")
@@ -127,7 +131,6 @@ const DoctorListScreen = ({ navigation, route }) => {
         ...doc.data(),
         id: doc.id,
       }));
-      // console.log(parsedDoctors);
       setTimeSlots(parsedTimeSlots);
     });
     return () => unsubscribe();
