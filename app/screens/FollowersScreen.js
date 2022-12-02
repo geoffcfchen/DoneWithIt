@@ -31,7 +31,9 @@ function FollowersScreen() {
         contentContainerStyle={{ paddingBottom: 109 }}
         // style={{ flex: 1 }}
         data={filterParsedCustomers}
-        renderItem={({ item }) => <ListUser tweet={item} />}
+        renderItem={({ item }) => (
+          <ListUser tweet={item} Follow="Follow Back" />
+        )}
         keyExtractor={(item) => item.id}
       />
     </View>

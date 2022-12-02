@@ -16,7 +16,11 @@ import AppButton from "../components/AppButton";
 import ProfilePicture from "../components/ProfilePicture";
 import GlobalContext from "../context/Context";
 
-function FollowButton({ userBData }) {
+function FollowButton({
+  userBData,
+  Following = "Following",
+  Follow = "Follow",
+}) {
   const [following, setFollowing] = useState(false);
   const [allUsersThatUserFollowing, setAllUsersThatUserFollowing] = useState(
     []
@@ -103,14 +107,14 @@ function FollowButton({ userBData }) {
             style={[styles.button, { backgroundColor: "white" }]}
             onPress={() => onUnFollow()}
           >
-            <Text style={[styles.text, { color: "black" }]}>Following</Text>
+            <Text style={[styles.text, { color: "black" }]}>{Following}</Text>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
             style={[styles.button, { backgroundColor: "black" }]}
             onPress={() => onFollow()}
           >
-            <Text style={[styles.text, { color: "white" }]}>Follow</Text>
+            <Text style={[styles.text, { color: "white" }]}>{Follow}</Text>
           </TouchableOpacity>
         )
       ) : null}

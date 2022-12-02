@@ -163,28 +163,47 @@ function CustomDrawerContent(props, { route }) {
           </View>
 
           <Text style={styles.username}>@{auth.currentUser.displayName}</Text>
-          <TouchableWithoutFeedback
-            onPress={() =>
-              props.navigation.navigate("AppNavigator", {
-                screen: whereTab,
-                params: {
-                  screen: "FollowScreen",
-                  params: { ProfileUser: userData },
-                },
-              })
-            }
-          >
-            <View style={styles.data}>
+
+          <View style={styles.data}>
+            <TouchableWithoutFeedback
+              onPress={() =>
+                props.navigation.navigate("AppNavigator", {
+                  screen: whereTab,
+                  params: {
+                    screen: "FollowScreen",
+                    params: {
+                      screen: "Following",
+                      // params: { ProfileUser: userData },
+                    },
+                  },
+                })
+              }
+            >
               <View style={styles.following}>
                 <Text style={styles.number}>{followingNumber}</Text>
                 <Text style={styles.text}> Following</Text>
               </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback
+              onPress={() =>
+                props.navigation.navigate("AppNavigator", {
+                  screen: whereTab,
+                  params: {
+                    screen: "FollowScreen",
+                    params: {
+                      screen: "Followers",
+                      // params: { ProfileUser: userData },
+                    },
+                  },
+                })
+              }
+            >
               <View style={styles.followers}>
                 <Text style={styles.number}>{followerNumber}</Text>
                 <Text style={styles.text}> Followers</Text>
               </View>
-            </View>
-          </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>
+          </View>
         </View>
         <DrawerItem
           label={() => <Text style={styles.label}>Profile</Text>}

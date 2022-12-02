@@ -9,7 +9,11 @@ import Footer from "./Footer";
 import AppButton from "../../AppButton";
 import FollowButton from "../../FollowButton";
 
-function MainContainer({ tweet }) {
+function MainContainer({
+  tweet,
+  Follow = "Following",
+  Following = "Following",
+}) {
   // console.log("tweet", tweet.user);
   return (
     <View style={styles.container}>
@@ -26,7 +30,11 @@ function MainContainer({ tweet }) {
             </Text>
           )}
         </View>
-        <FollowButton userBData={tweet}></FollowButton>
+        <FollowButton
+          userBData={tweet}
+          Follow={Follow}
+          Following={Following}
+        ></FollowButton>
       </View>
       {/* <Footer tweet={tweet} /> */}
     </View>

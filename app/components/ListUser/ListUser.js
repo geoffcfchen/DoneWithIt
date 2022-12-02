@@ -3,11 +3,11 @@ import { View, StyleSheet, Text } from "react-native";
 import LeftContainer from "./LeftContainer";
 import MainContainer from "./MainContainer/MainContainer";
 
-function ListUser({ tweet }) {
+function ListUser({ tweet, Follow = "Follow", Following = "Following" }) {
   return (
     <View style={styles.container}>
       <LeftContainer user={tweet} />
-      <MainContainer tweet={tweet} />
+      <MainContainer tweet={tweet} Follow={Follow} Following={Following} />
     </View>
   );
 }
