@@ -11,6 +11,8 @@ import { useNavigation, DrawerActions } from "@react-navigation/native";
 import colors from "../config/colors";
 import ProfileInfoScreen from "../screens/ProfileInfoScreen";
 import GlobalContext from "../context/Context";
+import { auth } from "../../firebase";
+import FollowScreen from "../screens/FollowScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -89,6 +91,11 @@ function ScheduleNavigator() {
           options={{ headerShown: true }}
           name="ProfileInfo"
           component={ProfileInfoScreen}
+        ></Stack.Screen>
+        <Stack.Screen
+          options={{ headerShown: true, title: auth.currentUser.displayName }}
+          name="FollowScreen"
+          component={FollowScreen}
         ></Stack.Screen>
       </Stack.Group>
     </Stack.Navigator>

@@ -30,6 +30,7 @@ import {
 } from "@react-navigation/drawer";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import AppNavigator from "./AppNavigator";
+import ProfilePicture from "../components/ProfilePicture";
 
 const Drawer = createDrawerNavigator();
 
@@ -136,9 +137,19 @@ function CustomDrawerContent(props, { route }) {
     <View style={{ flex: 1, backgroundColor: "#141f27" }}>
       <DrawerContentScrollView {...props}>
         <View style={styles.topContainer}>
-          {userData && (
-            <Image source={{ uri: userData.photoURL }} style={styles.profile} />
-          )}
+          <ProfilePicture
+            onPress={() =>
+              props.navigation.navigate("AppNavigator", {
+                screen: whereTab,
+                params: {
+                  screen: "ProfileInfo",
+                  params: { ProfileUser: userData },
+                },
+              })
+            }
+            size={60}
+            userData={userData}
+          ></ProfilePicture>
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
@@ -147,16 +158,28 @@ function CustomDrawerContent(props, { route }) {
           </View>
 
           <Text style={styles.username}>@{auth.currentUser.displayName}</Text>
-          <View style={styles.data}>
-            <View style={styles.following}>
-              <Text style={styles.number}>{followingNumber}</Text>
-              <Text style={styles.text}> Following</Text>
+          <TouchableWithoutFeedback
+            onPress={() =>
+              props.navigation.navigate("AppNavigator", {
+                screen: whereTab,
+                params: {
+                  screen: "FollowScreen",
+                  params: { ProfileUser: userData },
+                },
+              })
+            }
+          >
+            <View style={styles.data}>
+              <View style={styles.following}>
+                <Text style={styles.number}>{followingNumber}</Text>
+                <Text style={styles.text}> Following</Text>
+              </View>
+              <View style={styles.followers}>
+                <Text style={styles.number}>{followerNumber}</Text>
+                <Text style={styles.text}> Followers</Text>
+              </View>
             </View>
-            <View style={styles.followers}>
-              <Text style={styles.number}>{followerNumber}</Text>
-              <Text style={styles.text}> Followers</Text>
-            </View>
-          </View>
+          </TouchableWithoutFeedback>
         </View>
         <DrawerItem
           label={() => <Text style={styles.label}>Profile</Text>}

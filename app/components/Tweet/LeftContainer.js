@@ -1,11 +1,30 @@
-import React from "react";
+import { useNavigation } from "@react-navigation/native";
+import React, { useContext } from "react";
 import { View } from "react-native";
+import GlobalContext from "../../context/Context";
 import ProfilePicture from "../ProfilePicture";
 
-const LeftContainer = ({ user }) => (
-  <View>
-    <ProfilePicture userData={user} size={45} />
-  </View>
-);
+function LeftContainer({ user }) {
+  const navigation = useNavigation();
+  const { whereTab, userData } = useContext(GlobalContext);
+  console.log("user", user);
+  return (
+    <View>
+      <ProfilePicture
+        userData={user}
+        size={45}
+        onPress={() =>
+          navigation.navigate("AppNavigator", {
+            screen: whereTab,
+            params: {
+              screen: "ProfileInfo",
+              params: { ProfileUser: user },
+            },
+          })
+        }
+      />
+    </View>
+  );
+}
 
 export default LeftContainer;

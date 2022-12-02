@@ -2,10 +2,12 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import react, { useContext, useEffect } from "react";
+import { auth } from "../../firebase";
 
 import ProfilePicture from "../components/ProfilePicture";
 import colors from "../config/colors";
 import GlobalContext from "../context/Context";
+import FollowScreen from "../screens/FollowScreen";
 import HomeScreen from "../screens/HomeScreen";
 import ProfileInfoScreen from "../screens/ProfileInfoScreen";
 
@@ -14,6 +16,7 @@ const Stack = createNativeStackNavigator();
 function HomeNavigator() {
   const navigation = useNavigation();
   const { userData } = useContext(GlobalContext);
+  auth.currentUser.displayName;
   // console.log(userData);
 
   return (
@@ -78,6 +81,11 @@ function HomeNavigator() {
           options={{ headerShown: true }}
           name="ProfileInfo"
           component={ProfileInfoScreen}
+        ></Stack.Screen>
+        <Stack.Screen
+          options={{ headerShown: true, title: auth.currentUser.displayName }}
+          name="FollowScreen"
+          component={FollowScreen}
         ></Stack.Screen>
       </Stack.Group>
     </Stack.Navigator>
