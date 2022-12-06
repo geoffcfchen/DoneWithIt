@@ -31,6 +31,10 @@ import {
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import AppNavigator from "./AppNavigator";
 import ProfilePicture from "../components/ProfilePicture";
+import Following from "../components/Following";
+import Followers from "../components/Followers";
+import SetGlobalUserAFollowers from "../components/SetGlobalUserAFollowers";
+import SetGlobalUserAFollowing from "../components/SetGlobalUserAFollowing";
 
 const Drawer = createDrawerNavigator();
 
@@ -88,58 +92,10 @@ export default function DrawerNavigator({ navigation }) {
 }
 
 function CustomDrawerContent(props, { route }) {
-  const {
-    whereTab,
-    userData,
-    setAllUsersThatUserFollowing,
-    setFollowersOfUser,
-  } = useContext(GlobalContext);
-  const [followingNumber, setFollowingNumber] = useState(0);
-  const [followerNumber, setFollowerNumber] = useState(0);
-
-  const allUsersThatUserFollowingRef = collection(
-    db,
-    "following",
-    auth.currentUser.uid,
-    "userFollowing"
-  );
-
-  const FollowersOfUserRef = collection(
-    db,
-    "followers",
-    auth.currentUser.uid,
-    "userFollower"
-  );
-
-  useEffect(() => {
-    const unsubscribe = onSnapshot(
-      allUsersThatUserFollowingRef,
-      (querySnapshot) => {
-        const allUsersThatUserFollowing = querySnapshot.docs.map((doc) => {
-          const id = doc.id;
-          return id;
-        });
-        setFollowingNumber(allUsersThatUserFollowing.length);
-        setAllUsersThatUserFollowing(allUsersThatUserFollowing);
-      }
-    );
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    const unsubscribe = onSnapshot(FollowersOfUserRef, (querySnapshot) => {
-      const FollowersOfUser = querySnapshot.docs.map((doc) => {
-        const id = doc.id;
-        return id;
-      });
-      setFollowerNumber(FollowersOfUser.length);
-      setFollowersOfUser(FollowersOfUser);
-    });
-    return () => unsubscribe();
-  }, []);
-
+  const { userData, whereTab } = useContext(GlobalContext);
+  // console.log("userData in custom", userData);
   return (
-    <View style={{ flex: 1, backgroundColor: "#141f27" }}>
+    <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
         <View style={styles.topContainer}>
           <ProfilePicture
@@ -155,54 +111,15 @@ function CustomDrawerContent(props, { route }) {
             size={60}
             userData={userData}
           ></ProfilePicture>
-          <View
+          {/* <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            {/* <Text style={styles.title}>appdevblog</Text> */}
-            {/* <Ionicons name="ios-arrow-down" size={20} color="#00acee" /> */}
-          </View>
-
+          ></View> */}
           <Text style={styles.username}>@{auth.currentUser.displayName}</Text>
-
           <View style={styles.data}>
-            <TouchableWithoutFeedback
-              onPress={() =>
-                props.navigation.navigate("AppNavigator", {
-                  screen: whereTab,
-                  params: {
-                    screen: "FollowScreen",
-                    params: {
-                      screen: "Following",
-                      // params: { ProfileUser: userData },
-                    },
-                  },
-                })
-              }
-            >
-              <View style={styles.following}>
-                <Text style={styles.number}>{followingNumber}</Text>
-                <Text style={styles.text}> Following</Text>
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback
-              onPress={() =>
-                props.navigation.navigate("AppNavigator", {
-                  screen: whereTab,
-                  params: {
-                    screen: "FollowScreen",
-                    params: {
-                      screen: "Followers",
-                      // params: { ProfileUser: userData },
-                    },
-                  },
-                })
-              }
-            >
-              <View style={styles.followers}>
-                <Text style={styles.number}>{followerNumber}</Text>
-                <Text style={styles.text}> Followers</Text>
-              </View>
-            </TouchableWithoutFeedback>
+            <SetGlobalUserAFollowers></SetGlobalUserAFollowers>
+            <SetGlobalUserAFollowing></SetGlobalUserAFollowing>
+            {userData && <Following userBData={userData}></Following>}
+            {userData && <Followers userBData={userData}></Followers>}
           </View>
         </View>
         <DrawerItem
@@ -266,7 +183,7 @@ const styles = StyleSheet.create({
   circleStyle: {
     height: 60.0,
     width: 60.0,
-    backgroundColor: "#F5F5F5",
+    // backgroundColor: "#F5F5F5",
     borderRadius: 30.0,
     alignItems: "center",
     justifyContent: "center",
@@ -279,7 +196,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
     paddingRight: 0,
-    backgroundColor: "#141f27",
+    // backgroundColor: "#141f27",
   },
   image: {
     height: 40,
@@ -308,7 +225,7 @@ const styles = StyleSheet.create({
   },
   username: {
     fontSize: 18,
-    color: "#898f93",
+    // color: "#898f93",
   },
   data: {
     flexDirection: "row",
@@ -324,19 +241,19 @@ const styles = StyleSheet.create({
   number: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#fff",
+    // color: "#fff",
   },
   text: {
     fontSize: 16,
-    color: "#898f93",
+    // color: "#898f93",
   },
   label: {
     fontSize: 18,
-    color: "#fff",
+    // color: "#fff",
   },
   optionText: {
     fontSize: 18,
-    color: "#fff",
+    // color: "#fff",
     // fontWeight: 'bold',
   },
   bottomContainer: {

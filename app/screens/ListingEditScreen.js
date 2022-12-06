@@ -96,11 +96,11 @@ function ListingEditScreen({ onCloseQuestion }) {
   const randomID = useMemo(() => nanoid(), []);
   const [questionHash] = useState("");
   const [contacts, setContacts] = useState([]);
-  const { unfilteredQuestions } = useContext(GlobalContext);
+  const { unfilteredQuestions, allUsersThatUserFollowing } =
+    useContext(GlobalContext);
   const [uploadVisible, setUploadVisible] = useState(false);
   const [progress, setProgress] = useState(0);
   const { user } = useContext(AuthContext);
-
   const customersRef = collection(db, "customers");
 
   useEffect(() => {
@@ -112,7 +112,11 @@ function ListingEditScreen({ onCloseQuestion }) {
             ...customer,
           };
         })
-        .filter((item) => item.role.label == "Doctor");
+        .filter(
+          (item) =>
+            item.role.label == "Doctor" &&
+            allUsersThatUserFollowing.indexOf(item.uid) > -1
+        );
       const parsedcustomers = customers.map((item) => {
         return {
           contactName: item.displayName,
@@ -124,7 +128,7 @@ function ListingEditScreen({ onCloseQuestion }) {
       // setDatesWhitelist(messagesFirestore);
     });
     return () => unsubscribe();
-  }, []);
+  }, [allUsersThatUserFollowing]);
 
   // console.log("contacts", contacts);
 

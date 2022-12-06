@@ -7,7 +7,7 @@ function Tweet({ tweet }) {
   //   console.log("tweet", tweet.user);
   return (
     <View style={styles.container}>
-      <LeftContainer user={tweet.user} />
+      <LeftContainer userB={tweet.user} />
       <MainContainer tweet={tweet} />
     </View>
   );

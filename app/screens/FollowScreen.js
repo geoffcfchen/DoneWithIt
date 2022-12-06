@@ -69,28 +69,32 @@ const listings = [
 //   );
 // }
 
-function FollowScreen() {
+function FollowScreen({ route }) {
+  const userBData = route.params.ProfileUser;
+  const userBFollowing = route.params.Following;
+  const userBFollowers = route.params.Followers;
+  const initScreen = route.params.Init;
+  console.log("userBData", userBData);
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: true,
         tabBarLabelStyle: { textTransform: "none" },
       }}
-      initialRouteName="Followers"
+      initialRouteName={initScreen}
     >
       <Tab.Screen
         name="Followers"
-        component={FollowersScreen}
         options={{ title: "Followers" }}
-
-        // children={() => (
-        //   <ListingsSubmitScreen questions={unscheduledQuestions} />
-        // )}
+        children={() => (
+          <FollowersScreen UserBData={userBData} Followers={userBFollowers} />
+        )}
       ></Tab.Screen>
       <Tab.Screen
         name="Following"
-        component={FollowingScreen}
-        // children={() => <ListingsActiveScreen questions={activeQuestions} />}
+        children={() => (
+          <FollowingScreen UserBData={userBData} Following={userBFollowing} />
+        )}
       ></Tab.Screen>
     </Tab.Navigator>
   );

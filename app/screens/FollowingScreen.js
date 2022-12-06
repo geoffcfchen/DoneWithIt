@@ -13,12 +13,11 @@ import ListingCard from "../components/ListingCard";
 import useGetCustomers from "../hooks/useGetCustomers";
 import ListUser from "../components/ListUser/ListUser";
 
-function FollowingScreen() {
-  const { userData, allUsersThatUserFollowing } = useContext(GlobalContext);
-  const parsedCustomers = useGetCustomers(userData);
+function FollowingScreen({ UserBData, Following }) {
+  const parsedCustomers = useGetCustomers(UserBData);
 
   const filterParsedCustomers = parsedCustomers.filter(
-    (item) => allUsersThatUserFollowing.indexOf(item.uid) > -1
+    (item) => Following.indexOf(item.uid) > -1
   );
 
   return (

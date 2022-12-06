@@ -27,7 +27,7 @@ export default function NewTweetScreen({ onCloseTweet }) {
   // console.log(auth.currentUser);
   const currentUser = auth.currentUser;
 
-  // console.log(tweet);
+  console.log("userData", userData);
 
   const userPostsRef = doc(db, "posts", randomID);
   // const userEachPostRef = doc(
@@ -48,6 +48,7 @@ export default function NewTweetScreen({ onCloseTweet }) {
           username: currentUser.displayName,
           displayName: currentUser.displayName,
           photoURL: currentUser.photoURL,
+          role: userData.role,
         },
         createdAt: new Date(),
         content: tweet,
@@ -85,6 +86,7 @@ export default function NewTweetScreen({ onCloseTweet }) {
             numberOfLines={3}
             style={styles.tweetInput}
             placeholder={"What's happening?"}
+            keyboardType="default"
           />
           {/* <TextInput
             value={imageUrl}
