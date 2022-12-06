@@ -5,11 +5,11 @@ import { View, StyleSheet, TouchableWithoutFeedback, Text } from "react-native";
 import { auth, db } from "../../firebase";
 import GlobalContext from "../context/Context";
 
-function Following({ userBData }) {
-  const { whereTab } = useContext(GlobalContext);
-  // console.log("userBData", userBData);
+function FollowersDrawer({ userBData }) {
   const navigation = useNavigation();
-  const [followingNumber, setFollowingNumber] = useState(0);
+  const { whereTab } = useContext(GlobalContext);
+
+  const [followerNumber, setFollowerNumber] = useState(0);
   const [userBFollowers, setUserBFollowers] = useState([]);
   const [userBFollowing, setUserBFollowing] = useState([]);
 
@@ -35,7 +35,6 @@ function Following({ userBData }) {
           const id = doc.id;
           return id;
         });
-        setFollowingNumber(allUsersThatUserBFollowing.length);
         setUserBFollowing(allUsersThatUserBFollowing);
       }
     );
@@ -48,25 +47,32 @@ function Following({ userBData }) {
         const id = doc.id;
         return id;
       });
+      setFollowerNumber(FollowersOfUser.length);
       setUserBFollowers(FollowersOfUser);
     });
     return () => unsubscribe();
   }, []);
-
+  // console.log("userBData", userBData);
   return (
     <TouchableWithoutFeedback
       onPress={() =>
-        navigation.push("FollowScreen", {
-          ProfileUser: userBData,
-          Following: userBFollowing,
-          Followers: userBFollowers,
-          Init: "Following",
+        navigation.navigate("AppNavigator", {
+          screen: whereTab,
+          params: {
+            screen: "FollowScreen",
+            params: {
+              ProfileUser: userBData,
+              Following: userBFollowing,
+              Followers: userBFollowers,
+              Init: "Followers",
+            },
+          },
         })
       }
     >
-      <View style={styles.following}>
-        <Text style={styles.number}>{followingNumber}</Text>
-        <Text style={styles.text}> Following</Text>
+      <View style={styles.followers}>
+        <Text style={styles.number}>{followerNumber}</Text>
+        <Text style={styles.text}> Followers</Text>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -82,10 +88,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     // color: "#898f93",
   },
-  following: {
+  followers: {
     flexDirection: "row",
-    marginRight: 15,
   },
 });
 
-export default Following;
+export default FollowersDrawer;

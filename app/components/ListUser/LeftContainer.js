@@ -6,21 +6,12 @@ import ProfilePicture from "../ProfilePicture";
 
 function LeftContainer({ user }) {
   const navigation = useNavigation();
-  const { whereTab, userData } = useContext(GlobalContext);
   return (
     <View>
       <ProfilePicture
         userData={user}
         size={45}
-        onPress={() =>
-          navigation.navigate("AppNavigator", {
-            screen: whereTab,
-            params: {
-              screen: "ProfileInfo",
-              params: { ProfileUser: user },
-            },
-          })
-        }
+        onPress={() => navigation.push("ProfileInfo", { ProfileUser: user })}
       />
     </View>
   );

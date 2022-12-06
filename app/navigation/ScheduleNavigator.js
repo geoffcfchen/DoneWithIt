@@ -59,24 +59,24 @@ function ScheduleNavigator() {
         ></Stack.Screen>
       </Stack.Group>
       <Stack.Group
-        screenOptions={{ headerBackTitleVisible: false }}
+        // screenOptions={{ headerBackTitleVisible: false }}
 
-        // screenOptions={{
-        //   headerRightContainerStyle: {
-        //     marginRight: 15,
-        //   },
-        //   headerLeftContainerStyle: {
-        //     marginLeft: 15,
-        //   },
-        //   headerLeft: () => (
-        //     <MaterialCommunityIcons
-        //       name="arrow-left"
-        //       color={"black"}
-        //       size={24}
-        //       // onPress={() => navigation.navigate("DoctorList")}
-        //     />
-        //   ),
-        // }}
+        screenOptions={{
+          headerRightContainerStyle: {
+            marginRight: 15,
+          },
+          headerLeftContainerStyle: {
+            marginLeft: 15,
+          },
+          headerLeft: () => (
+            <MaterialCommunityIcons
+              name="arrow-left"
+              color={"black"}
+              size={24}
+              onPress={() => navigation.goBack()}
+            />
+          ),
+        }}
       >
         <Stack.Screen
           name="IndividualDay"

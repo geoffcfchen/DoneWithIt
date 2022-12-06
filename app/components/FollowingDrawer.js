@@ -5,7 +5,7 @@ import { View, StyleSheet, TouchableWithoutFeedback, Text } from "react-native";
 import { auth, db } from "../../firebase";
 import GlobalContext from "../context/Context";
 
-function Following({ userBData }) {
+function FollowingDrawer({ userBData }) {
   const { whereTab } = useContext(GlobalContext);
   // console.log("userBData", userBData);
   const navigation = useNavigation();
@@ -56,11 +56,17 @@ function Following({ userBData }) {
   return (
     <TouchableWithoutFeedback
       onPress={() =>
-        navigation.push("FollowScreen", {
-          ProfileUser: userBData,
-          Following: userBFollowing,
-          Followers: userBFollowers,
-          Init: "Following",
+        navigation.navigate("AppNavigator", {
+          screen: whereTab,
+          params: {
+            screen: "FollowScreen",
+            params: {
+              ProfileUser: userBData,
+              Following: userBFollowing,
+              Followers: userBFollowers,
+              Init: "Following",
+            },
+          },
         })
       }
     >
@@ -88,4 +94,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Following;
+export default FollowingDrawer;

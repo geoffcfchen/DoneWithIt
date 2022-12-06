@@ -72,7 +72,7 @@ function SearchNavigator() {
               name="arrow-left"
               color={"black"}
               size={24}
-              onPress={() => navigation.navigate("SearchScreen")}
+              onPress={() => navigation.goBack()}
             />
           ),
         }}

@@ -56,17 +56,11 @@ function Followers({ userBData }) {
   return (
     <TouchableWithoutFeedback
       onPress={() =>
-        navigation.navigate("AppNavigator", {
-          screen: whereTab,
-          params: {
-            screen: "FollowScreen",
-            params: {
-              ProfileUser: userBData,
-              Following: userBFollowing,
-              Followers: userBFollowers,
-              Init: "Followers",
-            },
-          },
+        navigation.push("FollowScreen", {
+          ProfileUser: userBData,
+          Following: userBFollowing,
+          Followers: userBFollowers,
+          Init: "Followers",
         })
       }
     >

@@ -31,10 +31,10 @@ import {
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import AppNavigator from "./AppNavigator";
 import ProfilePicture from "../components/ProfilePicture";
-import Following from "../components/Following";
-import Followers from "../components/Followers";
 import SetGlobalUserAFollowers from "../components/SetGlobalUserAFollowers";
 import SetGlobalUserAFollowing from "../components/SetGlobalUserAFollowing";
+import FollowingDrawer from "../components/FollowingDrawer";
+import FollowersDrawer from "../components/FollowersDrawer";
 
 const Drawer = createDrawerNavigator();
 
@@ -118,8 +118,12 @@ function CustomDrawerContent(props, { route }) {
           <View style={styles.data}>
             <SetGlobalUserAFollowers></SetGlobalUserAFollowers>
             <SetGlobalUserAFollowing></SetGlobalUserAFollowing>
-            {userData && <Following userBData={userData}></Following>}
-            {userData && <Followers userBData={userData}></Followers>}
+            {userData && (
+              <FollowingDrawer userBData={userData}></FollowingDrawer>
+            )}
+            {userData && (
+              <FollowersDrawer userBData={userData}></FollowersDrawer>
+            )}
           </View>
         </View>
         <DrawerItem
