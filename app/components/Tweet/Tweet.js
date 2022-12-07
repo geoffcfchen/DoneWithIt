@@ -1,15 +1,26 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, TouchableHighlight } from "react-native";
+import { navigationRef } from "../../navigation/rootNavigation";
 import LeftContainer from "./LeftContainer";
 import MainContainer from "./MainContainer/MainContainer";
 
 function Tweet({ tweet }) {
-  //   console.log("tweet", tweet.user);
+  const navigation = useNavigation();
+  console.log("tweet", tweet);
   return (
-    <View style={styles.container}>
-      <LeftContainer userB={tweet.user} />
-      <MainContainer tweet={tweet} />
-    </View>
+    <TouchableHighlight
+      onPress={() => {
+        navigation.push("FeedDetail", { tweet: tweet });
+      }}
+      activeOpacity={0.99}
+      underlayColor="#DDDDDD"
+    >
+      <View style={styles.container}>
+        <LeftContainer userB={tweet.user} />
+        <MainContainer tweet={tweet} />
+      </View>
+    </TouchableHighlight>
   );
 }
 

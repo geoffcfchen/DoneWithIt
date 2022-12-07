@@ -53,9 +53,9 @@ export default function NewTweetScreen({ onCloseTweet }) {
         createdAt: new Date(),
         content: tweet,
         // image: "https://picsum.photos/200",
-        numberOfComments: 4,
-        numberOfRetweets: 11,
-        numberOfLikes: 99,
+        numberOfComments: 0,
+        numberOfRetweets: 0,
+        numberOfLikes: 0,
       });
     } catch (error) {
       console.log(error);

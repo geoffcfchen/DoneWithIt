@@ -7,6 +7,7 @@ import { auth } from "../../firebase";
 import ProfilePicture from "../components/ProfilePicture";
 import colors from "../config/colors";
 import GlobalContext from "../context/Context";
+import FeedDetailScreen from "../screens/FeedDetailScreen";
 import FollowScreen from "../screens/FollowScreen";
 import HomeScreen from "../screens/HomeScreen";
 import ProfileInfoScreen from "../screens/ProfileInfoScreen";
@@ -81,6 +82,11 @@ function HomeNavigator() {
           options={{ headerShown: true }}
           name="ProfileInfo"
           component={ProfileInfoScreen}
+        ></Stack.Screen>
+        <Stack.Screen
+          options={{ headerShown: true }}
+          name="FeedDetail"
+          component={FeedDetailScreen}
         ></Stack.Screen>
         <Stack.Screen
           options={{ headerShown: true, title: auth.currentUser.displayName }}

@@ -15,7 +15,7 @@ import Tweet from "./Tweet/Tweet";
 
 const postsQuery = query(collection(db, "posts"));
 
-function Feed() {
+function FeedDetails({ tweet }) {
   const [parsedPosts, setParsedPosts] = useState([]);
   const { allUsersThatUserFollowing } = useContext(GlobalContext);
 
@@ -47,10 +47,21 @@ function Feed() {
     (a, b) => b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime()
   );
 
+  // console.log("newTweets", newTweets);
+
+  const header = () => {
+    return (
+      <View>
+        <AppText> Coffee list</AppText>
+      </View>
+    );
+  };
+
   return (
     <View style={{ width: "100%" }}>
       <FlatList
         // style={{ flex: 1 }}
+        ListHeaderComponent={header}
         data={newTweets}
         renderItem={({ item }) => <Tweet tweet={item} />}
         keyExtractor={(item) => item.id}
@@ -59,4 +70,4 @@ function Feed() {
   );
 }
 
-export default Feed;
+export default FeedDetails;

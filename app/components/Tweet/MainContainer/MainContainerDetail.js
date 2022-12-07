@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  TouchableHighlight,
-} from "react-native";
+import { View, Text, Image } from "react-native";
 import { StyleSheet } from "react-native";
 
 import { Entypo } from "@expo/vector-icons";
@@ -13,28 +7,27 @@ import moment from "moment";
 
 import Footer from "./Footer";
 
-function MainContainer({ tweet }) {
+function MainContainerDetail({ tweet }) {
   // console.log("tweet", tweet.user.name);
   return (
     <View style={styles.container}>
-      <>
-        <View style={styles.tweetHeaderContainer}>
-          <View style={styles.tweetHeaderNames}>
-            <Text style={styles.name}>{tweet.user.name}</Text>
-            <Text style={styles.username}>@{tweet.user.username}</Text>
-            <Text style={styles.createdAt}>
-              {moment(tweet.createdAt.toDate()).fromNow()}
-            </Text>
-          </View>
-          <Entypo name={"chevron-down"} size={16} color={"grey"} />
+      {/* <Text>test</Text> */}
+      <View style={styles.tweetHeaderContainer}>
+        <View style={styles.tweetHeaderNames}>
+          <Text style={styles.name}>{tweet.user.name}</Text>
+          <Text style={styles.username}>@{tweet.user.username}</Text>
+          <Text style={styles.createdAt}>
+            {moment(tweet.createdAt.toDate()).fromNow()}
+          </Text>
         </View>
-        <View>
-          <Text style={styles.content}>{tweet.content}</Text>
-          {!!tweet.image && (
-            <Image style={styles.image} source={{ uri: tweet.image }} />
-          )}
-        </View>
-      </>
+        <Entypo name={"chevron-down"} size={16} color={"grey"} />
+      </View>
+      <View>
+        <Text style={styles.content}>{tweet.content}</Text>
+        {!!tweet.image && (
+          <Image style={styles.image} source={{ uri: tweet.image }} />
+        )}
+      </View>
       <Footer tweet={tweet} />
     </View>
   );
@@ -78,4 +71,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MainContainer;
+export default MainContainerDetail;

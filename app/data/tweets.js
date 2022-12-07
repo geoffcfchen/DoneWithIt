@@ -8,6 +8,7 @@ const tweets = [
       username: "SavinVadim_",
       displayName: "Vadim Savin",
       photoURL: "https://picsum.photos/200",
+      role: { label: "Client" },
     },
     createdAt: moment(Date("2017-01-04T08:05:10")),
     content:
@@ -24,6 +25,7 @@ const tweets = [
       username: "SavinVadim_",
       displayName: "Vadim Savin",
       photoURL: "https://picsum.photos/200",
+      role: { label: "Client" },
     },
     createdAt: moment(Date("2017-01-04T08:05:10")),
     content:
@@ -40,6 +42,7 @@ const tweets = [
       username: "SavinVadim_",
       displayName: "Vadim Savin",
       photoURL: "https://picsum.photos/200",
+      role: { label: "Client" },
     },
     createdAt: moment(Date("2017-01-04T08:05:10")),
     content: "Hello World",
@@ -54,6 +57,7 @@ const tweets = [
       username: "SavinVadim_",
       displayName: "Vadim Savin",
       photoURL: "https://picsum.photos/200",
+      role: { label: "Client" },
     },
     createdAt: moment(Date("2017-01-04T08:05:10")),
     content:

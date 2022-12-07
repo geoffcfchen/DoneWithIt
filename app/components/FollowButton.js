@@ -22,15 +22,7 @@ function FollowButton({
   Follow = "Follow",
 }) {
   const [following, setFollowing] = useState(false);
-  const [allUsersThatUserFollowing, setAllUsersThatUserFollowing] = useState(
-    []
-  );
-  // console.log("route", route);
-  // const userBData = route.params.ProfileUser;
   const { userData } = useContext(GlobalContext);
-  // console.log("userBData", userBData);
-  // console.log("userBData", userBData.uid);
-  // console.log("userData", userData.uid);
 
   const userFollowingRef = doc(db, "following", userData.uid);
   const userBFollowersRef = doc(db, "followers", userBData.uid);
