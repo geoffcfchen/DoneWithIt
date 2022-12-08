@@ -7,7 +7,7 @@ import moment from "moment";
 
 import Footer from "./Footer";
 
-function MainContainerDetail({ tweet }) {
+function MainContainerComment({ tweet }) {
   // console.log("tweet", tweet.user.name);
   return (
     <View style={styles.container}>
@@ -28,7 +28,7 @@ function MainContainerDetail({ tweet }) {
           <Image style={styles.image} source={{ uri: tweet.image }} />
         )}
       </View>
-      <Footer tweet={tweet} />
+      {/* <Footer tweet={tweet} /> */}
     </View>
   );
 }
@@ -71,4 +71,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MainContainerDetail;
+export default MainContainerComment;

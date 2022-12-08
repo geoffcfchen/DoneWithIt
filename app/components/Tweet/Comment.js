@@ -4,24 +4,16 @@ import { View, StyleSheet, Text, TouchableHighlight } from "react-native";
 import { navigationRef } from "../../navigation/rootNavigation";
 import LeftContainer from "./LeftContainer";
 import MainContainer from "./MainContainer/MainContainer";
+import MainContainerComment from "./MainContainer/MainContainerComment";
 
-function Tweet({ tweet }) {
+function Comment({ tweet }) {
   const navigation = useNavigation();
   // console.log("tweet", tweet);
   return (
-    <TouchableHighlight
-      onPress={() => {
-        navigation.push("FeedDetail", { tweet: tweet });
-        // console.log("tweet", tweet);
-      }}
-      activeOpacity={0.99}
-      underlayColor="#DDDDDD"
-    >
-      <View style={styles.container}>
-        <LeftContainer userB={tweet.user} />
-        <MainContainer tweet={tweet} />
-      </View>
-    </TouchableHighlight>
+    <View style={styles.container}>
+      <LeftContainer userB={tweet.user} />
+      <MainContainerComment tweet={tweet} />
+    </View>
   );
 }
 
@@ -35,4 +27,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Tweet;
+export default Comment;

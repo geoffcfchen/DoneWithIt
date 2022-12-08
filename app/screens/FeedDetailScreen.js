@@ -6,7 +6,8 @@ import Screen, { ScreenScrollView } from "../components/Screen";
 import AppText from "../components/AppText";
 import FeedDetails from "../components/FeedDetails";
 
-export default function FeedDetailScreen({ tweet }) {
+export default function FeedDetailScreen({ route }) {
+  const tweet = route.params.tweet;
   return (
     <View>
       <FeedDetails tweet={tweet}></FeedDetails>

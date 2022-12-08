@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableHighlight,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { Feather, EvilIcons, AntDesign } from "@expo/vector-icons";
 import {
   addDoc,
@@ -12,6 +18,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { auth, db } from "../../../../firebase";
+import NewCommentButton from "../../NewCommentButton";
 
 function Footer({ tweet }) {
   // console.log(tweet);
@@ -69,10 +76,8 @@ function Footer({ tweet }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.iconContainer}>
-        <Feather name={"message-circle"} size={20} color={"grey"} />
-        <Text style={styles.number}>{tweet.numberOfComments}</Text>
-      </View>
+      <NewCommentButton tweet={tweet}></NewCommentButton>
+
       <View style={styles.iconContainer}>
         <EvilIcons name={"retweet"} size={28} color={"grey"} />
         <Text style={styles.number}>{tweet.numberOfRetweets}</Text>

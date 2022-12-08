@@ -6,53 +6,47 @@ import {
   where,
 } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
-import { View, FlatList, Text } from "react-native";
+import { View, FlatList, Text, StyleSheet } from "react-native";
 import { auth, db } from "../../firebase";
 import GlobalContext from "../context/Context";
 import tweets from "../data/tweets";
 import AppText from "./AppText";
+import Comment from "./Tweet/Comment";
+import LeftContainer from "./Tweet/LeftContainer";
+import LeftContainerCommentHeader from "./Tweet/LeftContainerCommentHeader";
+import MainContainer from "./Tweet/MainContainer/MainContainer";
+import MainContainerCommentHeader from "./Tweet/MainContainer/MainContainerCommentHeader";
 import Tweet from "./Tweet/Tweet";
 
-const postsQuery = query(collection(db, "posts"));
-
 function FeedDetails({ tweet }) {
-  const [parsedPosts, setParsedPosts] = useState([]);
-  const { allUsersThatUserFollowing } = useContext(GlobalContext);
+  const [parsedComments, setParsedComments] = useState([]);
+
+  const allUserCommentsRef = collection(db, "posts", tweet.id, "comments");
 
   useEffect(() => {
-    const allUsersThatUserFollowingAndSelf = [
-      ...allUsersThatUserFollowing,
-      auth.currentUser.uid,
-    ];
-    const unsubscribe = onSnapshot(postsQuery, (querySnapshot) => {
+    const unsubscribe = onSnapshot(allUserCommentsRef, (querySnapshot) => {
       // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
-      const parsedPosts = querySnapshot.docs
+      const parsedComments = querySnapshot.docs
         .map((doc) => ({
           ...doc.data(),
           id: doc.id,
         }))
-        .filter((doc) =>
-          allUsersThatUserFollowingAndSelf.includes(doc.user.uid)
-        )
         .sort(
           (a, b) =>
             b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime()
         );
-      setParsedPosts(parsedPosts);
+      setParsedComments(parsedComments);
     });
     return () => unsubscribe();
-  }, [allUsersThatUserFollowing]);
-
-  const newTweets = [...tweets, ...parsedPosts].sort(
-    (a, b) => b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime()
-  );
+  }, []);
 
   // console.log("newTweets", newTweets);
 
   const header = () => {
     return (
-      <View>
-        <AppText> Coffee list</AppText>
+      <View style={styles.container}>
+        <LeftContainerCommentHeader userB={tweet.user} />
+        <MainContainerCommentHeader tweet={tweet} />
       </View>
     );
   };
@@ -62,12 +56,22 @@ function FeedDetails({ tweet }) {
       <FlatList
         // style={{ flex: 1 }}
         ListHeaderComponent={header}
-        data={newTweets}
-        renderItem={({ item }) => <Tweet tweet={item} />}
+        data={parsedComments}
+        renderItem={({ item }) => <Comment tweet={item} />}
         keyExtractor={(item) => item.id}
       />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    // flexDirection: "row",
+    padding: 15,
+    borderBottomWidth: 0.5,
+    borderColor: "lightgrey",
+  },
+});
 
 export default FeedDetails;
