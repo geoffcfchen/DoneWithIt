@@ -51,8 +51,8 @@ function Footer({ tweet }) {
   }, []);
 
   async function onLike() {
-    console.log("onLike");
-    console.log("tweet", tweet.id);
+    // console.log("onLike");
+    // console.log("tweet", tweet.id);
     try {
       await updateDoc(userPostsRef, { numberOfLikes: increment(1) });
       await setDoc(userPostsLikesRef, {});
@@ -62,8 +62,8 @@ function Footer({ tweet }) {
   }
 
   async function onUnLike() {
-    console.log("onLike");
-    console.log("tweet", tweet.id);
+    // console.log("onLike");
+    // console.log("tweet", tweet.id);
     try {
       await updateDoc(userPostsRef, { numberOfLikes: increment(-1) });
       await deleteDoc(userPostsLikesRef, {});
@@ -72,7 +72,7 @@ function Footer({ tweet }) {
     }
   }
 
-  console.log("liking", liking);
+  // console.log("liking", liking);
 
   return (
     <View style={styles.container}>

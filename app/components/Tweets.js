@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { Animated, Image, Text, StyleSheet, View } from "react-native";
 
 import {
@@ -5,11 +6,18 @@ import {
   HEADER_HEIGHT_NARROWED,
   PROFILE_PICTURE_URI,
 } from "../../constants";
+import colors from "../config/colors";
+import GlobalContext from "../context/Context";
 import generateTweets from "../utility/generateTweets";
+import ProfileEdiButton from "./EditProfileButton";
+import FollowButton from "./FollowButton";
+import Followers from "./Followers";
+import Following from "./Following";
 
 const TWEETS = generateTweets(30);
 
-export default function Tweets({ scrollY }) {
+export default function Tweets({ scrollY, userBData }) {
+  const { userData } = useContext(GlobalContext);
   return (
     <Animated.ScrollView
       showsVerticalScrollIndicator={false}
@@ -29,7 +37,7 @@ export default function Tweets({ scrollY }) {
         paddingTop: HEADER_HEIGHT_EXPANDED,
       }}
     >
-      <View style={[styles.container, { backgroundColor: "black" }]}>
+      <View style={[styles.container]}>
         <View
           style={[
             styles.container,
@@ -40,7 +48,7 @@ export default function Tweets({ scrollY }) {
         >
           <Animated.Image
             source={{
-              uri: PROFILE_PICTURE_URI,
+              uri: userBData.photoURL,
             }}
             style={{
               width: 75,
@@ -67,19 +75,27 @@ export default function Tweets({ scrollY }) {
               ],
             }}
           />
-
-          <Text
-            style={[
-              styles.text,
-              {
-                fontSize: 24,
-                fontWeight: "bold",
-                marginTop: 10,
-              },
-            ]}
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            Arnaud
-          </Text>
+            <Text
+              style={[
+                styles.text,
+                {
+                  fontSize: 24,
+                  fontWeight: "bold",
+                  marginTop: 10,
+                },
+              ]}
+            >
+              {userBData.displayName}
+            </Text>
+            {userData.uid == userBData.uid ? (
+              <ProfileEdiButton userBData={userBData}></ProfileEdiButton>
+            ) : (
+              <FollowButton userBData={userBData}></FollowButton>
+            )}
+          </View>
 
           <Text
             style={[
@@ -91,11 +107,11 @@ export default function Tweets({ scrollY }) {
               },
             ]}
           >
-            @eveningkid
+            @{userBData.email}
           </Text>
 
           <Text style={[styles.text, { marginBottom: 15, fontSize: 15 }]}>
-            Same @ on every social media
+            {userBData.bio}
           </Text>
 
           {/* Profile stats */}
@@ -105,37 +121,8 @@ export default function Tweets({ scrollY }) {
               marginBottom: 15,
             }}
           >
-            <Text
-              style={[
-                styles.text,
-                {
-                  fontWeight: "bold",
-                  marginRight: 10,
-                },
-              ]}
-            >
-              70{" "}
-              <Text
-                style={{
-                  color: "gray",
-                  fontWeight: "normal",
-                }}
-              >
-                Following
-              </Text>
-            </Text>
-
-            <Text style={[styles.text, { fontWeight: "bold" }]}>
-              106{" "}
-              <Text
-                style={{
-                  color: "gray",
-                  fontWeight: "normal",
-                }}
-              >
-                Followers
-              </Text>
-            </Text>
+            <Following userBData={userBData}></Following>
+            <Followers userBData={userBData}></Followers>
           </View>
         </View>
 
@@ -190,7 +177,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   text: {
-    color: "white",
+    color: colors.black,
   },
   tweet: {
     flexDirection: "row",

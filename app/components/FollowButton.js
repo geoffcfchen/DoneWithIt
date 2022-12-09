@@ -106,7 +106,7 @@ function FollowButton({
             style={[styles.button, { backgroundColor: "black" }]}
             onPress={() => onFollow()}
           >
-            <Text style={[styles.text, { color: "white" }]}>{Follow}</Text>
+            <Text style={[styles.text, { color: "white" }]}> {Follow} </Text>
           </TouchableOpacity>
         )
       ) : null}
