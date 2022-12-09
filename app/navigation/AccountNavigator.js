@@ -70,7 +70,7 @@ function AccountNavigator() {
               name="arrow-left"
               color={"black"}
               size={24}
-              onPress={() => navigation.navigate("Account")}
+              onPress={() => navigation.pop()}
             />
           ),
         }}
