@@ -13,6 +13,7 @@ import HomeScreen from "../screens/HomeScreen";
 import ProfileEditScreen from "../screens/ProfileEditScreen";
 import ProfileInfoAnimatedScreen from "../screens/ProfileInfoAnimatedScreen";
 import ProfileInfoScreen from "../screens/ProfileInfoScreen";
+import ProfileInfoTestScreen from "../screens/ProfileInfoTestScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -83,7 +84,7 @@ function HomeNavigator() {
         <Stack.Screen
           options={{ headerShown: false }}
           name="ProfileInfo"
-          component={ProfileInfoAnimatedScreen}
+          component={ProfileInfoTestScreen}
         ></Stack.Screen>
         <Stack.Screen
           options={{ headerShown: false, presentation: "modal" }}

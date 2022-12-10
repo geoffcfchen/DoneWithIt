@@ -9,6 +9,7 @@ import colors from "../config/colors";
 import GlobalContext from "../context/Context";
 import FollowScreen from "../screens/FollowScreen";
 import HomeScreen from "../screens/HomeScreen";
+import ProfileInfoAnimatedScreen from "../screens/ProfileInfoAnimatedScreen";
 import ProfileInfoScreen from "../screens/ProfileInfoScreen";
 import SearchScreen from "../screens/SearchScreen";
 
@@ -78,9 +79,9 @@ function SearchNavigator() {
         }}
       >
         <Stack.Screen
-          options={{ headerShown: true }}
+          options={{ headerShown: false }}
           name="ProfileInfo"
-          component={ProfileInfoScreen}
+          component={ProfileInfoAnimatedScreen}
         ></Stack.Screen>
         <Stack.Screen
           options={{ headerShown: true, title: auth.currentUser.displayName }}

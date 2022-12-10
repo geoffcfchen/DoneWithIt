@@ -139,7 +139,7 @@ function ProfileEditScreen() {
     } catch (error) {
       console.log(error);
     }
-    navigation.navigate("HomeScreen");
+    navigation.pop();
     // navigation.navigate({
     //   name: "ProfileInfo",
     //   params: { ProfileUser: userData },

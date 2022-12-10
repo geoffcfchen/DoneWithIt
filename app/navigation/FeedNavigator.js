@@ -11,6 +11,7 @@ import ProfileInfoScreen from "../screens/ProfileInfoScreen";
 import GlobalContext from "../context/Context";
 import { auth } from "../../firebase";
 import FollowScreen from "../screens/FollowScreen";
+import ProfileInfoAnimatedScreen from "../screens/ProfileInfoAnimatedScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -77,9 +78,9 @@ function FeedNavigator() {
           component={ListingDetailsScreen}
         ></Stack.Screen>
         <Stack.Screen
-          options={{ headerShown: true }}
+          options={{ headerShown: false }}
           name="ProfileInfo"
-          component={ProfileInfoScreen}
+          component={ProfileInfoAnimatedScreen}
         ></Stack.Screen>
         <Stack.Screen
           options={{ headerShown: true, title: auth.currentUser.displayName }}
