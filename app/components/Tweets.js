@@ -2,6 +2,10 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { useContext } from "react";
 import { Animated, Image, Text, StyleSheet, View } from "react-native";
 
+import * as React from "react";
+import { useWindowDimensions } from "react-native";
+import { TabView, SceneMap } from "react-native-tab-view";
+
 import {
   HEADER_HEIGHT_EXPANDED,
   HEADER_HEIGHT_NARROWED,
@@ -135,53 +139,55 @@ export default function Tweets({ scrollY, userBData }) {
           </View>
 
           <View style={[styles.container, { zIndex: 1 }]}>
-            <Tab.Navigator>
+            {/* <Tab.Navigator>
               <Tab.Screen
                 name="Post"
                 component={ProfilePostsScreen}
               ></Tab.Screen>
               <Tab.Screen name="Questions" component={BlankScreen}></Tab.Screen>
               <Tab.Screen name="Likes" component={BlankScreen}></Tab.Screen>
-            </Tab.Navigator>
-            {/* {TWEETS.map((item, index) => (
-            <View key={item.key} style={styles.tweet}>
-              <Image
-                source={{
-                  uri: PROFILE_PICTURE_URI,
-                }}
-                style={{
-                  height: 50,
-                  width: 50,
-                  borderRadius: 25,
-                  marginRight: 10,
-                }}
-              />
+            </Tab.Navigator> */}
+            {TWEETS.map((item, index) => (
+              <View key={item.key} style={styles.tweet}>
+                <Image
+                  source={{
+                    uri: PROFILE_PICTURE_URI,
+                  }}
+                  style={{
+                    height: 50,
+                    width: 50,
+                    borderRadius: 25,
+                    marginRight: 10,
+                  }}
+                />
 
-              <View style={styles.container}>
-                <Text
-                  style={[
-                    styles.text,
-                    {
-                      fontWeight: "bold",
-                      fontSize: 15,
-                    },
-                  ]}
-                >
-                  {item.author}{" "}
+                <View style={styles.container}>
                   <Text
-                    style={{
-                      color: "gray",
-                      fontWeight: "normal",
-                    }}
+                    style={[
+                      styles.text,
+                      {
+                        fontWeight: "bold",
+                        fontSize: 15,
+                      },
+                    ]}
                   >
-                    @{item.tag} · {index + 1}d
+                    {item.author}{" "}
+                    <Text
+                      style={{
+                        color: "gray",
+                        fontWeight: "normal",
+                      }}
+                    >
+                      @{item.tag} · {index + 1}d
+                    </Text>
                   </Text>
-                </Text>
 
-                <Text style={[styles.text, { fontSize: 15 }]}>{item.text}</Text>
+                  <Text style={[styles.text, { fontSize: 15 }]}>
+                    {item.text}
+                  </Text>
+                </View>
               </View>
-            </View>
-          ))} */}
+            ))}
           </View>
         </View>
       </Animated.ScrollView>
@@ -192,7 +198,6 @@ export default function Tweets({ scrollY, userBData }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "red",
   },
   text: {
     color: colors.black,
