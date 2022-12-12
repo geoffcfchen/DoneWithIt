@@ -2,18 +2,19 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useContext } from "react";
 import { View } from "react-native";
 import GlobalContext from "../../context/Context";
+import useGetSingleCustomerInfo from "../../hooks/useGetSingleCustomerInfo";
 import ProfilePicture from "../ProfilePicture";
 
 function LeftContainer({ userB }) {
   const navigation = useNavigation();
-  // console.log("user", user);
+  const parsedCustomers = useGetSingleCustomerInfo(userB.uid)[0];
+
+  function onPress() {
+    return navigation.push("ProfileInfo", { ProfileUser: parsedCustomers });
+  }
   return (
     <View>
-      <ProfilePicture
-        userData={userB}
-        size={45}
-        onPress={() => navigation.push("ProfileInfo", { ProfileUser: userB })}
-      />
+      <ProfilePicture userData={userB} size={45} onPress={onPress} />
     </View>
   );
 }

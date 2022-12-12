@@ -21,13 +21,32 @@ import ProfileEdiButton from "./EditProfileButton";
 import FollowButton from "./FollowButton";
 import Followers from "./Followers";
 import Following from "./Following";
-
-const Tab = createMaterialTopTabNavigator();
+import ProfileInfoTestScreen from "../screens/ProfileInfoListScreen";
 
 const TWEETS = generateTweets(10);
 
 export default function Tweets({ scrollY, userBData }) {
   const { userData } = useContext(GlobalContext);
+
+  const FirstRoute = () => <View style={{ flex: 1, backgroundColor: "red" }} />;
+
+  const SecondRoute = () => (
+    <View style={{ flex: 1, backgroundColor: "#673ab7" }} />
+  );
+
+  const renderScene = SceneMap({
+    first: FirstRoute,
+    second: SecondRoute,
+  });
+
+  const layout = useWindowDimensions();
+
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { key: "first", title: "First" },
+    { key: "second", title: "Second" },
+  ]);
+
   return (
     <View style={{ flex: 1 }}>
       <Animated.ScrollView
@@ -138,7 +157,14 @@ export default function Tweets({ scrollY, userBData }) {
             </View>
           </View>
 
-          <View style={[styles.container, { zIndex: 1 }]}>
+          <View>
+            {/* <TabView
+              navigationState={{ index, routes }}
+              renderScene={renderScene}
+              onIndexChange={setIndex}
+              initialLayout={{ width: layout.width }}
+            /> */}
+            {/* <ProfileInfoTestScreen></ProfileInfoTestScreen> */}
             {/* <Tab.Navigator>
               <Tab.Screen
                 name="Post"

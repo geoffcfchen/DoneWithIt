@@ -13,6 +13,7 @@ import ProfileInfoScreen from "../screens/ProfileInfoScreen";
 import { auth } from "../../firebase";
 import FollowScreen from "../screens/FollowScreen";
 import ProfileInfoAnimatedScreen from "../screens/ProfileInfoAnimatedScreen";
+import ProfileInfoListScreen from "../screens/ProfileInfoListScreen";
 // import { useRoute } from "@react-navigation/native";
 
 const Stack = createNativeStackNavigator();
@@ -86,9 +87,9 @@ function SubmitNavigator() {
           component={ConsultationScreen}
         ></Stack.Screen>
         <Stack.Screen
-          options={{ headerShown: false }}
+          options={{ headerShown: true }}
           name="ProfileInfo"
-          component={ProfileInfoAnimatedScreen}
+          component={ProfileInfoListScreen}
         ></Stack.Screen>
         <Stack.Screen
           options={{ headerShown: true, title: auth.currentUser.displayName }}

@@ -121,10 +121,12 @@ const styles = StyleSheet.create({
   },
   newTweetContainer: {
     flexDirection: "row",
-    padding: 15,
+    backgroundColor: "red",
+    padding: 10,
   },
   inputsContainer: {
     marginLeft: 10,
+    marginRight: 60,
   },
   tweetInput: {
     height: 100,

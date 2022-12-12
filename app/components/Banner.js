@@ -26,7 +26,7 @@ export default function Banner({ scrollY }) {
           {
             scale: scrollY.interpolate({
               inputRange: [-200, 0],
-              outputRange: [5, 1],
+              outputRange: [3, 1],
               extrapolateLeft: "extend",
               extrapolateRight: "clamp",
             }),
@@ -45,7 +45,7 @@ export default function Banner({ scrollY }) {
             outputRange: [1, 0, 0, 1],
           }),
         }}
-      />
+      ></AnimatedBlurView>
     </AnimatedImageBackground>
   );
 }

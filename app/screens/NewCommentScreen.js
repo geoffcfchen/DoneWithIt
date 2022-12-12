@@ -30,13 +30,7 @@ export default function NewCommentScreen({ onCloseTweet, tweet }) {
 
   //console.log("userData", userData);
 
-  const userCommentsRef = doc(
-    db,
-    "posts",
-    tweet.id,
-    "comments",
-    currentUser.uid
-  );
+  const userCommentsRef = doc(db, "posts", tweet.id, "comments", randomID);
   // const userEachPostRef = doc(
   //   db,
   //   "posts",

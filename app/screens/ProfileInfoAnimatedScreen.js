@@ -22,6 +22,7 @@ import GlobalContext from "../context/Context";
 
 export default function ProfileInfoAnimatedScreen({ route }) {
   const scrollY = useRef(new Animated.Value(0)).current;
+  console.log("scrollY", scrollY);
   const userBData = route.params.ProfileUser;
   // const [userBData, setUserBData] = useState({});
 

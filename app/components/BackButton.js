@@ -8,7 +8,7 @@ export default function BackButton() {
 
   const navigation = useNavigation();
   return (
-    <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+    <TouchableWithoutFeedback onPress={() => navigation.pop()}>
       <View
         style={{
           zIndex: 3,
