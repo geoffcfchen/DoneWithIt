@@ -15,13 +15,15 @@ import Footer from "./Footer";
 
 function MainContainer({ tweet }) {
   // console.log("tweet", tweet.user.name);
+
+  var username = tweet.user.email.substr(0, tweet.user.email.indexOf("@"));
   return (
     <View style={styles.container}>
       <>
         <View style={styles.tweetHeaderContainer}>
           <View style={styles.tweetHeaderNames}>
-            <Text style={styles.name}>{tweet.user.name}</Text>
-            <Text style={styles.username}>@{tweet.user.username}</Text>
+            <Text style={styles.name}>{tweet.user.displayName}</Text>
+            <Text style={styles.username}>@{username}</Text>
             <Text style={styles.createdAt}>
               {moment(tweet.createdAt.toDate()).fromNow()}
             </Text>

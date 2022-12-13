@@ -45,7 +45,7 @@ export default function NewCommentScreen({ onCloseTweet, tweet }) {
       await setDoc(userCommentsRef, {
         user: {
           uid: currentUser.uid,
-          username: currentUser.displayName,
+          email: currentUser.email,
           displayName: currentUser.displayName,
           photoURL: currentUser.photoURL,
           role: userData.role,

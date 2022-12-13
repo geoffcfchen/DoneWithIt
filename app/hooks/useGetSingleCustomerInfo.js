@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { db } from "../../firebase";
 
 export default function useGetSingleCustomerInfo(uid) {
-  console.log(uid);
+  // console.log(uid);
   // if userData is client, then return all doctors
   // if userData is doctor, then return all doctors and clients except themselves
   const customersQuery = query(

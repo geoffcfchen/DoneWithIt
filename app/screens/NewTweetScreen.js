@@ -44,7 +44,11 @@ export default function NewTweetScreen({ onCloseTweet }) {
       await setDoc(userPostsRef, {
         id: randomID,
         user: {
-          ...userData,
+          uid: currentUser.uid,
+          displayName: userData.displayName,
+          email: userData.email,
+          photoURL: userData.photoURL,
+          role: userData.role,
         },
         createdAt: new Date(),
         content: tweet,
@@ -121,7 +125,6 @@ const styles = StyleSheet.create({
   },
   newTweetContainer: {
     flexDirection: "row",
-    backgroundColor: "red",
     padding: 10,
   },
   inputsContainer: {

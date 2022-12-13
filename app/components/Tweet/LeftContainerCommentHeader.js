@@ -8,7 +8,9 @@ import { Entypo } from "@expo/vector-icons";
 
 function LeftContainerCommentHeader({ userB }) {
   const navigation = useNavigation();
-  console.log("user", userB);
+  console.log("userB", userB.email);
+  var username = userB.email.substr(0, userB.email.indexOf("@"));
+  // console.log("streetaddress", streetaddress);
 
   return (
     <View style={styles.tweetHeaderContainer}>
@@ -20,7 +22,7 @@ function LeftContainerCommentHeader({ userB }) {
         />
         <View style={{ marginLeft: 10 }}>
           <Text style={styles.name}>{userB.displayName}</Text>
-          <Text style={styles.username}>@{userB.username}</Text>
+          <Text style={styles.username}>@{username}</Text>
         </View>
       </View>
       <Entypo name={"chevron-down"} size={16} color={"grey"} />

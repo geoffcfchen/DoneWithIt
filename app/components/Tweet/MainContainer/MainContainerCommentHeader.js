@@ -23,7 +23,7 @@ function MainContainerCommentHeader({ tweet }) {
           <Image style={styles.image} source={{ uri: tweet.image }} />
         )}
         <Text style={styles.createdAt}>
-          {moment(tweet.createdAt.toDate()).format("hh:mm A, DD/MM/YYYY")}
+          {moment(tweet.createdAt.toDate()).format("hh:mm A, MM/DD/YYYY")}
         </Text>
       </View>
       <Footer tweet={tweet} />

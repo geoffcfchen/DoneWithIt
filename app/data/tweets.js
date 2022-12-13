@@ -5,7 +5,7 @@ const tweets = [
     id: "t1",
     user: {
       uid: "u1",
-      username: "SavinVadim_",
+      email: "SavinVadim@test.com",
       displayName: "Vadim Savin",
       photoURL: "https://picsum.photos/200",
       role: { label: "Client" },
@@ -22,7 +22,7 @@ const tweets = [
     id: "t2",
     user: {
       uid: "u1",
-      username: "SavinVadim_",
+      email: "SavinVadim@test.com",
       displayName: "Vadim Savin",
       photoURL: "https://picsum.photos/200",
       role: { label: "Client" },
@@ -39,7 +39,7 @@ const tweets = [
     id: "t3",
     user: {
       uid: "u1",
-      username: "SavinVadim_",
+      email: "SavinVadim@test.com",
       displayName: "Vadim Savin",
       photoURL: "https://picsum.photos/200",
       role: { label: "Client" },
@@ -54,7 +54,7 @@ const tweets = [
     id: "t4",
     user: {
       uid: "u1",
-      username: "SavinVadim_",
+      email: "SavinVadim@test.com",
       displayName: "Vadim Savin",
       photoURL: "https://picsum.photos/200",
       role: { label: "Client" },

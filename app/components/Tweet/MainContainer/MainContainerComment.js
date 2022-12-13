@@ -8,14 +8,15 @@ import moment from "moment";
 import Footer from "./Footer";
 
 function MainContainerComment({ tweet }) {
-  // console.log("tweet", tweet.user.name);
+  console.log("tweet", tweet);
+  var username = tweet.user.email.substr(0, tweet.user.email.indexOf("@"));
   return (
     <View style={styles.container}>
       {/* <Text>test</Text> */}
       <View style={styles.tweetHeaderContainer}>
         <View style={styles.tweetHeaderNames}>
-          <Text style={styles.name}>{tweet.user.name}</Text>
-          <Text style={styles.username}>@{tweet.user.username}</Text>
+          <Text style={styles.name}>{tweet.user.displayName}</Text>
+          <Text style={styles.username}>@{username}</Text>
           <Text style={styles.createdAt}>
             {moment(tweet.createdAt.toDate()).fromNow()}
           </Text>
