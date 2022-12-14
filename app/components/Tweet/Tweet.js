@@ -7,12 +7,10 @@ import MainContainer from "./MainContainer/MainContainer";
 
 function Tweet({ tweet }) {
   const navigation = useNavigation();
-  // console.log("tweet", tweet);
   return (
     <TouchableHighlight
       onPress={() => {
         navigation.push("FeedDetail", { tweet: tweet });
-        // console.log("tweet", tweet);
       }}
       activeOpacity={0.99}
       underlayColor="#DDDDDD"

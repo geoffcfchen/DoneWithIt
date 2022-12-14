@@ -181,7 +181,6 @@ const DoctorListScreen = ({ navigation, route }) => {
 
   function doctors() {
     const renderItem = ({ item }) => {
-      // console.log("item", item);
       return (
         <View style={{ justifyContent: "center", marginTop: 15.0 }}>
           <View style={{ flexDirection: "row", alignItems: "center" }}>

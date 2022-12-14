@@ -96,7 +96,6 @@ function ProfileScreen({ navigation }) {
       );
       photoURL = url;
     }
-    console.log("check");
     const userData = {
       displayName: userInfo.name,
       role: userInfo.role,
@@ -104,15 +103,11 @@ function ProfileScreen({ navigation }) {
     if (photoURL) {
       userData.photoURL = photoURL;
     }
-    // console.log("userData", userData);
-    // console.log("user", user);
     try {
-      // console.log("check");
       await Promise.all([
         updateProfile(user, userData),
         updateDoc(userRef, { ...userData, uid: user.uid, email: user.email }),
       ]).then(() => {
-        // console.log("currentUser", auth.currentUser);
         setUser(auth.currentUser);
       });
     } catch (error) {

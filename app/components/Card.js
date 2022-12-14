@@ -21,9 +21,6 @@ function Card({
   datetime,
   slot,
 }) {
-  // console.log("datetime", datetime);
-  // console.log("slot", slot);
-
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.card}>

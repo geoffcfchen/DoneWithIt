@@ -8,7 +8,6 @@ import MainContainerComment from "./MainContainer/MainContainerComment";
 
 function Comment({ tweet }) {
   const navigation = useNavigation();
-  // console.log("tweet", tweet);
   return (
     <View style={styles.container}>
       <LeftContainer userB={tweet.user} />

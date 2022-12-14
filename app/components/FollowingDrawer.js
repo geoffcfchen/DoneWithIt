@@ -7,7 +7,6 @@ import GlobalContext from "../context/Context";
 
 function FollowingDrawer({ userBData }) {
   const { whereTab } = useContext(GlobalContext);
-  // console.log("userBData", userBData);
   const navigation = useNavigation();
   const [followingNumber, setFollowingNumber] = useState(0);
   const [userBFollowers, setUserBFollowers] = useState([]);

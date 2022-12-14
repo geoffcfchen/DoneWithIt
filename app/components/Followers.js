@@ -52,7 +52,6 @@ function Followers({ userBData }) {
     });
     return () => unsubscribe();
   }, []);
-  // console.log("userBData", userBData);
   return (
     <TouchableWithoutFeedback
       onPress={() =>

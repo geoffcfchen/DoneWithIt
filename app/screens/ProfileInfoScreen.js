@@ -32,7 +32,6 @@ const TWEETS = generateTweets(30);
 export default function ProfileInfoScreen({ route }) {
   // const scrollY = useRef(new Animated.Value(0)).current;
   const userBData = route.params.ProfileUser;
-  // console.log(userBData);
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: "white" }]}>
       <View style={styles.container}>

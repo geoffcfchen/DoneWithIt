@@ -218,9 +218,7 @@ function ListingEditScreen({ onCloseQuestion }) {
       createdAt: new Date(),
       user: senderUser,
     };
-    // console.log("message in sendImage", message);
     const lastMessage = { ...message };
-    // console.log("lastMessage", lastMessage);
     await Promise.all([
       addDoc(questionMessagesRef, message),
       updateDoc(questionRef, { lastMessage }),

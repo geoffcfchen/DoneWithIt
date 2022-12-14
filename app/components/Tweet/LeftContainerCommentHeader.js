@@ -5,23 +5,28 @@ import GlobalContext from "../../context/Context";
 import ProfilePicture from "../ProfilePicture";
 
 import { Entypo } from "@expo/vector-icons";
+import useGetSingleCustomerInfo from "../../hooks/useGetSingleCustomerInfo";
 
 function LeftContainerCommentHeader({ userB }) {
   const navigation = useNavigation();
-  console.log("userB", userB.email);
-  var username = userB.email.substr(0, userB.email.indexOf("@"));
-  // console.log("streetaddress", streetaddress);
+  const parsedCustomers = useGetSingleCustomerInfo(userB.uid);
+  var username = parsedCustomers?.email.substr(
+    0,
+    parsedCustomers?.email.indexOf("@")
+  );
 
   return (
     <View style={styles.tweetHeaderContainer}>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <ProfilePicture
-          userData={userB}
+          userData={parsedCustomers}
           size={45}
-          onPress={() => navigation.push("ProfileInfo", { ProfileUser: userB })}
+          onPress={() =>
+            navigation.push("ProfileInfo", { ProfileUser: parsedCustomers })
+          }
         />
         <View style={{ marginLeft: 10 }}>
-          <Text style={styles.name}>{userB.displayName}</Text>
+          <Text style={styles.name}>{parsedCustomers?.displayName}</Text>
           <Text style={styles.username}>@{username}</Text>
         </View>
       </View>

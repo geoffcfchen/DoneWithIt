@@ -51,7 +51,6 @@ export default function MessagesScreen() {
         userB: doc.data().participants.find((p) => p.email !== user.email),
       }));
 
-      // console.log("parsedChats", parsedChats);
       setUnfilteredRooms(parsedChats);
       setRooms(
         parsedChats
@@ -73,7 +72,7 @@ export default function MessagesScreen() {
     }
     return user;
   }
-  // console.log("rooms", rooms);
+
   // const handleDelete = (message) => {
   //   setMessages(messages.filter((m) => m.id !== message.id));
   // };

@@ -41,13 +41,11 @@ function ImageInput({ imageUri, onChangeImage }) {
         // aspect: [3, 5],
         quality: 0.2,
       });
-      console.log("result", result.uri);
       const manipResult = await manipulateAsync(
         result.uri,
         [{ resize: { height: 200 } }],
         { format: SaveFormat.PNG }
       );
-      console.log("manipResult", manipResult);
       if (!result.cancelled) onChangeImage(manipResult.uri);
     } catch (error) {
       logger.log("Error reading an image", error);

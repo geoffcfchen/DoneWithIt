@@ -8,7 +8,6 @@ import moment from "moment";
 import Footer from "./Footer";
 
 function MainContainerComment({ tweet }) {
-  console.log("tweet", tweet);
   var username = tweet.user.email.substr(0, tweet.user.email.indexOf("@"));
   return (
     <View style={styles.container}>

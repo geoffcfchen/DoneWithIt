@@ -24,11 +24,8 @@ export default function NewCommentScreen({ onCloseTweet, tweet }) {
   const [comment, setComment] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const { userData } = useContext(GlobalContext);
-  // console.log("tweet", tweet);
-  const currentUser = auth.currentUser;
-  // console.log("comment", comment);
 
-  //console.log("userData", userData);
+  const currentUser = auth.currentUser;
 
   const userCommentsRef = doc(db, "posts", tweet.id, "comments", randomID);
   // const userEachPostRef = doc(

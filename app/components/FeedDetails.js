@@ -40,8 +40,6 @@ function FeedDetails({ tweet }) {
     return () => unsubscribe();
   }, []);
 
-  // console.log("newTweets", newTweets);
-
   const header = () => {
     return (
       <View style={styles.container}>

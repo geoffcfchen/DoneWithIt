@@ -8,7 +8,6 @@ import FeedDetails from "../components/FeedDetails";
 
 export default function FeedDetailScreen({ route }) {
   const tweet = route.params.tweet;
-  console.log("tweet", tweet);
   return (
     <View>
       <FeedDetails tweet={tweet}></FeedDetails>

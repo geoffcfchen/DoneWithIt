@@ -11,8 +11,6 @@ import colors from "../config/colors";
 const TWEETS = generateTweets(30);
 
 export default function ProfilePostsScreen() {
-  console.log("test");
-  console.log("tweets", TWEETS.length);
   return (
     <View style={styles.container}>
       {TWEETS.map((item, index) => (

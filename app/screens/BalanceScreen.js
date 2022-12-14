@@ -61,18 +61,13 @@ function BalanceScreen(props) {
     return () => unsub();
   }, []);
 
-  //   console.log("products", products);
-  //   console.log("Object.entries", Object.entries(products));
-
   //   useEffect(() => {
 
   //     setProductsPrice(productPrice);
   //   }, []);
 
-  //   console.log("productsPrice", productsPrice);
-
   //   const loadCheckout = async (priceId) => {
-  //     console.log("window", window.location);
+
   //     const docRef = await addDoc(
   //       collection(db, `customers/${userData.uid}/checkout_sessions`),
   //       {

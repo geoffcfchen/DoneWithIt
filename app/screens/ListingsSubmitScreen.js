@@ -28,7 +28,6 @@ function ListingsSubmitScreen() {
         id: doc.id,
         userB: doc.data().participants.find((p) => p.email !== userData.email),
       }));
-      // console.log("parsedQuestions", parsedQuestions);
       const unscheduledQuestions = parsedQuestions.filter(
         (doc) => doc.lastMessage && !doc.datetime
       );

@@ -7,14 +7,14 @@ import ProfilePicture from "../ProfilePicture";
 
 function LeftContainer({ userB }) {
   const navigation = useNavigation();
-  const parsedCustomers = useGetSingleCustomerInfo(userB.uid)[0];
+  const parsedCustomers = useGetSingleCustomerInfo(userB.uid);
 
   function onPress() {
     return navigation.push("ProfileInfo", { ProfileUser: parsedCustomers });
   }
   return (
     <View>
-      <ProfilePicture userData={userB} size={45} onPress={onPress} />
+      <ProfilePicture userData={parsedCustomers} size={45} onPress={onPress} />
     </View>
   );
 }

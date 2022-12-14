@@ -60,9 +60,7 @@ const Tab = createMaterialTopTabNavigator();
 
 function OpenScheduleScreen({ navigation }) {
   const { userData, timeSlots } = useContext(GlobalContext);
-  // console.log("timeSlots", timeSlots);
   // const route = useRoute();
-  // console.log("route", route.params);
   // const [timeSlots, setTimeSlots] = useState([]);
   // const timeSlotsQuery = query(
   //   collection(db, "timeSlots"),
@@ -77,7 +75,6 @@ function OpenScheduleScreen({ navigation }) {
   //       id: doc.id,
   //     }));
 
-  //     // console.log("parsedTimesSlots", parsedTimesSlots);
   //     setTimeSlots(parsedTimesSlots);
   //   });
   //   return () => unsubscribe();
@@ -87,7 +84,6 @@ function OpenScheduleScreen({ navigation }) {
   // const timeSlot = timeSlots.find((timeSlot) =>
   //   timeSlot.participantsArray.includes(userData.email)
   // );
-  // console.log("test1");
 
   return (
     <Tab.Navigator screenOptions={{ headerShown: true }}>

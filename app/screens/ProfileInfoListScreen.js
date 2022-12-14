@@ -21,6 +21,7 @@ import { collection, onSnapshot, query } from "firebase/firestore";
 import Tweet from "../components/Tweet/Tweet";
 import { auth, db } from "../../firebase";
 import colors from "../config/colors";
+import useGetSingleCustomerInfo from "../hooks/useGetSingleCustomerInfo";
 
 const HEADER_HEIGHT = 300;
 
@@ -28,7 +29,9 @@ const DATA = [0, 1, 2, 3, 4];
 const identity = (v) => v + "";
 
 function ProfileInfoListScreen({ route }) {
-  const userBData = route.params.ProfileUser;
+  const userB = route.params.ProfileUser;
+  const upToDateuserBData = useGetSingleCustomerInfo(userB.uid);
+  console.log("upToDateuserBData", upToDateuserBData);
   const { userData } = useContext(GlobalContext);
 
   function Header() {
@@ -44,7 +47,7 @@ function ProfileInfoListScreen({ route }) {
         <View>
           <Image
             source={{
-              uri: userBData.photoURL,
+              uri: upToDateuserBData?.photoURL,
             }}
             style={{
               width: 75,

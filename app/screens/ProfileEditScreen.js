@@ -120,7 +120,7 @@ function ProfileEditScreen() {
       );
       photoURL = url;
     }
-    // console.log("check");
+
     const userData = {
       displayName: userInfo.name,
       bio: userInfo.bio,
@@ -128,10 +128,7 @@ function ProfileEditScreen() {
     if (photoURL) {
       userData.photoURL = photoURL;
     }
-    // console.log("userData", userData);
-    // console.log("user", user);
     try {
-      // console.log("check");
       await Promise.all([
         updateProfile(user, userData),
         updateDoc(userRef, { ...userData }),

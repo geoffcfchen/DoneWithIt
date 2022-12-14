@@ -74,7 +74,6 @@ function FollowScreen({ route }) {
   const userBFollowing = route.params.Following;
   const userBFollowers = route.params.Followers;
   const initScreen = route.params.Init;
-  // console.log("userBData", userBData);
   return (
     <Tab.Navigator
       screenOptions={{

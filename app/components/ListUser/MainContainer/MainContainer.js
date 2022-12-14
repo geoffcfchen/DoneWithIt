@@ -14,7 +14,6 @@ function MainContainer({
   Follow = "Following",
   Following = "Following",
 }) {
-  // console.log("tweet", tweet);
   return (
     <View style={styles.container}>
       {/* <Text>test</Text> */}

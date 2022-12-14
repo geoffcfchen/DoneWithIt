@@ -24,10 +24,7 @@ export default function NewTweetScreen({ onCloseTweet }) {
   const [tweet, setTweet] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const { userData } = useContext(GlobalContext);
-  // console.log(auth.currentUser);
   const currentUser = auth.currentUser;
-
-  console.log("userData", userData);
 
   const userPostsRef = doc(db, "posts", randomID);
   // const userEachPostRef = doc(

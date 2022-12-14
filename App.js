@@ -55,7 +55,6 @@ function App() {
       }
     }
     prepare();
-    // console.log("user in first useEffect", user);
   }, []);
 
   const onNavigationContainerReady = useCallback(async () => {
@@ -65,8 +64,6 @@ function App() {
   if (!isReady) return null;
 
   const Stack = createNativeStackNavigator();
-
-  console.log("user", user);
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>

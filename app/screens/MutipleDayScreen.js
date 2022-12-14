@@ -86,8 +86,6 @@ function MutipleDayScreen({ navigation }) {
     hideEndDatePicker();
   };
 
-  // console.log("startDatetime", startDatetime);
-  // console.log("endDatetime", endDatetime);
   // const questionsQuery = query(
   //   collection(db, "questions"),
   //   where("participantsArray", "array-contains", user.email)
@@ -106,15 +104,11 @@ function MutipleDayScreen({ navigation }) {
   //     //     b.lastMessage.createdAt.toDate().getTime() -
   //     //     a.lastMessage.createdAt.toDate().getTime()
   //     // );
-  //     // console.log("parsedQuestions", parsedQuestions);
   //     setUnfilteredQuestions(parsedQuestions);
   //     setQuestions(parsedQuestions.filter((doc) => doc.lastMessage));
   //   });
   //   return () => unsubscribe();
   // }, []);
-
-  // console.log("unfilteredQuestions", unfilteredQuestions);
-  // console.log("questions", questions);
 
   return (
     <Screen style={styles.container}>

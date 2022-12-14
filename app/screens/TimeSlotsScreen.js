@@ -54,9 +54,6 @@ const TimeSlotScreen = ({ navigation, route }) => {
   const timeSlot = route.params.timeSlot;
   const item = route.params.item;
 
-  // console.log("timeSlot", timeSlot);
-  // console.log("item", item);
-
   const [selectedSlot, setSelectedSlot] = useState("");
 
   const [book, setBook] = useState(false);

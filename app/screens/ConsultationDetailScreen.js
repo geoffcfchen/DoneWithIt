@@ -50,7 +50,6 @@ const ConsultationScreen = ({ navigation, route }) => {
   // const name = route.params.name;
   // const experience = route.params.experience;
   // const type = route.params.type;
-  // console.log("item", route.params.item);
   const doctorData = route.params.item.user;
   const datetime = route.params.item.datetime;
   const slot = route.params.item.slot;
@@ -314,7 +313,7 @@ const ConsultationScreen = ({ navigation, route }) => {
   function bookButton() {
     const navigation = useNavigation();
     const docRef = doc(db, "timeSlots", timeSlotID, "messages", messageID);
-    // console.log("slot", slot);
+
     const handelBookButton = () => {
       updateDoc(docRef, {
         participantsArray: arrayUnion({
@@ -326,7 +325,6 @@ const ConsultationScreen = ({ navigation, route }) => {
         .then(() => {
           navigation.navigate("Questions", { screen: "Listings" });
           // setModalVisible(false);
-          // console.log("test");
         })
         .catch((error) => {
           console.log(error);

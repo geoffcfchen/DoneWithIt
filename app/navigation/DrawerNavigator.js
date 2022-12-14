@@ -93,7 +93,6 @@ export default function DrawerNavigator({ navigation }) {
 
 function CustomDrawerContent(props, { route }) {
   const { userData, whereTab } = useContext(GlobalContext);
-  // console.log("userData in custom", userData);
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>

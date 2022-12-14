@@ -30,6 +30,6 @@ export default function useGetSingleCustomerInfo(uid) {
     });
     return () => unsubscribe();
   }, []);
-  return parsedCustomers;
+  return parsedCustomers[0];
   // }
 }

@@ -57,7 +57,6 @@ const IndividualDayScreen = ({ timeSlots }) => {
   const [book, setBook] = useState(false);
   const route = useRoute();
   const navigation = useNavigation();
-  // console.log("userData", userData);
 
   let timeSlotID;
   let doctorData;
@@ -122,7 +121,6 @@ const IndividualDayScreen = ({ timeSlots }) => {
       //   .map(({ doc }) => console.log("doc_id", doc.id));
       const messagesFirestore = querySnapshot.docs.map((doc) => {
         const message = doc.data();
-        // console.log("message", message.slotStartingTime.toDate());
         return {
           ...message,
           id: doc.id,
@@ -130,7 +128,6 @@ const IndividualDayScreen = ({ timeSlots }) => {
           datetime: moment(message.slotStartingTime.toDate()),
         };
       });
-      // console.log("messagesFirestore", messagesFirestore);
       setDatesWhitelist(messagesFirestore);
     });
     return () => unsubscribe();
@@ -141,13 +138,9 @@ const IndividualDayScreen = ({ timeSlots }) => {
   //     ...previousdatesWhitelist,
   //     ...timeslot,
   //   ]);
-  //   console.log("timeslot inside", timeslot);
   // }, []);
 
-  // console.log(userData);
   async function handleSubmit(slot, userData) {
-    // console.log(slot, userData);
-
     // const emailHash = `${user.email}:${userB.email}:`;
 
     sendQuestion(slot, timeSlotMessagesRef);
@@ -169,14 +162,12 @@ const IndividualDayScreen = ({ timeSlots }) => {
 
   async function sendQuestion(slot, questionMessagesRef, roomPath) {
     // const uri = listing.images[0];
-    // console.log("uri", uri);
-    // console.log("emailHash", emailHash);
+
     // const { url, fileName } = await uploadImage(
     //   uri,
     //   `images/questions/${roomPath || questionHash}`
     // );
-    // console.log("url", url);
-    // console.log("fileName", fileName);
+
     const message = {
       // _id: fileName,
       // image: url,
@@ -191,9 +182,8 @@ const IndividualDayScreen = ({ timeSlots }) => {
       duration: 1,
       numberOfPeopleLimit: 10,
     };
-    // console.log("message in sendImage", message);
     // const lastMessage = { ...message };
-    // console.log("lastMessage", lastMessage);
+
     await Promise.all([
       addDoc(questionMessagesRef, message),
       // updateDoc(questionRef, { lastMessage }),
@@ -219,7 +209,6 @@ const IndividualDayScreen = ({ timeSlots }) => {
     handleSubmit(Datetime, doctorData);
     hideStartDatetime1Picker();
   };
-  // console.log("datesWhitelist", typeof datesWhitelist[0]);
   useEffect(() => {
     const samedate = datesWhitelist.filter(
       (value) =>
@@ -288,9 +277,6 @@ const IndividualDayScreen = ({ timeSlots }) => {
     }
     morningSlots(filteredDates, number);
   }, [filteredDates, datesWhitelist, number]);
-
-  // console.log("filteredDates", filteredDates);
-  // console.log("datesWhitelist", datesWhitelist);
 
   const renderItem = ({ item }) => {
     return (
@@ -372,7 +358,6 @@ const IndividualDayScreen = ({ timeSlots }) => {
   );
 
   function formatAMPM(momentdate) {
-    // console.log("momentdate", momentdate);
     if (momentdate) {
       const date = momentdate.toDate();
       const strTime = date.toLocaleString("en-US", {
@@ -380,7 +365,7 @@ const IndividualDayScreen = ({ timeSlots }) => {
         minute: "numeric",
         hour12: true,
       });
-      // console.log("strTime", strTime);
+
       return strTime;
     }
     return momentdate;
@@ -460,7 +445,6 @@ const IndividualDayScreen = ({ timeSlots }) => {
   }
 
   function calander() {
-    // console.log("test");
     return (
       <View>
         <CalendarStrip

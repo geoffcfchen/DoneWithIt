@@ -21,7 +21,6 @@ function Search() {
   const parsedCustomers = useGetCustomers(userData);
 
   useEffect(() => {
-    // console.log("parsedCustomers", parsedCustomers);
     const newContacts = parsedCustomers.filter((contact) =>
       contact.displayName
         .toLocaleLowerCase()

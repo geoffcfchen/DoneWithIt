@@ -22,7 +22,6 @@ import GlobalContext from "../context/Context";
 
 function ListingDetailsScreen({ route }) {
   const { item } = route.params;
-  // console.log("listing = ", listing);
   const { userData } = useContext(GlobalContext);
   // const userB = listing.participants.find((p) => p.email !== currentUser.email);
 
@@ -58,7 +57,6 @@ function ListingDetailsScreen({ route }) {
   function rescheduleButton() {
     const navigation = useNavigation();
     const questionRef = doc(db, "questions", item.id);
-    // console.log("listing.id", item.id);
     return (
       <TouchableOpacity
         activeOpacity={0.99}

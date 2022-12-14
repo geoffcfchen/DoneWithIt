@@ -18,8 +18,6 @@ export default function ListItemMessages({
   const {
     theme: { colors },
   } = useContext(GlobalContext);
-  // console.log("user", user);
-  // console.log("room", room);
   return (
     <TouchableOpacity
       style={{ height: 80, ...style }}

@@ -56,9 +56,6 @@ export default function MessagesDetailsScreen() {
   const room = route.params.room;
   const selectedImage = route.params.image;
   const userB = route.params.user;
-  // console.log("route", route);
-  // console.log("room = ", room);
-  // console.log("userB", userB);
 
   const senderUser = user.photoURL
     ? {
@@ -67,24 +64,16 @@ export default function MessagesDetailsScreen() {
         avatar: user.photoURL,
       }
     : { name: user.displayName, _id: user.uid };
-  // console.log("senderUser = ", senderUser);
 
   const roomID = room ? room.id : useMemo(() => nanoid(), []);
-  // console.log("roomID = ", roomID);
 
   const roomRef = doc(db, "rooms", roomID);
-  // console.log("roomRef = ", roomRef);
   const roomMessagesRef = collection(db, "rooms", roomID, "messages");
-  // console.log("roomMessageRef = ", roomMessagesRef);
-  // if (!room) {
-  //   console.log("no room");
-  // }
 
   useEffect(() => {
     (async () => {
       // if there is no conversation
       if (!room) {
-        // console.log("test");
         // create currUserData
         const currUserData = {
           displayName: user.displayName,
@@ -118,15 +107,11 @@ export default function MessagesDetailsScreen() {
       const emailHash = `${user.email}:${userB.email}:`;
       setRoomHash(emailHash);
       // not sure what this following line is doing. Let's figure it out later
-      // console.log("emailHash", emailHash);
       if (selectedImage && selectedImage.uri) {
         await sendImage(selectedImage.uri, emailHash);
       }
-      // console.log("selectedImage", selectedImage);
     })();
   }, []);
-  // console.log("selectedImage", selectedImage);
-  // console.log("roomHash second", roomHash);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(roomMessagesRef, (querySnapshot) => {
@@ -138,7 +123,6 @@ export default function MessagesDetailsScreen() {
           return { ...message, createdAt: message.createdAt.toDate() };
         })
         .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-      // console.log("messagesFirestore = ", messagesFirestore);
       appendMessages(messagesFirestore);
     });
     return () => unsubscribe();
@@ -156,36 +140,24 @@ export default function MessagesDetailsScreen() {
       setMessages((previousMessages) =>
         GiftedChat.append(previousMessages, messages)
       );
-      // console.log("messages inside", messages);
     },
     [messages]
   );
-  // console.log("messages outside", messages);
 
   async function onSend(messages = []) {
-    // console.log("message", messages);
     const writes = messages.map((m) => addDoc(roomMessagesRef, m));
-    // console.log("messages inside onsend", messages);
     const lastMessage = messages[messages.length - 1];
-    // console.log("lastMessage=", lastMessage);
     writes.push(updateDoc(roomRef, { lastMessage }));
     //  updateDoc(roomRef, { lastMessage });
-    // console.log("roomRef", roomRef);
     await Promise.all(writes);
   }
 
-  // console.log("messages global", messages.length);
-
   async function sendImage(uri, roomPath) {
-    // console.log("roomPath", roomPath);
-    // console.log("uri", uri);
-    // console.log("roomHash ", `${roomPath || roomHash}`);
     const { url, fileName } = await uploadImage(
       uri,
       `images/rooms/${roomPath || roomHash}`
     );
-    // console.log("url", url);
-    // console.log("fileName", fileName);
+
     const message = {
       _id: fileName,
       text: "",
@@ -193,9 +165,7 @@ export default function MessagesDetailsScreen() {
       user: senderUser,
       image: url,
     };
-    // console.log("message in sendImage", message);
     const lastMessage = { ...message, text: "Image" };
-    // console.log("lastMessage", lastMessage);
     await Promise.all([
       addDoc(roomMessagesRef, message),
       updateDoc(roomRef, { lastMessage }),
@@ -204,7 +174,6 @@ export default function MessagesDetailsScreen() {
 
   async function handlePhotoPicker() {
     const result = await pickImage();
-    // console.log("result", result.uri);
 
     if (!result.cancelled) {
       await sendImage(result.uri);

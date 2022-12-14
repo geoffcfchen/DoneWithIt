@@ -15,14 +15,12 @@ import ListUser from "../components/ListUser/ListUser";
 
 function FollowersScreen({ UserBData, Followers }) {
   const parsedCustomers = useGetCustomers(UserBData);
-  // console.log("parsedCustomers", parsedCustomers[3].uid);
-  // console.log("followersOfUser", followersOfUser);
+
   // console.log("test", followersOfUser.indexOf(parsedCustomers[3].uid) > -1);
 
   const filterParsedCustomers = parsedCustomers.filter(
     (item) => Followers.indexOf(item.uid) > -1
   );
-  // console.log("filterParsedCustomers", filterParsedCustomers);
 
   return (
     <View style={{ width: "100%" }}>

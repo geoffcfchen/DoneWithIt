@@ -14,7 +14,6 @@ import routes from "../navigation/routes";
 
 function ListingCard({ questions }) {
   const navigation = useNavigation();
-  // console.log("questions", questions);
   return (
     <FlatList
       data={questions}
