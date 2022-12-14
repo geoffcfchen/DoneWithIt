@@ -43,15 +43,14 @@ function Feed() {
     return () => unsubscribe();
   }, [allUsersThatUserFollowing]);
 
-  const newTweets = [...tweets, ...parsedPosts].sort(
-    (a, b) => b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime()
-  );
+  // const newTweets = [...tweets, ...parsedPosts].sort(
+  //   (a, b) => b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime()
+  // );
 
   return (
-    <View style={{ width: "100%" }}>
+    <View style={{ width: "100%", flex: 1 }}>
       <FlatList
-        // style={{ flex: 1 }}
-        data={newTweets}
+        data={parsedPosts}
         renderItem={({ item }) => <Tweet tweet={item} />}
         keyExtractor={(item) => item.id}
       />

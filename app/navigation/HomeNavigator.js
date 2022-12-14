@@ -19,8 +19,6 @@ const Stack = createNativeStackNavigator();
 function HomeNavigator() {
   const navigation = useNavigation();
   const { userData } = useContext(GlobalContext);
-  // auth.currentUser.displayName;
-  // console.log(userData);
 
   return (
     <Stack.Navigator>

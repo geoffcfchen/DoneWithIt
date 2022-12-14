@@ -30,7 +30,7 @@ function Search() {
   }, [searchTerm, parsedCustomers]);
 
   return (
-    <View style={{ width: "100%" }}>
+    <View style={{ width: "100%", flex: 1 }}>
       <AppTextInput
         icon="account-search"
         value={searchTerm}
@@ -38,7 +38,6 @@ function Search() {
       ></AppTextInput>
       <FlatList
         contentContainerStyle={{ paddingBottom: 109 }}
-        // style={{ flex: 1 }}
         data={filteredContacts}
         renderItem={({ item }) => <ListUser tweet={item} />}
         keyExtractor={(item) => item.id}

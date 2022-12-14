@@ -9,7 +9,7 @@ import NewTweetButton from "../components/NewTweetButton";
 
 export default function HomeScreen() {
   return (
-    <View>
+    <View style={styles.container}>
       <Feed></Feed>
       <NewTweetButton />
     </View>
@@ -19,7 +19,5 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
 });

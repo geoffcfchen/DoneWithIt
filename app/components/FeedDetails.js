@@ -77,7 +77,7 @@ function FeedDetails({ tweet }) {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    // flexDirection: "row",
+    flex: 1,
     padding: 15,
     borderBottomWidth: 0.5,
     borderColor: "lightgrey",

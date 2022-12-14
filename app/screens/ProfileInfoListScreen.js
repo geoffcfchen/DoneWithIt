@@ -22,6 +22,8 @@ import Tweet from "../components/Tweet/Tweet";
 import { auth, db } from "../../firebase";
 import colors from "../config/colors";
 import useGetSingleCustomerInfo from "../hooks/useGetSingleCustomerInfo";
+import NewTweetButton from "../components/NewTweetButton";
+import { FontAwesome } from "@expo/vector-icons";
 
 const HEADER_HEIGHT = 300;
 
@@ -72,19 +74,42 @@ function ProfileInfoListScreen({ route }) {
             }}
           />
         </View>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text
-            style={[
-              styles.text,
-              {
-                fontSize: 24,
-                fontWeight: "bold",
-                marginTop: 10,
-              },
-            ]}
-          >
-            {upToDateUserBData?.displayName}
-          </Text>
+        <View
+          style={{
+            marginTop: 10,
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <View style={{ flexDirection: "row" }}>
+            <Text
+              style={[
+                styles.text,
+                {
+                  fontSize: 24,
+                  fontWeight: "bold",
+                },
+              ]}
+            >
+              {upToDateUserBData?.displayName}
+            </Text>
+            <View
+              style={{
+                paddingTop: 3,
+                paddingLeft: 2,
+                marginLeft: 10,
+                borderRadius: 15,
+                width: 30,
+                height: 30,
+                backgroundColor: "blue",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <FontAwesome name="stethoscope" size={20} color="white" />
+            </View>
+          </View>
+
           {userData.uid == userB.uid ? (
             <ProfileEdiButton userBData={userB}></ProfileEdiButton>
           ) : (
@@ -136,7 +161,7 @@ function ProfileInfoListScreen({ route }) {
 
   useEffect(() => {
     const postsQuery = query(collection(db, "posts"));
-    const allUsersThatUserFollowingAndSelf = [upToDateUserBData?.uid];
+    const allUsersThatUserFollowingAndSelf = [userB.uid];
     const unsubscribe = onSnapshot(postsQuery, (querySnapshot) => {
       // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
       const parsedPosts = querySnapshot.docs
@@ -161,7 +186,7 @@ function ProfileInfoListScreen({ route }) {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {/* <BackButton /> */}
       <Tabs.Container
         renderHeader={Header}
@@ -182,7 +207,8 @@ function ProfileInfoListScreen({ route }) {
           />
         </Tabs.Tab>
       </Tabs.Container>
-    </SafeAreaView>
+      <NewTweetButton />
+    </View>
   );
 }
 
