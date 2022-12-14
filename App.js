@@ -66,6 +66,8 @@ function App() {
 
   const Stack = createNativeStackNavigator();
 
+  console.log("user", user);
+
   return (
     <AuthContext.Provider value={{ user, setUser }}>
       <OfflineNotice></OfflineNotice>
@@ -88,7 +90,7 @@ function App() {
               headerShown: false,
             }}
           >
-            {!user.displayName && (
+            {!user.displayName && !user.photoURL && (
               <Stack.Screen
                 name="profile"
                 component={ProfileScreen}

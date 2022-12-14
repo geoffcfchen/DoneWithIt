@@ -32,7 +32,6 @@ function ProfileInfoListScreen({ route }) {
   const { userData } = useContext(GlobalContext);
 
   function Header() {
-    console.log("userBData.bio", userBData);
     return (
       <ScrollView
         style={[

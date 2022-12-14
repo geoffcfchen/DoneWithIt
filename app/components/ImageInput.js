@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
+
 import Screen from "./Screen";
 import colors from "../config/colors";
 import logger from "../utility/logger";
@@ -35,11 +37,18 @@ function ImageInput({ imageUri, onChangeImage }) {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        // allowsEditing: true,
+        allowsEditing: true,
         // aspect: [3, 5],
-        quality: 0,
+        quality: 0.2,
       });
-      if (!result.cancelled) onChangeImage(result.uri);
+      console.log("result", result.uri);
+      const manipResult = await manipulateAsync(
+        result.uri,
+        [{ resize: { height: 200 } }],
+        { format: SaveFormat.PNG }
+      );
+      console.log("manipResult", manipResult);
+      if (!result.cancelled) onChangeImage(manipResult.uri);
     } catch (error) {
       logger.log("Error reading an image", error);
     }

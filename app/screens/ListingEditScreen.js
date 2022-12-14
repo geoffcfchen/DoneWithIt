@@ -123,14 +123,11 @@ function ListingEditScreen({ onCloseQuestion }) {
           email: item.email,
         };
       });
-      // console.log("customers", parsedcustomers);
       setContacts(parsedcustomers);
       // setDatesWhitelist(messagesFirestore);
     });
     return () => unsubscribe();
   }, [allUsersThatUserFollowing]);
-
-  // console.log("contacts", contacts);
 
   const senderUser = user.photoURL
     ? {
@@ -141,8 +138,6 @@ function ListingEditScreen({ onCloseQuestion }) {
     : { name: user.displayName, _id: user.uid };
 
   const handleSubmit = async (listing, { resetForm }) => {
-    // console.log("listing", listing);
-
     const question = unfilteredQuestions.find((question) =>
       question.participantsArray.includes(listing.doctor.email)
     );
@@ -209,14 +204,10 @@ function ListingEditScreen({ onCloseQuestion }) {
     roomPath
   ) {
     const uri = listing.images[0];
-    // console.log("uri", uri);
-    // console.log("emailHash", emailHash);
     const { url, fileName } = await uploadImage(
       uri,
       `images/questions/${roomPath || questionHash}`
     );
-    // console.log("url", url);
-    // console.log("fileName", fileName);
     const message = {
       _id: fileName,
       image: url,
