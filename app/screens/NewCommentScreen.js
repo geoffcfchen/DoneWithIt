@@ -15,7 +15,13 @@ import colors from "../config/colors";
 import { useNavigation } from "@react-navigation/native";
 import GlobalContext from "../context/Context";
 import { auth, db } from "../../firebase";
-import { doc, setDoc } from "firebase/firestore";
+import {
+  doc,
+  increment,
+  onSnapshot,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { async } from "@firebase/util";
 import { nanoid } from "nanoid";
 
@@ -26,19 +32,19 @@ export default function NewCommentScreen({ onCloseTweet, tweet }) {
   const { userData } = useContext(GlobalContext);
 
   const currentUser = auth.currentUser;
-
+  const userPostsRef = doc(db, "posts", tweet.id);
   const userCommentsRef = doc(db, "posts", tweet.id, "comments", randomID);
-  // const userEachPostRef = doc(
-  //   db,
-  //   "posts",
-  //   currentUser.uid,
-  //   "userPosts",
-  //   randomID
-  // );
+
+  const unsub = onSnapshot(userPostsRef, (doc) => {
+    console.log("Current data: ", doc.data());
+  });
+
+  unsub();
 
   async function onPostTweet() {
     try {
       // await setDoc(userPostsRef, {});
+      await updateDoc(userPostsRef, { numberOfComments: increment(1) });
       await setDoc(userCommentsRef, {
         user: {
           uid: currentUser.uid,
@@ -49,7 +55,6 @@ export default function NewCommentScreen({ onCloseTweet, tweet }) {
         },
         createdAt: new Date(),
         content: comment,
-        // image: "https://picsum.photos/200",
       });
     } catch (error) {
       console.log(error);

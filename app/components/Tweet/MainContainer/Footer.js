@@ -23,7 +23,6 @@ import NewCommentButton from "../../NewCommentButton";
 function Footer({ tweet }) {
   // console.log(tweet);
   const [liking, setLiking] = useState(false);
-
   const userPostsRef = doc(db, "posts", tweet.id);
   const userPostsLikesRef = doc(
     db,

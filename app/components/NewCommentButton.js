@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TouchableOpacity,
   StyleSheet,
@@ -12,6 +12,8 @@ import { useNavigation } from "@react-navigation/native";
 import colors from "../config/colors";
 import NewTweetScreen from "../screens/NewTweetScreen";
 import NewCommentScreen from "../screens/NewCommentScreen";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../../firebase";
 
 function NewCommentButton({ tweet }) {
   const [modalVisible, setModalVisible] = useState(false);

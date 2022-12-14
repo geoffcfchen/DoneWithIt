@@ -1,5 +1,6 @@
 import {
   collection,
+  doc,
   getDocs,
   onSnapshot,
   query,
@@ -20,8 +21,19 @@ import Tweet from "./Tweet/Tweet";
 
 function FeedDetails({ tweet }) {
   const [parsedComments, setParsedComments] = useState([]);
+  const [upToDateTweet, setUpToDateTweet] = useState(tweet);
 
   const allUserCommentsRef = collection(db, "posts", tweet.id, "comments");
+
+  const userPostsRef = doc(db, "posts", tweet.id);
+
+  useEffect(() => {
+    const unsub = onSnapshot(userPostsRef, (doc) => {
+      setUpToDateTweet(doc.data());
+    });
+
+    return () => unsub();
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(allUserCommentsRef, (querySnapshot) => {
@@ -43,8 +55,8 @@ function FeedDetails({ tweet }) {
   const header = () => {
     return (
       <View style={styles.container}>
-        <LeftContainerCommentHeader userB={tweet.user} />
-        <MainContainerCommentHeader tweet={tweet} />
+        <LeftContainerCommentHeader userB={upToDateTweet.user} />
+        <MainContainerCommentHeader tweet={upToDateTweet} />
       </View>
     );
   };
