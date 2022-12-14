@@ -25,13 +25,10 @@ import useGetSingleCustomerInfo from "../hooks/useGetSingleCustomerInfo";
 
 const HEADER_HEIGHT = 300;
 
-const DATA = [0, 1, 2, 3, 4];
-const identity = (v) => v + "";
-
 function ProfileInfoListScreen({ route }) {
   const userB = route.params.ProfileUser;
-  const upToDateuserBData = useGetSingleCustomerInfo(userB.uid);
-  console.log("upToDateuserBData", upToDateuserBData);
+  const upToDateUserBData = useGetSingleCustomerInfo(userB.uid);
+  console.log("upToDateuserBData", upToDateUserBData);
   const { userData } = useContext(GlobalContext);
 
   function Header() {
@@ -47,7 +44,7 @@ function ProfileInfoListScreen({ route }) {
         <View>
           <Image
             source={{
-              uri: upToDateuserBData?.photoURL,
+              uri: upToDateUserBData?.photoURL,
             }}
             style={{
               width: 75,
@@ -86,12 +83,12 @@ function ProfileInfoListScreen({ route }) {
               },
             ]}
           >
-            {userBData.displayName}
+            {upToDateUserBData?.displayName}
           </Text>
-          {userData.uid == userBData.uid ? (
-            <ProfileEdiButton userBData={userBData}></ProfileEdiButton>
+          {userData.uid == userB.uid ? (
+            <ProfileEdiButton userBData={userB}></ProfileEdiButton>
           ) : (
-            <FollowButton userBData={userBData}></FollowButton>
+            <FollowButton userBData={userB}></FollowButton>
           )}
         </View>
         <Text
@@ -104,10 +101,12 @@ function ProfileInfoListScreen({ route }) {
             },
           ]}
         >
-          @{userBData.email}
+          @{upToDateUserBData?.email}
         </Text>
-        {userBData && (
-          <Text style={[styles.text, { fontSize: 15 }]}>{userBData.bio}</Text>
+        {upToDateUserBData && (
+          <Text style={[styles.text, { fontSize: 15 }]}>
+            {upToDateUserBData.bio}
+          </Text>
         )}
         {/* Profile stats */}
         <View
@@ -117,8 +116,8 @@ function ProfileInfoListScreen({ route }) {
             marginTop: 10,
           }}
         >
-          <Following userBData={userBData}></Following>
-          <Followers userBData={userBData}></Followers>
+          <Following userBData={userB}></Following>
+          <Followers userBData={userB}></Followers>
         </View>
       </ScrollView>
     );
@@ -137,7 +136,7 @@ function ProfileInfoListScreen({ route }) {
 
   useEffect(() => {
     const postsQuery = query(collection(db, "posts"));
-    const allUsersThatUserFollowingAndSelf = [userBData.uid];
+    const allUsersThatUserFollowingAndSelf = [upToDateUserBData?.uid];
     const unsubscribe = onSnapshot(postsQuery, (querySnapshot) => {
       // querySnapshot.docs.map((doc) => console.log("doc", doc.data()));
       const parsedPosts = querySnapshot.docs
