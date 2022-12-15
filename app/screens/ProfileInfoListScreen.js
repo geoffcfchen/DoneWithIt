@@ -24,14 +24,22 @@ import colors from "../config/colors";
 import useGetSingleCustomerInfo from "../hooks/useGetSingleCustomerInfo";
 import NewTweetButton from "../components/NewTweetButton";
 import { FontAwesome } from "@expo/vector-icons";
+import {
+  GeneralPracticeBadges,
+  SpecialistBadges,
+  ClinicBadges,
+} from "../components/Badges";
 
 const HEADER_HEIGHT = 300;
 
 function ProfileInfoListScreen({ route }) {
   const userB = route.params.ProfileUser;
   const upToDateUserBData = useGetSingleCustomerInfo(userB.uid);
-  console.log("upToDateuserBData", upToDateUserBData);
   const { userData } = useContext(GlobalContext);
+  var username = upToDateUserBData?.email.substr(
+    0,
+    upToDateUserBData?.email.indexOf("@")
+  );
 
   function Header() {
     return (
@@ -82,32 +90,33 @@ function ProfileInfoListScreen({ route }) {
           }}
         >
           <View style={{ flexDirection: "row" }}>
-            <Text
-              style={[
-                styles.text,
-                {
-                  fontSize: 24,
-                  fontWeight: "bold",
-                },
-              ]}
-            >
-              {upToDateUserBData?.displayName}
-            </Text>
-            <View
-              style={{
-                paddingTop: 3,
-                paddingLeft: 2,
-                marginLeft: 10,
-                borderRadius: 15,
-                width: 30,
-                height: 30,
-                backgroundColor: "blue",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <FontAwesome name="stethoscope" size={20} color="white" />
-            </View>
+            {upToDateUserBData?.role.label == "Doctor" ? (
+              <Text
+                style={[
+                  styles.text,
+                  {
+                    fontSize: 24,
+                    fontWeight: "bold",
+                  },
+                ]}
+              >
+                Dr. {upToDateUserBData?.displayName}
+              </Text>
+            ) : (
+              <Text
+                style={[
+                  styles.text,
+                  {
+                    fontSize: 24,
+                    fontWeight: "bold",
+                  },
+                ]}
+              >
+                {upToDateUserBData?.displayName}
+              </Text>
+            )}
+            <GeneralPracticeBadges></GeneralPracticeBadges>
+            <ClinicBadges></ClinicBadges>
           </View>
 
           {userData.uid == userB.uid ? (
@@ -126,7 +135,7 @@ function ProfileInfoListScreen({ route }) {
             },
           ]}
         >
-          @{upToDateUserBData?.email}
+          @{username}
         </Text>
         {upToDateUserBData && (
           <Text style={[styles.text, { fontSize: 15 }]}>
@@ -192,14 +201,14 @@ function ProfileInfoListScreen({ route }) {
         renderHeader={Header}
         headerHeight={HEADER_HEIGHT} // optional
       >
-        <Tabs.Tab name="Posts">
+        <Tabs.Tab name="Posts" label="Posts">
           <Tabs.FlatList
             data={newTweets}
             renderItem={({ item }) => <Tweet tweet={item} />}
             keyExtractor={(item) => item.id}
           />
         </Tabs.Tab>
-        <Tabs.Tab name="Reviews">
+        <Tabs.Tab name="Reviews" label="Reviews">
           <Tabs.FlatList
             data={newTweets}
             renderItem={({ item }) => <Tweet tweet={item} />}

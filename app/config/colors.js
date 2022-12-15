@@ -8,6 +8,8 @@ export default {
   dark: "#0c0c0c",
   danger: "#ff5252",
   tint: "#4D9FEC",
+  purple: "#7A1DC2",
+  green: "#32940C",
 };
 
 export const theme = {
@@ -21,5 +23,7 @@ export const theme = {
     dark: "#0c0c0c",
     danger: "#ff5252",
     tint: "#4D9FEC",
+    purple: "#7A1DC2",
+    green: "#32940C",
   },
 };

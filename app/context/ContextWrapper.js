@@ -12,7 +12,7 @@ export default function ContextWrapper(props) {
   const [doctors, setDoctors] = useState([]);
   const [unfilteredDoctors, setUnfilteredDoctors] = useState([]);
   const [timeSlots, setTimeSlots] = useState([]);
-  const [whereTab, setWhereTab] = useState("");
+  const [whereTab, setWhereTab] = useState("Home");
   const [allUsersThatUserFollowing, setAllUsersThatUserFollowing] = useState(
     []
   );

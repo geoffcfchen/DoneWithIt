@@ -18,10 +18,10 @@ import Search from "../components/Search";
 export default function SearchScreen() {
   return (
     // <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    <SafeAreaView style={{ flex: 1 }}>
+    <View style={{ flex: 1 }}>
       <Search></Search>
       {/* <NewTweetButton /> */}
-    </SafeAreaView>
+    </View>
     // </TouchableWithoutFeedback>
   );
 }

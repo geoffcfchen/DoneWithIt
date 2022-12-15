@@ -20,10 +20,8 @@ function MainContainer({
       <View style={styles.tweetHeaderContainer}>
         <View style={styles.tweetHeaderNames}>
           <Text style={styles.name}>{tweet.displayName}</Text>
-          {tweet.selfIntro && (
-            <Text style={styles.content}>{tweet.content}</Text>
-          )}
-          {!tweet.selfIntro && (
+          {tweet.bio && <Text style={styles.content}>{tweet.bio}</Text>}
+          {!tweet.bio && (
             <Text style={styles.content}>
               Hi! this is Dr. {tweet.displayName}!
             </Text>
@@ -50,6 +48,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   tweetHeaderNames: {
+    width: 230,
     // flexDirection: "row",
   },
   name: {

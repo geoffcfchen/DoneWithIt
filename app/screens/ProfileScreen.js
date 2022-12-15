@@ -113,7 +113,7 @@ function ProfileScreen({ navigation }) {
     } catch (error) {
       console.log(error);
     }
-    navigation.navigate("DrawerNavigator");
+    navigation.reset("DrawerNavigator");
   };
 
   return (

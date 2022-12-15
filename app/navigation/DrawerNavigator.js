@@ -93,6 +93,7 @@ export default function DrawerNavigator({ navigation }) {
 
 function CustomDrawerContent(props, { route }) {
   const { userData, whereTab } = useContext(GlobalContext);
+  console.log("whereTab", whereTab);
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
@@ -113,7 +114,7 @@ function CustomDrawerContent(props, { route }) {
           {/* <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           ></View> */}
-          <Text style={styles.username}>@{auth.currentUser.displayName}</Text>
+          <Text style={styles.username}>{auth.currentUser.displayName}</Text>
           <View style={styles.data}>
             <SetGlobalUserAFollowers></SetGlobalUserAFollowers>
             <SetGlobalUserAFollowing></SetGlobalUserAFollowing>
@@ -227,7 +228,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   username: {
-    fontSize: 18,
+    marginTop: 5,
+    fontSize: 17,
     // color: "#898f93",
   },
   data: {

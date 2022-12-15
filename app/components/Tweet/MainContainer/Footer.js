@@ -19,6 +19,7 @@ import {
 } from "firebase/firestore";
 import { auth, db } from "../../../../firebase";
 import NewCommentButton from "../../NewCommentButton";
+import * as Haptics from "expo-haptics";
 
 function Footer({ tweet }) {
   // console.log(tweet);
@@ -50,6 +51,7 @@ function Footer({ tweet }) {
   }, []);
 
   async function onLike() {
+    Haptics.selectionAsync();
     try {
       await updateDoc(userPostsRef, { numberOfLikes: increment(1) });
       await setDoc(userPostsLikesRef, {});
@@ -59,6 +61,7 @@ function Footer({ tweet }) {
   }
 
   async function onUnLike() {
+    Haptics.selectionAsync();
     try {
       await updateDoc(userPostsRef, { numberOfLikes: increment(-1) });
       await deleteDoc(userPostsLikesRef, {});
