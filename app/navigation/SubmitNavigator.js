@@ -22,7 +22,7 @@ function SubmitNavigator() {
   const { userData, timeSlots } = useContext(GlobalContext);
   const navigation = useNavigation();
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ fullScreenGestureEnabled: true }}>
       <Stack.Group
         screenOptions={{
           headerRightContainerStyle: {

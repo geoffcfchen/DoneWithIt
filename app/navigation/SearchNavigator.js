@@ -22,7 +22,7 @@ function SearchNavigator() {
   // console.log(userData);
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ fullScreenGestureEnabled: true }}>
       <Stack.Group
         screenOptions={{
           headerRightContainerStyle: {

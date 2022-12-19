@@ -21,7 +21,7 @@ function HomeNavigator() {
   const { userData } = useContext(GlobalContext);
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ fullScreenGestureEnabled: true }}>
       <Stack.Group
         screenOptions={{
           headerRightContainerStyle: {

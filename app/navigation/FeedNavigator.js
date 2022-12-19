@@ -20,7 +20,10 @@ function FeedNavigator() {
   const navigation = useNavigation();
   const { userData } = useContext(GlobalContext);
   return (
-    <Stack.Navigator initialRouteName="Listings">
+    <Stack.Navigator
+      initialRouteName="Listings"
+      screenOptions={{ fullScreenGestureEnabled: true }}
+    >
       <Stack.Group
         screenOptions={{
           headerRightContainerStyle: {
