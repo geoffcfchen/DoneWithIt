@@ -65,6 +65,7 @@ export default function DrawerNavigator({ navigation }) {
           listeners
           options={({ route }) => {
             const routeName = getFocusedRouteNameFromRoute(route) ?? "";
+            console.log("routeName", routeName);
             setWhereTab(routeName);
           }}
         />

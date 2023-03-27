@@ -66,34 +66,33 @@ function BalanceScreen(props) {
   //     setProductsPrice(productPrice);
   //   }, []);
 
-  //   const loadCheckout = async (priceId) => {
+  const loadCheckout = async (priceId) => {
+    const docRef = await addDoc(
+      collection(db, `customers/${userData.uid}/checkout_sessions`),
+      {
+        price: priceId,
+        success_url: window.location.origin,
+        cancel_url: window.location.origin,
+      }
+    );
 
-  //     const docRef = await addDoc(
-  //       collection(db, `customers/${userData.uid}/checkout_sessions`),
-  //       {
-  //         price: priceId,
-  //         success_url: window.location.origin,
-  //         cancel_url: window.location.origin,
-  //       }
-  //     );
-
-  //     onSnapshot(docRef, async (snap) => {
-  //       const { error, sessionId } = snap.data();
-  //       if (error) {
-  //         // Show an error to your customer and
-  //         // inspect your Cloud Function logs in the Firebase console.
-  //         alert(`An error occured: ${error.message}`);
-  //       }
-  //       if (sessionId) {
-  //         // We have a Stripe Checkout URL, let's redirect.
-  //         // window.location.assign(url);
-  //         const stripe = await loadStripe(
-  //           "pk_test_51Lhf4GDsOD7fAAq8BAQLfXxnP69pNkOgwcX8CbYx5YEsqzQWHEVFbKoAIjetsXCyQzq46U73S4fEQBOeJLo6inea00vzpGOQet"
-  //         );
-  //         stripe.redirectToCheckout({ sessionId });
-  //       }
-  //     });
-  //   };
+    onSnapshot(docRef, async (snap) => {
+      const { error, sessionId } = snap.data();
+      if (error) {
+        // Show an error to your customer and
+        // inspect your Cloud Function logs in the Firebase console.
+        alert(`An error occured: ${error.message}`);
+      }
+      if (sessionId) {
+        // We have a Stripe Checkout URL, let's redirect.
+        // window.location.assign(url);
+        const stripe = await loadStripe(
+          "pk_test_51Lhf4GDsOD7fAAq8BAQLfXxnP69pNkOgwcX8CbYx5YEsqzQWHEVFbKoAIjetsXCyQzq46U73S4fEQBOeJLo6inea00vzpGOQet"
+        );
+        stripe.redirectToCheckout({ sessionId });
+      }
+    });
+  };
 
   const Item = ({ title, priceId }) => (
     <View style={[styles.container, { flexDirection: "row" }]}>

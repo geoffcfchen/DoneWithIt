@@ -51,7 +51,13 @@ function ProfileInfoListScreen({ route }) {
           },
         ]}
       >
-        <View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+          }}
+        >
           <Image
             source={{
               uri: upToDateUserBData?.photoURL,
@@ -81,49 +87,33 @@ function ProfileInfoListScreen({ route }) {
               // ],
             }}
           />
-        </View>
-        <View
-          style={{
-            marginTop: 10,
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <View style={{ flexDirection: "row" }}>
-            {upToDateUserBData?.role.label == "Doctor" ? (
-              <Text
-                style={[
-                  styles.text,
-                  {
-                    fontSize: 24,
-                    fontWeight: "bold",
-                  },
-                ]}
-              >
-                Dr. {upToDateUserBData?.displayName}
-              </Text>
-            ) : (
-              <Text
-                style={[
-                  styles.text,
-                  {
-                    fontSize: 24,
-                    fontWeight: "bold",
-                  },
-                ]}
-              >
-                {upToDateUserBData?.displayName}
-              </Text>
-            )}
-            <GeneralPracticeBadges></GeneralPracticeBadges>
-            <ClinicBadges></ClinicBadges>
-          </View>
-
           {userData.uid == userB.uid ? (
             <ProfileEdiButton userBData={userB}></ProfileEdiButton>
           ) : (
             <FollowButton userBData={userB}></FollowButton>
           )}
+        </View>
+        <View
+          style={{
+            marginTop: 10,
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+        >
+          <Text
+            style={[
+              styles.text,
+              {
+                fontSize: 20,
+                fontWeight: "bold",
+              },
+            ]}
+          >
+            {upToDateUserBData?.displayName}
+          </Text>
+          <GeneralPracticeBadges></GeneralPracticeBadges>
+          <ClinicBadges></ClinicBadges>
         </View>
         <Text
           style={[
@@ -138,7 +128,7 @@ function ProfileInfoListScreen({ route }) {
           @{username}
         </Text>
         {upToDateUserBData && (
-          <Text style={[styles.text, { fontSize: 15 }]}>
+          <Text style={[styles.text, { fontSize: 14 }]}>
             {upToDateUserBData.bio}
           </Text>
         )}
