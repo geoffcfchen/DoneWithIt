@@ -22,6 +22,7 @@ import {
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import GlobalContext from "../context/Context";
+import { useRoute } from "@react-navigation/native";
 
 import {
   createDrawerNavigator,
@@ -46,10 +47,15 @@ function NotificationsScreen({ navigation }) {
   );
 }
 
-export default function DrawerNavigator({ navigation }) {
+function updateWhereTab(route) {
   const { setWhereTab, setAllUsersThatUserFollowing } =
     useContext(GlobalContext);
+  const routeName = getFocusedRouteNameFromRoute(route) ?? "";
+  console.log("routeName in updatewhereTab", routeName);
+  setWhereTab(routeName);
+}
 
+export default function DrawerNavigator({ navigation }) {
   return (
     <Drawer.Navigator
       drawerType="front"
@@ -59,16 +65,7 @@ export default function DrawerNavigator({ navigation }) {
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
       <Drawer.Group screenOptions={{ headerShown: false }}>
-        <Drawer.Screen
-          name="AppNavigator"
-          component={AppNavigator}
-          listeners
-          options={({ route }) => {
-            const routeName = getFocusedRouteNameFromRoute(route) ?? "";
-            console.log("routeName", routeName);
-            setWhereTab(routeName);
-          }}
-        />
+        <Drawer.Screen name="AppNavigator" component={AppNavigator} />
       </Drawer.Group>
       <Drawer.Group
         screenOptions={{
@@ -92,8 +89,9 @@ export default function DrawerNavigator({ navigation }) {
   );
 }
 
-function CustomDrawerContent(props, { route }) {
+function CustomDrawerContent(props) {
   const { userData, whereTab } = useContext(GlobalContext);
+
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>

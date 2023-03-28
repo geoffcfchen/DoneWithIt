@@ -38,18 +38,29 @@ import {
 import {
   DrawerActions,
   getFocusedRouteNameFromRoute,
+  useFocusEffect,
   useNavigation,
+  useRoute,
 } from "@react-navigation/native";
 import HomeNavigator from "./HomeNavigator";
 import SearchNavigator from "./SearchNavigator";
 
 const Tab = createBottomTabNavigator();
 
+// function updateWhereTab(routeName) {
+//   const { setWhereTab, setAllUsersThatUserFollowing } =
+//     useContext(GlobalContext);
+//   // const routeName = getFocusedRouteNameFromRoute(route) ?? "";
+//   // console.log("routeName in updatewhereTab", routeName);
+//   setWhereTab(routeName);
+// }
+
 export default function AppNavigator() {
   const { user } = useContext(AuthContext);
   const { setUserData, userData, setTimeSlots, setWhereTab } =
     useContext(GlobalContext);
-  const navigation = useNavigation();
+
+  // const navigation = useNavigation();
 
   const questionsQuery = query(
     collection(db, "customers"),
@@ -90,6 +101,12 @@ export default function AppNavigator() {
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={{ tabBarShowLabel: false }}
+      screenListeners={({ navigation }) => ({
+        state: (e) => {
+          const routeName = getFocusedRouteNameFromRoute(e.data) ?? "";
+          setWhereTab(routeName);
+        },
+      })}
     >
       <Tab.Screen
         name="Home"
