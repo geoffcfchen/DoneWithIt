@@ -47,14 +47,6 @@ function NotificationsScreen({ navigation }) {
   );
 }
 
-function updateWhereTab(route) {
-  const { setWhereTab, setAllUsersThatUserFollowing } =
-    useContext(GlobalContext);
-  const routeName = getFocusedRouteNameFromRoute(route) ?? "";
-  console.log("routeName in updatewhereTab", routeName);
-  setWhereTab(routeName);
-}
-
 export default function DrawerNavigator({ navigation }) {
   return (
     <Drawer.Navigator

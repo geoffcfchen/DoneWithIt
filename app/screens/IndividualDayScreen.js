@@ -360,12 +360,12 @@ const IndividualDayScreen = ({ timeSlots }) => {
   function formatAMPM(momentdate) {
     if (momentdate) {
       const date = momentdate.toDate();
-      const strTime = date.toLocaleString("en-US", {
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true,
-      });
-
+      // const strTime = date.toLocaleString("en-US", {
+      //   hour: "numeric",
+      //   minute: "numeric",
+      //   hour12: true,
+      // });
+      const strTime = moment(date).format("h:mm A");
       return strTime;
     }
     return momentdate;
