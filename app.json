@@ -4,7 +4,11 @@
     "name": "Vetcation",
     "slug": "Vetcation",
     "owner": "vetcation",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
@@ -29,7 +33,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gcfchen.Vetcation"
     },
     "web": {
       "favicon": "./app/assets/favicon.png"
@@ -37,6 +42,9 @@
     "extra": {
       "bugsnag": {
         "apiKey": "f6a53209b3168f10e3321e5f5f0ec5cd"
+      },
+      "eas": {
+        "projectId": "477c44b2-bf4a-4a30-b8bf-c99db6d6ffbb"
       }
     },
     "hooks": {
@@ -46,6 +54,9 @@
           "config": {}
         }
       ]
+    },
+    "android": {
+      "package": "com.gcfchen.Vetcation"
     }
   }
 }
