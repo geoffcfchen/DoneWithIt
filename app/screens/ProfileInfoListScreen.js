@@ -29,6 +29,7 @@ import {
   SpecialistBadges,
   ClinicBadges,
 } from "../components/Badges";
+import CallButton from "../components/CallButton";
 
 const HEADER_HEIGHT = 300;
 
@@ -114,6 +115,13 @@ function ProfileInfoListScreen({ route }) {
           </Text>
           <GeneralPracticeBadges></GeneralPracticeBadges>
           <ClinicBadges></ClinicBadges>
+          <CallButton
+            iconName="phone-alt"
+            backgroundColor="gray"
+            onPress={() => {
+              console.log("test");
+            }}
+          ></CallButton>
         </View>
         <Text
           style={[
