@@ -31,9 +31,35 @@ import {
 } from "../components/Badges";
 import CallButton from "../components/CallButton";
 
+import {
+  ScreenCapturePickerView,
+  RTCPeerConnection,
+  RTCIceCandidate,
+  RTCSessionDescription,
+  RTCView,
+  MediaStream,
+  MediaStreamTrack,
+  mediaDevices,
+  registerGlobals,
+} from "react-native-webrtc";
+import Video from "./Video";
+
 const HEADER_HEIGHT = 300;
 
+const peerConstraints = {
+  iceServers: [
+    {
+      urls: "stun:stun.l.google.com:19302",
+    },
+  ],
+};
+
 function ProfileInfoListScreen({ route }) {
+  const [localStream, setLocalStream] = useState(null);
+  const [remoteStream, setRemoteStream] = useState(null);
+  const connecting = useRef(false);
+  let pc = useRef(false);
+
   const userB = route.params.ProfileUser;
   const upToDateUserBData = useGetSingleCustomerInfo(userB.uid);
   const { userData } = useContext(GlobalContext);
@@ -41,6 +67,72 @@ function ProfileInfoListScreen({ route }) {
     0,
     upToDateUserBData?.email.indexOf("@")
   );
+
+  async function setupWebrtc() {
+    pc.current = new RTCPeerConnection(peerConstraints);
+
+    // Get the audio and video stream for the call
+    const stream = await getStream();
+
+    if (stream) {
+      setLocalStream(stream);
+      pc.current.addStream(stream);
+    }
+    // Get the remote stream once it is available
+    pc.current.onaddstream = (event) => {
+      setRemoteStream(event.stream);
+    };
+  }
+
+  async function create() {
+    console.log("calling");
+    console.log(userB.uid);
+    connecting.current = true;
+
+    // setUp webrtc
+    await setupWebrtc();
+  }
+
+  /**
+   * For disconnectign the call, close the connection, release the stream,
+   * and delete the document for the call
+   **/
+
+  async function hangup() {
+    console.log("hangup");
+    // setGettingCall(false);
+    connecting.current = false;
+    // streamCleanUp();
+    // firebaseCleanUp();
+    // if (pc.current) {
+    //   pc.current.close();
+    // }
+  }
+
+  // Helper function
+
+  async function getStream() {
+    let isVoiceOnly = false;
+    let mediaConstraints = {
+      audio: true,
+      video: {
+        frameRate: 30,
+        facingMode: "user",
+      },
+    };
+    try {
+      const mediaStream = await mediaDevices.getUserMedia(mediaConstraints);
+
+      if (isVoiceOnly) {
+        let videoTrack = mediaStream.getVideoTracks()[0];
+        videoTrack.enabled = false;
+      }
+
+      return mediaStream;
+    } catch (err) {
+      console.log("err", err);
+    }
+  }
 
   function Header() {
     return (
@@ -118,9 +210,7 @@ function ProfileInfoListScreen({ route }) {
           <CallButton
             iconName="phone-alt"
             backgroundColor="gray"
-            onPress={() => {
-              console.log("test");
-            }}
+            onPress={create}
           ></CallButton>
         </View>
         <Text
@@ -191,6 +281,19 @@ function ProfileInfoListScreen({ route }) {
   const newTweets = [...parsedPosts].sort(
     (a, b) => b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime()
   );
+
+  // Displays local stream on calling
+  // Displays both local and remote stream once call is connected
+  if (localStream) {
+    console.log("localStream");
+    return (
+      <Video
+        hangup={hangup}
+        localStream={localStream}
+        remoteStream={remoteStream}
+      ></Video>
+    );
+  }
 
   return (
     <View style={styles.container}>
