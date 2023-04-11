@@ -15,7 +15,7 @@ function ButtonContainer({ hangup }) {
   );
 }
 
-export default function Video({ hangup, localStream, remoteStream }) {
+export default function VideoScreen({ hangup, localStream, remoteStream }) {
   // On call we will just display the local stream
   if (localStream && !remoteStream) {
     console.log("localStream && !remoteStream");

@@ -17,7 +17,18 @@ import {
   HEADER_HEIGHT_NARROWED,
   PROFILE_PICTURE_URI,
 } from "../../constants";
-import { collection, onSnapshot, query } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  query,
+  onSnapshot,
+  setDoc,
+  getDoc,
+  getDocs,
+  updateDoc,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import Tweet from "../components/Tweet/Tweet";
 import { auth, db } from "../../firebase";
 import colors from "../config/colors";
@@ -42,7 +53,8 @@ import {
   mediaDevices,
   registerGlobals,
 } from "react-native-webrtc";
-import Video from "./Video";
+import VideoScreen from "./VideoScreen";
+import GettingCallScreen from "./GettingCallScreen";
 
 const HEADER_HEIGHT = 300;
 
@@ -57,6 +69,7 @@ const peerConstraints = {
 function ProfileInfoListScreen({ route }) {
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
+  const [gettingCall, setGettingCall] = useState(false);
   const connecting = useRef(false);
   let pc = useRef(false);
 
@@ -91,7 +104,82 @@ function ProfileInfoListScreen({ route }) {
 
     // setUp webrtc
     await setupWebrtc();
+
+    // Document for the call
+    const cRef = doc(db, "meet", userB.uid);
+    // await setDoc(cRef, {});
+
+    // Exchange the ICE candidates between the caller and callee
+    collectIceCandidates(cRef, "caller", "callee");
+
+    if (pc.current) {
+      // Create the offer for the call
+      // Store the offer under the document
+      console.log("create");
+      try {
+        let sessionConstraints = {
+          mandatory: {
+            OfferToReceiveAudio: true,
+            OfferToReceiveVideo: true,
+            VoiceActivityDetection: true,
+          },
+        };
+        const offerDescription = await pc.current.createOffer(
+          sessionConstraints
+        );
+        await pc.current.setLocalDescription(offerDescription);
+
+        const cWithOffer = {
+          offer: {
+            type: offerDescription.type,
+            sdp: offerDescription.sdp,
+          },
+        };
+
+        // cRef.set(cWithOffer)
+        await setDoc(cRef, cWithOffer);
+      } catch (error) {
+        console.log("error", error);
+      }
+    }
   }
+
+  const join = async () => {
+    console.log("Joining the call");
+    connecting.current = true;
+    setGettingCall(false);
+
+    //const cRef = firestore().collection("meet").doc("chatId")
+    const cRef = doc(db, "meet", userB.uid);
+    // const offer = (await cRef.get()).data()?.offer
+    const offer = (await getDoc(cRef)).data()?.offer;
+
+    if (offer) {
+      // Setup Webrtc
+      await setupWebrtc();
+
+      // Exchange the ICE candidates
+      // Check the parameters, Its reversed. Since the joining part is callee
+      collectIceCandidates(cRef, "callee", "caller");
+
+      if (pc.current) {
+        pc.current.setRemoteDescription(new RTCSessionDescription(offer));
+
+        // Create the answer for the call
+        // Updates the document with answer
+        const answer = await pc.current.createAnswer();
+        pc.current.setLocalDescription(answer);
+        const cWithAnswer = {
+          answer: {
+            type: answer.type,
+            sdp: answer.sdp,
+          },
+        };
+        // cRef.update(cWithAnswer)
+        await updateDoc(cRef, cWithAnswer);
+      }
+    }
+  };
 
   /**
    * For disconnectign the call, close the connection, release the stream,
@@ -100,13 +188,13 @@ function ProfileInfoListScreen({ route }) {
 
   async function hangup() {
     console.log("hangup");
-    // setGettingCall(false);
+    setGettingCall(false);
     connecting.current = false;
-    // streamCleanUp();
-    // firebaseCleanUp();
-    // if (pc.current) {
-    //   pc.current.close();
-    // }
+    streamCleanUp();
+    firebaseCleanUp();
+    if (pc.current) {
+      pc.current.close();
+    }
   }
 
   // Helper function
@@ -132,6 +220,59 @@ function ProfileInfoListScreen({ route }) {
     } catch (err) {
       console.log("err", err);
     }
+  }
+
+  async function streamCleanUp() {
+    console.log("streamCleanUp");
+    if (localStream) {
+      localStream.getTracks().forEach((t) => t.stop());
+      localStream.release();
+    }
+    setLocalStream(null);
+    setRemoteStream(null);
+  }
+
+  async function firebaseCleanUp() {
+    console.log("firebaseCleanUp");
+    const cRef = doc(db, "meet", userB.uid);
+    if (cRef) {
+      const qee = query(collection(cRef, "callee"));
+      const calleeCandidate = await getDocs(qee);
+      calleeCandidate.forEach(async (candidate) => {
+        await deleteDoc(candidate.ref);
+      });
+      const qer = query(collection(cRef, "caller"));
+      const callerCandidate = await getDocs(qer);
+      callerCandidate.forEach(async (candidate) => {
+        await deleteDoc(candidate.ref);
+      });
+      deleteDoc(cRef);
+    }
+  }
+
+  async function collectIceCandidates(cRef, localName, remoteName) {
+    console.log("localName", localName);
+    const candidateCollection = collection(db, "meet", userB.uid, localName);
+
+    if (pc.current) {
+      // on new ICE candidate add it to firestore
+      console.log("test");
+      pc.current.onicecandidate = (event) => {
+        event.candidate &&
+          addDoc(candidateCollection, event.candidate.toJSON());
+      };
+    }
+
+    // Get the ICE candidate added to firestore and update the local PC
+    const q = query(collection(cRef, remoteName));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if (change.type == "added") {
+          const candidate = new RTCIceCandidate(change.doc.data());
+          pc.current.addIceCandidate(candidate);
+        }
+      });
+    });
   }
 
   function Header() {
@@ -282,16 +423,22 @@ function ProfileInfoListScreen({ route }) {
     (a, b) => b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime()
   );
 
+  // Displays the gettingCall Component
+  if (gettingCall) {
+    console.log("gettingCall");
+    return <GettingCallScreen hangup={hangup} join={join}></GettingCallScreen>;
+  }
+
   // Displays local stream on calling
   // Displays both local and remote stream once call is connected
   if (localStream) {
     console.log("localStream");
     return (
-      <Video
+      <VideoScreen
         hangup={hangup}
         localStream={localStream}
         remoteStream={remoteStream}
-      ></Video>
+      ></VideoScreen>
     );
   }
 
