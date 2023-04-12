@@ -348,11 +348,13 @@ function ProfileInfoListScreen({ route }) {
           </Text>
           <GeneralPracticeBadges></GeneralPracticeBadges>
           <ClinicBadges></ClinicBadges>
-          <CallButton
-            iconName="phone-alt"
-            backgroundColor="gray"
-            onPress={create}
-          ></CallButton>
+          {userData.uid != userB.uid && (
+            <CallButton
+              iconName="phone-alt"
+              backgroundColor="gray"
+              onPress={create}
+            ></CallButton>
+          )}
         </View>
         <Text
           style={[
