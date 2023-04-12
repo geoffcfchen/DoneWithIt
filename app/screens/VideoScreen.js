@@ -1,16 +1,51 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { StyleSheet, Text, View, Pressable } from "react-native";
+import React, { useState } from "react";
 import CallButton from "../components/CallButton";
 import { RTCView } from "react-native-webrtc";
+import MateralIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 function ButtonContainer({ hangup }) {
+  const [isCameraOn, setIsCameraOn] = useState(true);
+  const [isMicOn, setIsMicOn] = useState(true);
   return (
     <View style={styles.bContainer}>
-      <CallButton
+      <Pressable onPress={hangup} style={styles.iconButton}>
+        <Ionicons
+          name="ios-camera-reverse"
+          size={30}
+          color={"white"}
+        ></Ionicons>
+      </Pressable>
+      <Pressable onPress={hangup} style={styles.iconButton}>
+        <MateralIcons
+          name={isCameraOn ? "camera-off" : "camera"}
+          size={30}
+          color={"white"}
+        ></MateralIcons>
+      </Pressable>
+      <Pressable onPress={hangup} style={styles.iconButton}>
+        <MateralIcons
+          name={isMicOn ? "microphone-off" : "microphone"}
+          size={30}
+          color={"white"}
+        ></MateralIcons>
+      </Pressable>
+      <Pressable
+        onPress={hangup}
+        style={[styles.iconButton, { backgroundColor: "red" }]}
+      >
+        <MateralIcons
+          name="phone-hangup"
+          size={30}
+          color={"white"}
+        ></MateralIcons>
+      </Pressable>
+      {/* <CallButton
         iconName="phone"
         backgroundColor="red"
         onPress={hangup}
-      ></CallButton>
+      ></CallButton> */}
     </View>
   );
 }
@@ -58,13 +93,26 @@ export default function VideoScreen({ hangup, localStream, remoteStream }) {
 
 const styles = StyleSheet.create({
   bContainer: {
+    backgroundColor: "#333333",
+    padding: 20,
+    paddingBottom: 40,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
     flexDirection: "row",
-    bottom: 30,
+    justifyContent: "space-between",
+    marginTop: "auto",
+  },
+  iconButton: {
+    backgroundColor: "#4a4a4a",
+    padding: 10,
+    borderRadius: 50,
   },
   container: {
+    backgroundColor: "#7b4e80",
+    height: "100%",
     flex: 1,
     justifyContent: "flex-end",
-    alignItems: "center",
+    // alignItems: "center",
   },
   video: {
     position: "absolute",
