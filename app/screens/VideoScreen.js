@@ -61,6 +61,10 @@ export default function VideoScreen({ hangup, localStream, remoteStream }) {
           objectFit={"cover"}
           style={styles.video}
         ></RTCView>
+        <View style={styles.cameraPreview}>
+          <Text style={styles.name}>test</Text>
+          <Text style={styles.phoneNumber}>test</Text>
+        </View>
         <ButtonContainer hangup={hangup}></ButtonContainer>
       </View>
     );
@@ -113,6 +117,23 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     // alignItems: "center",
+  },
+  cameraPreview: {
+    flex: 1,
+    alignItems: "center",
+    paddingTop: 10,
+    paddingHorizontal: 10,
+  },
+  name: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "white",
+    marginTop: 50,
+    marginBottom: 15,
+  },
+  phoneNumber: {
+    fontSize: 25,
+    color: "white",
   },
   video: {
     position: "absolute",
