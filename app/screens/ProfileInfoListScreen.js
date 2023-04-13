@@ -81,6 +81,40 @@ function ProfileInfoListScreen({ route }) {
     upToDateUserBData?.email.indexOf("@")
   );
 
+  // Global state
+
+  useEffect(() => {
+    const cRef = doc(db, "meet", userB.uid);
+    const subscribe = onSnapshot(cRef, (snapshot) => {
+      const data = snapshot.data();
+
+      // On answer start the call
+      if (pc.current && !pc.current.remoteDescription && data && data.answer) {
+        pc.current.setRemoteDescription(new RTCSessionDescription(data.answer));
+      }
+
+      // if there is offer for chatId set the getting call flag
+      if (data && data.offer && !connecting.current) {
+        setGettingCall(true);
+      }
+    });
+
+    // On Delete of collection call hangup
+    // The other side has clicked on hangup
+    const qdelete = query(collection(cRef, "callee"));
+    const subscribeDelete = onSnapshot(qdelete, (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if (change.type == "removed") {
+          hangup();
+        }
+      });
+    });
+    return () => {
+      subscribe();
+      subscribeDelete();
+    };
+  }, []);
+
   async function setupWebrtc() {
     pc.current = new RTCPeerConnection(peerConstraints);
 
@@ -264,7 +298,7 @@ function ProfileInfoListScreen({ route }) {
     }
 
     // Get the ICE candidate added to firestore and update the local PC
-    const q = query(collection(cRef, remoteName));
+    q = query(collection(cRef, remoteName));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type == "added") {
