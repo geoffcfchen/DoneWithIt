@@ -7,6 +7,7 @@ import { auth } from "../../firebase";
 import ProfilePicture from "../components/ProfilePicture";
 import colors from "../config/colors";
 import GlobalContext from "../context/Context";
+import CallingScreen from "../screens/CallingScreen";
 import FeedDetailScreen from "../screens/FeedDetailScreen";
 import FollowScreen from "../screens/FollowScreen";
 import HomeScreen from "../screens/HomeScreen";
@@ -82,6 +83,11 @@ function HomeNavigator() {
           options={{ headerShown: true }}
           name="ProfileInfo"
           component={ProfileInfoListScreen}
+        ></Stack.Screen>
+        <Stack.Screen
+          options={{ headerShown: true }}
+          name="Calling"
+          component={CallingScreen}
         ></Stack.Screen>
         <Stack.Screen
           options={{ headerShown: false, presentation: "modal" }}

@@ -55,6 +55,7 @@ import {
 } from "react-native-webrtc";
 import VideoScreen from "./VideoScreen";
 import GettingCallScreen from "./GettingCallScreen";
+import { useNavigation } from "@react-navigation/native";
 
 const HEADER_HEIGHT = 300;
 
@@ -80,6 +81,8 @@ function ProfileInfoListScreen({ route }) {
     0,
     upToDateUserBData?.email.indexOf("@")
   );
+
+  const navigation = useNavigation();
 
   // Global state
 
@@ -114,6 +117,10 @@ function ProfileInfoListScreen({ route }) {
       subscribeDelete();
     };
   }, []);
+
+  function CallUser() {
+    navigation.navigate("Calling", { userB_uid: userB.uid });
+  }
 
   async function setupWebrtc() {
     pc.current = new RTCPeerConnection(peerConstraints);
@@ -386,7 +393,7 @@ function ProfileInfoListScreen({ route }) {
             <CallButton
               iconName="phone-alt"
               backgroundColor="gray"
-              onPress={create}
+              onPress={CallUser}
             ></CallButton>
           )}
         </View>
