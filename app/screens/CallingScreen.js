@@ -1,6 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-import { useRoute } from "@react-navigation/native";
+import {
+  useNavigation,
+  useRoute,
+  StackActions,
+} from "@react-navigation/native";
 import {
   ScreenCapturePickerView,
   RTCPeerConnection,
@@ -44,6 +48,8 @@ export default function CallingScreen() {
   let pc = useRef(false);
 
   const route = useRoute();
+  const navigation = useNavigation();
+  const popAction = StackActions.pop(1);
   const userB_uid = route.params?.userB_uid;
 
   useEffect(() => {
@@ -127,6 +133,7 @@ export default function CallingScreen() {
     if (pc.current) {
       pc.current.close();
     }
+    navigation.dispatch(popAction);
   }
 
   // Helper function

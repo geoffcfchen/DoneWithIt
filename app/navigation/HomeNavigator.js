@@ -84,11 +84,11 @@ function HomeNavigator() {
           name="ProfileInfo"
           component={ProfileInfoListScreen}
         ></Stack.Screen>
-        <Stack.Screen
+        {/* <Stack.Screen
           options={{ headerShown: true }}
           name="Calling"
           component={CallingScreen}
-        ></Stack.Screen>
+        ></Stack.Screen> */}
         <Stack.Screen
           options={{ headerShown: false, presentation: "modal" }}
           name="ProfileEdit"
