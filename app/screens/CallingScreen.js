@@ -133,7 +133,7 @@ export default function CallingScreen() {
     if (pc.current) {
       pc.current.close();
     }
-    navigation.dispatch(popAction);
+    navigation.goBack();
   }
 
   // Helper function
