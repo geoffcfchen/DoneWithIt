@@ -1,9 +1,16 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  initializeAuth,
+  getReactNativePersistence,
+} from "firebase/auth/react-native";
+
 import { initializeApp } from "firebase/app";
 import {
   createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+
 import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
 import { Alert } from "react-native";
@@ -19,7 +26,16 @@ const firebaseConfig = {
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+
+// Replace __export const auth = getAuth(app)__ with the following code to resolve the warning:
+// AsyncStorage has been extracted from react-native core and will be removed in a future
+// release. It can now be installed and imported from '@react-native-async-storage/async-storage'
+// instead of 'react-native'. See https://github.com/react-native-async-storage/async-storage
+
+// initialize auth
+export const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage),
+});
 export const storage = getStorage(app);
 export const db = getFirestore(app);
 
