@@ -1,10 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  useNavigation,
-  useRoute,
-  StackActions,
-} from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   ScreenCapturePickerView,
   RTCPeerConnection,
@@ -49,7 +45,6 @@ export default function CallingScreen() {
 
   const route = useRoute();
   const navigation = useNavigation();
-  const popAction = StackActions.pop(1);
   const userB_uid = route.params?.userB_uid;
 
   useEffect(() => {

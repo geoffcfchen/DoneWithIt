@@ -142,11 +142,6 @@ function CustomDrawerContent(props) {
           onPress={() => props.navigation.navigate("Lists")}
           icon={() => <Ionicons name="wallet" size={22} color="#898f93" />}
         />
-        <DrawerItem
-          label={() => <Text style={styles.label}>Wallets</Text>}
-          onPress={() => props.navigation.navigate("Lists")}
-          icon={() => <Ionicons name="wallet" size={22} color="#898f93" />}
-        />
 
         <View style={{ height: 0.2, backgroundColor: "#2b353c" }} />
         <TouchableOpacity
@@ -160,12 +155,6 @@ function CustomDrawerContent(props) {
           onPress={() => props.navigation.navigate("Help")}
         >
           <Text style={styles.optionText}>Help and Centre</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{ padding: 10, paddingLeft: 15 }}
-          onPress={() => props.navigation.navigate("Calling")}
-        >
-          <Text style={styles.optionText}>CallingScreen</Text>
         </TouchableOpacity>
       </DrawerContentScrollView>
       <View style={styles.bottomContainer}>
