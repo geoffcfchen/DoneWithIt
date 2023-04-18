@@ -24,11 +24,11 @@ import colors from "./app/config/colors";
 import NewTweetScreen from "./app/screens/NewTweetScreen";
 import ListingEditScreen from "./app/screens/ListingEditScreen";
 
-LogBox.ignoreLogs([
-  "Setting a timer",
-  "AsyncStorage has been extracted from react-native core and will be removed in a future release.",
-  "Non-serializable values were found in the navigation state",
-]);
+// LogBox.ignoreLogs([
+//   "Setting a timer",
+//   "AsyncStorage has been extracted from react-native core and will be removed in a future release.",
+//   "Non-serializable values were found in the navigation state",
+// ]);
 
 logger.start();
 
