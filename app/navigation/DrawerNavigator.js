@@ -37,6 +37,7 @@ import SetGlobalUserAFollowing from "../components/SetGlobalUserAFollowing";
 import FollowingDrawer from "../components/FollowingDrawer";
 import FollowersDrawer from "../components/FollowersDrawer";
 import CallingScreen from "../screens/CallingScreen";
+import IncomingCallScreen from "../screens/IncomingCallScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -60,6 +61,7 @@ export default function DrawerNavigator({ navigation }) {
       <Drawer.Group screenOptions={{ headerShown: false }}>
         <Drawer.Screen name="AppNavigator" component={AppNavigator} />
         <Drawer.Screen name="Calling" component={CallingScreen} />
+        <Drawer.Screen name="IncomingCall" component={IncomingCallScreen} />
       </Drawer.Group>
       <Drawer.Group
         screenOptions={{
@@ -155,6 +157,12 @@ function CustomDrawerContent(props) {
           onPress={() => props.navigation.navigate("Help")}
         >
           <Text style={styles.optionText}>Help and Centre</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ padding: 10, paddingLeft: 15 }}
+          onPress={() => props.navigation.navigate("IncomingCall")}
+        >
+          <Text style={styles.optionText}>IncomingCall</Text>
         </TouchableOpacity>
       </DrawerContentScrollView>
       <View style={styles.bottomContainer}>
