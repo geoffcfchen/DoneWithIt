@@ -55,7 +55,7 @@ const Tab = createBottomTabNavigator();
 //   setWhereTab(routeName);
 // }
 
-export default function AppNavigator() {
+export default function AppNavigator({ create }) {
   const { user } = useContext(AuthContext);
   const { setUserData, userData, setTimeSlots, setWhereTab } =
     useContext(GlobalContext);
@@ -110,7 +110,8 @@ export default function AppNavigator() {
     >
       <Tab.Screen
         name="Home"
-        component={HomeNavigator}
+        // component={HomeNavigator}
+        children={() => <HomeNavigator create={create}></HomeNavigator>}
         options={({ route }) => ({
           headerShown: false,
           tabBarIcon: ({ color, size }) => (

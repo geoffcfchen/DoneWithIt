@@ -53,7 +53,7 @@ function ButtonContainer({ hangup }) {
 export default function VideoScreen({ hangup, localStream, remoteStream }) {
   // On call we will just display the local stream
   if (localStream && !remoteStream) {
-    console.log("localStream && !remoteStream");
+    // console.log("localStream && !remoteStream");
     return (
       <View style={styles.container}>
         <RTCView
@@ -72,6 +72,7 @@ export default function VideoScreen({ hangup, localStream, remoteStream }) {
   // Once the call is connected, we will display
   // local Stream on top of remote stream
   if (localStream && remoteStream) {
+    // console.log("localStream && remoteStream");
     return (
       <View style={styles.container}>
         <RTCView

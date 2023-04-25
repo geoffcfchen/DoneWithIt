@@ -19,7 +19,7 @@ export default function GettingCallScreen({ join, hangup }) {
         <CallButton
           iconName="phone"
           backgroundColor="red"
-          onPress={{ hangup }}
+          onPress={hangup}
           style={{ marginLeft: 30 }}
         ></CallButton>
       </View>

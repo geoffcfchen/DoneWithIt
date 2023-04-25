@@ -17,7 +17,7 @@ import ProfileInfoListScreen from "../screens/ProfileInfoListScreen";
 
 const Stack = createNativeStackNavigator();
 
-function HomeNavigator() {
+function HomeNavigator({ create }) {
   const navigation = useNavigation();
   const { userData } = useContext(GlobalContext);
 
@@ -82,13 +82,11 @@ function HomeNavigator() {
         <Stack.Screen
           options={{ headerShown: true }}
           name="ProfileInfo"
-          component={ProfileInfoListScreen}
+          // component={ProfileInfoListScreen}
+          children={() => (
+            <ProfileInfoListScreen create={create}></ProfileInfoListScreen>
+          )}
         ></Stack.Screen>
-        {/* <Stack.Screen
-          options={{ headerShown: true }}
-          name="Calling"
-          component={CallingScreen}
-        ></Stack.Screen> */}
         <Stack.Screen
           options={{ headerShown: false, presentation: "modal" }}
           name="ProfileEdit"

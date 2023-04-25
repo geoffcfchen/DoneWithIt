@@ -100,8 +100,8 @@ export default function CallingScreen() {
   }
 
   async function create() {
-    console.log("calling");
-    console.log(userB_uid);
+    // console.log("calling");
+    // console.log(userB_uid);
     connecting.current = true;
 
     // setUp webrtc
@@ -117,7 +117,7 @@ export default function CallingScreen() {
     if (pc.current) {
       // Create the offer for the call
       // Store the offer under the document
-      console.log("create");
+      // console.log("create");
       try {
         let sessionConstraints = {
           mandatory: {
@@ -152,7 +152,7 @@ export default function CallingScreen() {
    **/
 
   async function hangup() {
-    console.log("hangup");
+    // console.log("hangup");
     setGettingCall(false);
     connecting.current = false;
     streamCleanUp();
@@ -189,7 +189,7 @@ export default function CallingScreen() {
   }
 
   async function streamCleanUp() {
-    console.log("streamCleanUp");
+    // console.log("streamCleanUp");
     if (localStream) {
       localStream.getTracks().forEach((t) => t.stop());
       localStream.release();
@@ -199,7 +199,7 @@ export default function CallingScreen() {
   }
 
   async function firebaseCleanUp() {
-    console.log("firebaseCleanUp");
+    // console.log("firebaseCleanUp");
     const cRef = doc(db, "meet", userB_uid);
     if (cRef) {
       const qee = query(collection(cRef, "callee"));
@@ -217,12 +217,12 @@ export default function CallingScreen() {
   }
 
   async function collectIceCandidates(cRef, localName, remoteName) {
-    console.log("localName", localName);
+    // console.log("localName", localName);
     const candidateCollection = collection(db, "meet", userB_uid, localName);
 
     if (pc.current) {
       // on new ICE candidate add it to firestore
-      console.log("test");
+      // console.log("test");
       pc.current.onicecandidate = (event) => {
         event.candidate &&
           addDoc(candidateCollection, event.candidate.toJSON());
@@ -244,7 +244,7 @@ export default function CallingScreen() {
   // Displays local stream on calling
   // Displays both local and remote stream once call is connected
   if (localStream) {
-    console.log("localStream");
+    // console.log("localStream");
     return (
       <VideoScreen
         hangup={hangup}

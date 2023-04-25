@@ -17,6 +17,7 @@ export default function ContextWrapper(props) {
     []
   );
   const [followersOfUser, setFollowersOfUser] = useState([]);
+  const [callReceiverID, setCallReceiverID] = useState("");
   return (
     <Context.Provider
       value={{
@@ -45,6 +46,8 @@ export default function ContextWrapper(props) {
         setAllUsersThatUserFollowing,
         followersOfUser,
         setFollowersOfUser,
+        callReceiverID,
+        setCallReceiverID,
       }}
     >
       {props.children}

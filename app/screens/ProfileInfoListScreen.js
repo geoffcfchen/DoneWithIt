@@ -55,7 +55,7 @@ import {
 } from "react-native-webrtc";
 import VideoScreen from "./VideoScreen";
 import GettingCallScreen from "./GettingCallScreen";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const HEADER_HEIGHT = 300;
 
@@ -67,16 +67,15 @@ const peerConstraints = {
   ],
 };
 
-function ProfileInfoListScreen({ route }) {
-  const [localStream, setLocalStream] = useState(null);
-  const [remoteStream, setRemoteStream] = useState(null);
-  const [gettingCall, setGettingCall] = useState(false);
-  const connecting = useRef(false);
-  let pc = useRef(false);
+function ProfileInfoListScreen({ create }) {
+  const { userData, setCallReceiverID } = useContext(GlobalContext);
 
+  const route = useRoute();
+  // console.log(route.params);
   const userB = route.params.ProfileUser;
+
   const upToDateUserBData = useGetSingleCustomerInfo(userB.uid);
-  const { userData } = useContext(GlobalContext);
+
   var username = upToDateUserBData?.email.substr(
     0,
     upToDateUserBData?.email.indexOf("@")
@@ -84,237 +83,241 @@ function ProfileInfoListScreen({ route }) {
 
   const navigation = useNavigation();
 
-  // Global state
-
   useEffect(() => {
-    const cRef = doc(db, "meet", userB.uid);
-    const subscribe = onSnapshot(cRef, (snapshot) => {
-      const data = snapshot.data();
-
-      // On answer start the call
-      if (pc.current && !pc.current.remoteDescription && data && data.answer) {
-        pc.current.setRemoteDescription(new RTCSessionDescription(data.answer));
-      }
-
-      // if there is offer for chatId set the getting call flag
-      if (data && data.offer && !connecting.current) {
-        setGettingCall(true);
-      }
-    });
-
-    // On Delete of collection call hangup
-    // The other side has clicked on hangup
-    const qdelete = query(collection(cRef, "callee"));
-    const subscribeDelete = onSnapshot(qdelete, (snapshot) => {
-      snapshot.docChanges().forEach((change) => {
-        if (change.type == "removed") {
-          hangup();
-        }
-      });
-    });
-    return () => {
-      subscribe();
-      subscribeDelete();
-    };
+    setCallReceiverID(userB.uid);
   }, []);
 
-  function CallUser() {
-    navigation.navigate("Calling", { userB_uid: userB.uid });
-  }
+  // Global state
 
-  async function setupWebrtc() {
-    pc.current = new RTCPeerConnection(peerConstraints);
+  // useEffect(() => {
+  //   const cRef = doc(db, "meet", userB.uid);
+  //   const subscribe = onSnapshot(cRef, (snapshot) => {
+  //     const data = snapshot.data();
 
-    // Get the audio and video stream for the call
-    const stream = await getStream();
+  //     // On answer start the call
+  //     if (pc.current && !pc.current.remoteDescription && data && data.answer) {
+  //       pc.current.setRemoteDescription(new RTCSessionDescription(data.answer));
+  //     }
 
-    if (stream) {
-      setLocalStream(stream);
-      pc.current.addStream(stream);
-    }
-    // Get the remote stream once it is available
-    pc.current.onaddstream = (event) => {
-      setRemoteStream(event.stream);
-    };
-  }
+  //     // if there is offer for chatId set the getting call flag
+  //     if (data && data.offer && !connecting.current) {
+  //       setGettingCall(true);
+  //     }
+  //   });
 
-  async function create() {
-    console.log("calling");
-    console.log(userB.uid);
-    connecting.current = true;
+  //   // On Delete of collection call hangup
+  //   // The other side has clicked on hangup
+  //   const qdelete = query(collection(cRef, "callee"));
+  //   const subscribeDelete = onSnapshot(qdelete, (snapshot) => {
+  //     snapshot.docChanges().forEach((change) => {
+  //       if (change.type == "removed") {
+  //         hangup();
+  //       }
+  //     });
+  //   });
+  //   return () => {
+  //     subscribe();
+  //     subscribeDelete();
+  //   };
+  // }, []);
 
-    // setUp webrtc
-    await setupWebrtc();
+  // function CallUser() {
+  //   navigation.navigate("Calling", { userB_uid: userB.uid });
+  // }
 
-    // Document for the call
-    const cRef = doc(db, "meet", userB.uid);
-    // await setDoc(cRef, {});
+  // async function setupWebrtc() {
+  //   pc.current = new RTCPeerConnection(peerConstraints);
 
-    // Exchange the ICE candidates between the caller and callee
-    collectIceCandidates(cRef, "caller", "callee");
+  //   // Get the audio and video stream for the call
+  //   const stream = await getStream();
 
-    if (pc.current) {
-      // Create the offer for the call
-      // Store the offer under the document
-      console.log("create");
-      try {
-        let sessionConstraints = {
-          mandatory: {
-            OfferToReceiveAudio: true,
-            OfferToReceiveVideo: true,
-            VoiceActivityDetection: true,
-          },
-        };
-        const offerDescription = await pc.current.createOffer(
-          sessionConstraints
-        );
-        await pc.current.setLocalDescription(offerDescription);
+  //   if (stream) {
+  //     setLocalStream(stream);
+  //     pc.current.addStream(stream);
+  //   }
+  //   // Get the remote stream once it is available
+  //   pc.current.onaddstream = (event) => {
+  //     setRemoteStream(event.stream);
+  //   };
+  // }
 
-        const cWithOffer = {
-          offer: {
-            type: offerDescription.type,
-            sdp: offerDescription.sdp,
-          },
-        };
+  // async function create() {
+  //   console.log("calling");
+  //   console.log(userB.uid);
+  //   connecting.current = true;
 
-        // cRef.set(cWithOffer)
-        await setDoc(cRef, cWithOffer);
-      } catch (error) {
-        console.log("error", error);
-      }
-    }
-  }
+  //   // setUp webrtc
+  //   await setupWebrtc();
 
-  const join = async () => {
-    console.log("Joining the call");
-    connecting.current = true;
-    setGettingCall(false);
+  //   // Document for the call
+  //   const cRef = doc(db, "meet", userB.uid);
+  //   // await setDoc(cRef, {});
 
-    //const cRef = firestore().collection("meet").doc("chatId")
-    const cRef = doc(db, "meet", userB.uid);
-    // const offer = (await cRef.get()).data()?.offer
-    const offer = (await getDoc(cRef)).data()?.offer;
+  //   // Exchange the ICE candidates between the caller and callee
+  //   collectIceCandidates(cRef, "caller", "callee");
 
-    if (offer) {
-      // Setup Webrtc
-      await setupWebrtc();
+  //   if (pc.current) {
+  //     // Create the offer for the call
+  //     // Store the offer under the document
+  //     console.log("create");
+  //     try {
+  //       let sessionConstraints = {
+  //         mandatory: {
+  //           OfferToReceiveAudio: true,
+  //           OfferToReceiveVideo: true,
+  //           VoiceActivityDetection: true,
+  //         },
+  //       };
+  //       const offerDescription = await pc.current.createOffer(
+  //         sessionConstraints
+  //       );
+  //       await pc.current.setLocalDescription(offerDescription);
 
-      // Exchange the ICE candidates
-      // Check the parameters, Its reversed. Since the joining part is callee
-      collectIceCandidates(cRef, "callee", "caller");
+  //       const cWithOffer = {
+  //         offer: {
+  //           type: offerDescription.type,
+  //           sdp: offerDescription.sdp,
+  //         },
+  //       };
 
-      if (pc.current) {
-        pc.current.setRemoteDescription(new RTCSessionDescription(offer));
+  //       // cRef.set(cWithOffer)
+  //       await setDoc(cRef, cWithOffer);
+  //     } catch (error) {
+  //       console.log("error", error);
+  //     }
+  //   }
+  // }
 
-        // Create the answer for the call
-        // Updates the document with answer
-        const answer = await pc.current.createAnswer();
-        pc.current.setLocalDescription(answer);
-        const cWithAnswer = {
-          answer: {
-            type: answer.type,
-            sdp: answer.sdp,
-          },
-        };
-        // cRef.update(cWithAnswer)
-        await updateDoc(cRef, cWithAnswer);
-      }
-    }
-  };
+  // const join = async () => {
+  //   console.log("Joining the call");
+  //   connecting.current = true;
+  //   setGettingCall(false);
+
+  //   //const cRef = firestore().collection("meet").doc("chatId")
+  //   const cRef = doc(db, "meet", userB.uid);
+  //   // const offer = (await cRef.get()).data()?.offer
+  //   const offer = (await getDoc(cRef)).data()?.offer;
+
+  //   if (offer) {
+  //     // Setup Webrtc
+  //     await setupWebrtc();
+
+  //     // Exchange the ICE candidates
+  //     // Check the parameters, Its reversed. Since the joining part is callee
+  //     collectIceCandidates(cRef, "callee", "caller");
+
+  //     if (pc.current) {
+  //       pc.current.setRemoteDescription(new RTCSessionDescription(offer));
+
+  //       // Create the answer for the call
+  //       // Updates the document with answer
+  //       const answer = await pc.current.createAnswer();
+  //       pc.current.setLocalDescription(answer);
+  //       const cWithAnswer = {
+  //         answer: {
+  //           type: answer.type,
+  //           sdp: answer.sdp,
+  //         },
+  //       };
+  //       // cRef.update(cWithAnswer)
+  //       await updateDoc(cRef, cWithAnswer);
+  //     }
+  //   }
+  // };
 
   /**
    * For disconnectign the call, close the connection, release the stream,
    * and delete the document for the call
    **/
 
-  async function hangup() {
-    console.log("hangup");
-    setGettingCall(false);
-    connecting.current = false;
-    streamCleanUp();
-    firebaseCleanUp();
-    if (pc.current) {
-      pc.current.close();
-    }
-  }
+  // async function hangup() {
+  //   console.log("hangup");
+  //   setGettingCall(false);
+  //   connecting.current = false;
+  //   streamCleanUp();
+  //   firebaseCleanUp();
+  //   if (pc.current) {
+  //     pc.current.close();
+  //   }
+  // }
 
-  // Helper function
+  // // Helper function
 
-  async function getStream() {
-    let isVoiceOnly = false;
-    let mediaConstraints = {
-      audio: true,
-      video: {
-        frameRate: 30,
-        facingMode: "user",
-      },
-    };
-    try {
-      const mediaStream = await mediaDevices.getUserMedia(mediaConstraints);
+  // async function getStream() {
+  //   let isVoiceOnly = false;
+  //   let mediaConstraints = {
+  //     audio: true,
+  //     video: {
+  //       frameRate: 30,
+  //       facingMode: "user",
+  //     },
+  //   };
+  //   try {
+  //     const mediaStream = await mediaDevices.getUserMedia(mediaConstraints);
 
-      if (isVoiceOnly) {
-        let videoTrack = mediaStream.getVideoTracks()[0];
-        videoTrack.enabled = false;
-      }
+  //     if (isVoiceOnly) {
+  //       let videoTrack = mediaStream.getVideoTracks()[0];
+  //       videoTrack.enabled = false;
+  //     }
 
-      return mediaStream;
-    } catch (err) {
-      console.log("err", err);
-    }
-  }
+  //     return mediaStream;
+  //   } catch (err) {
+  //     console.log("err", err);
+  //   }
+  // }
 
-  async function streamCleanUp() {
-    console.log("streamCleanUp");
-    if (localStream) {
-      localStream.getTracks().forEach((t) => t.stop());
-      localStream.release();
-    }
-    setLocalStream(null);
-    setRemoteStream(null);
-  }
+  // async function streamCleanUp() {
+  //   console.log("streamCleanUp");
+  //   if (localStream) {
+  //     localStream.getTracks().forEach((t) => t.stop());
+  //     localStream.release();
+  //   }
+  //   setLocalStream(null);
+  //   setRemoteStream(null);
+  // }
 
-  async function firebaseCleanUp() {
-    console.log("firebaseCleanUp");
-    const cRef = doc(db, "meet", userB.uid);
-    if (cRef) {
-      const qee = query(collection(cRef, "callee"));
-      const calleeCandidate = await getDocs(qee);
-      calleeCandidate.forEach(async (candidate) => {
-        await deleteDoc(candidate.ref);
-      });
-      const qer = query(collection(cRef, "caller"));
-      const callerCandidate = await getDocs(qer);
-      callerCandidate.forEach(async (candidate) => {
-        await deleteDoc(candidate.ref);
-      });
-      deleteDoc(cRef);
-    }
-  }
+  // async function firebaseCleanUp() {
+  //   console.log("firebaseCleanUp");
+  //   const cRef = doc(db, "meet", userB.uid);
+  //   if (cRef) {
+  //     const qee = query(collection(cRef, "callee"));
+  //     const calleeCandidate = await getDocs(qee);
+  //     calleeCandidate.forEach(async (candidate) => {
+  //       await deleteDoc(candidate.ref);
+  //     });
+  //     const qer = query(collection(cRef, "caller"));
+  //     const callerCandidate = await getDocs(qer);
+  //     callerCandidate.forEach(async (candidate) => {
+  //       await deleteDoc(candidate.ref);
+  //     });
+  //     deleteDoc(cRef);
+  //   }
+  // }
 
-  async function collectIceCandidates(cRef, localName, remoteName) {
-    console.log("localName", localName);
-    const candidateCollection = collection(db, "meet", userB.uid, localName);
+  // async function collectIceCandidates(cRef, localName, remoteName) {
+  //   console.log("localName", localName);
+  //   const candidateCollection = collection(db, "meet", userB.uid, localName);
 
-    if (pc.current) {
-      // on new ICE candidate add it to firestore
-      console.log("test");
-      pc.current.onicecandidate = (event) => {
-        event.candidate &&
-          addDoc(candidateCollection, event.candidate.toJSON());
-      };
-    }
+  //   if (pc.current) {
+  //     // on new ICE candidate add it to firestore
+  //     console.log("test");
+  //     pc.current.onicecandidate = (event) => {
+  //       event.candidate &&
+  //         addDoc(candidateCollection, event.candidate.toJSON());
+  //     };
+  //   }
 
-    // Get the ICE candidate added to firestore and update the local PC
-    q = query(collection(cRef, remoteName));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      snapshot.docChanges().forEach((change) => {
-        if (change.type == "added") {
-          const candidate = new RTCIceCandidate(change.doc.data());
-          pc.current.addIceCandidate(candidate);
-        }
-      });
-    });
-  }
+  //   // Get the ICE candidate added to firestore and update the local PC
+  //   q = query(collection(cRef, remoteName));
+  //   const unsubscribe = onSnapshot(q, (snapshot) => {
+  //     snapshot.docChanges().forEach((change) => {
+  //       if (change.type == "added") {
+  //         const candidate = new RTCIceCandidate(change.doc.data());
+  //         pc.current.addIceCandidate(candidate);
+  //       }
+  //     });
+  //   });
+  // }
 
   function Header() {
     return (
@@ -393,7 +396,7 @@ function ProfileInfoListScreen({ route }) {
             <CallButton
               iconName="phone-alt"
               backgroundColor="gray"
-              onPress={CallUser}
+              onPress={create}
             ></CallButton>
           )}
         </View>
@@ -466,24 +469,24 @@ function ProfileInfoListScreen({ route }) {
     (a, b) => b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime()
   );
 
-  // Displays the gettingCall Component
-  if (gettingCall) {
-    console.log("gettingCall");
-    return <GettingCallScreen hangup={hangup} join={join}></GettingCallScreen>;
-  }
+  // // Displays the gettingCall Component
+  // if (gettingCall) {
+  //   console.log("gettingCall");
+  //   return <GettingCallScreen hangup={hangup} join={join}></GettingCallScreen>;
+  // }
 
-  // Displays local stream on calling
-  // Displays both local and remote stream once call is connected
-  if (localStream) {
-    console.log("localStream");
-    return (
-      <VideoScreen
-        hangup={hangup}
-        localStream={localStream}
-        remoteStream={remoteStream}
-      ></VideoScreen>
-    );
-  }
+  // // Displays local stream on calling
+  // // Displays both local and remote stream once call is connected
+  // if (localStream) {
+  //   console.log("localStream");
+  //   return (
+  //     <VideoScreen
+  //       hangup={hangup}
+  //       localStream={localStream}
+  //       remoteStream={remoteStream}
+  //     ></VideoScreen>
+  //   );
+  // }
 
   return (
     <View style={styles.container}>
