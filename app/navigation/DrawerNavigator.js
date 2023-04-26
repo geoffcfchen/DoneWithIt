@@ -86,18 +86,43 @@ export default function DrawerNavigator({ navigation }) {
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
   const [gettingCall, setGettingCall] = useState(false);
+  const [callId, setCallId] = useState(auth.currentUser.uid);
+  const [callReceiverID, setCallReceiverID] = useState("");
   const connecting = useRef(false);
   let pc = useRef(false);
-  const { callReceiverID } = useContext(GlobalContext);
+
+  const { userBId } = useContext(GlobalContext);
   // console.log("pc.curret render", pc.current);
 
   // console.log("Recever_id", callReceiverID);
   // console.log("auth_id", auth.currentUser.uid);
 
+  const meetCollection = collection(db, "meet");
+
+  // Set up a listener for real-time changes to the "users" collection
+  const unsubscribe = onSnapshot(meetCollection, (querySnapshot) => {
+    querySnapshot.docChanges().forEach((change) => {
+      if (
+        change.type === "added" &&
+        (change.doc.id === callReceiverID ||
+          change.doc.id === auth.currentUser.uid)
+      ) {
+        // console.log("Added document ID:", change.doc.id, auth.currentUser.uid);
+        setCallId(change.doc.id);
+      }
+    });
+  });
+  console.log("callId", callId, auth.currentUser.uid);
+
+  useEffect(() => {
+    console.log("userBId", userBId);
+  }, [userBId]);
+
   useEffect(() => {
     // console.log("user", user?.uid);
     // console.log("auth_id", auth.currentUser.uid);
-    const cRef = doc(db, "meet", "chatId");
+    console.log("callId inside useEffect", callId, auth.currentUser.uid);
+    const cRef = doc(db, "meet", callId);
     // console.log(cRef);
     const subscribe = onSnapshot(cRef, (snapshot) => {
       const data = snapshot.data();
@@ -140,7 +165,7 @@ export default function DrawerNavigator({ navigation }) {
       // subscribeDelete_ee();
       subscribeDelete_er();
     };
-  }, []);
+  }, [callId]);
 
   async function setupWebrtc() {
     pc.current = new RTCPeerConnection(peerConstraints);
@@ -159,19 +184,22 @@ export default function DrawerNavigator({ navigation }) {
     }
     // Get the remote stream once it is available
     pc.current.onaddstream = (event) => {
+      console.log("event inside setupWebrtc");
       setRemoteStream(event.stream);
     };
   }
 
   async function create() {
     // console.log(userB_uid);
+    setCallReceiverID(userBId);
     connecting.current = true;
 
     // setUp webrtc
     await setupWebrtc();
 
     // Document for the call
-    const cRef = doc(db, "meet", "chatId");
+    console.log("callReceiverID in create", userBId);
+    const cRef = doc(db, "meet", userBId);
     // await setDoc(cRef, {});
 
     // Exchange the ICE candidates between the caller and callee
@@ -214,7 +242,7 @@ export default function DrawerNavigator({ navigation }) {
     setGettingCall(false);
 
     //const cRef = firestore().collection("meet").doc("chatId")
-    const cRef = doc(db, "meet", "chatId");
+    const cRef = doc(db, "meet", callId);
     // const offer = (await cRef.get()).data()?.offer
     const offer = (await getDoc(cRef)).data()?.offer;
 
@@ -260,6 +288,8 @@ export default function DrawerNavigator({ navigation }) {
       pc.current.close();
       pc.current = null;
     }
+    setCallId(auth.currentUser.uid);
+    setCallReceiverID("empty");
   }
 
   // Helper function
@@ -299,39 +329,40 @@ export default function DrawerNavigator({ navigation }) {
 
   async function firebaseCleanUp() {
     // console.log("firebaseCleanUp");
-    // const cRef = doc(db, "meet", auth.currentUser.uid);
-    // if (cRef) {
-    //   const qee = query(collection(cRef, "callee"));
-    //   const calleeCandidate = await getDocs(qee);
-    //   calleeCandidate.forEach(async (candidate) => {
-    //     await deleteDoc(candidate.ref);
-    //   });
-    //   const qer = query(collection(cRef, "caller"));
-    //   const callerCandidate = await getDocs(qer);
-    //   callerCandidate.forEach(async (candidate) => {
-    //     await deleteDoc(candidate.ref);
-    //   });
-    //   deleteDoc(cRef);
-    // }
-
-    const cRefReceiver = doc(db, "meet", "chatId");
-    if (cRefReceiver) {
-      const qee = query(collection(cRefReceiver, "callee"));
+    const cRef = doc(db, "meet", callId);
+    if (cRef) {
+      const qee = query(collection(cRef, "callee"));
       const calleeCandidate = await getDocs(qee);
       calleeCandidate.forEach(async (candidate) => {
         await deleteDoc(candidate.ref);
       });
-      const qer = query(collection(cRefReceiver, "caller"));
+      const qer = query(collection(cRef, "caller"));
       const callerCandidate = await getDocs(qer);
       callerCandidate.forEach(async (candidate) => {
         await deleteDoc(candidate.ref);
       });
-      deleteDoc(cRefReceiver);
+      deleteDoc(cRef);
     }
+
+    // const cRefReceiver = doc(db, "meet", callReceiverID);
+    // if (cRefReceiver) {
+    //   const qee = query(collection(cRefReceiver, "callee"));
+    //   const calleeCandidate = await getDocs(qee);
+    //   calleeCandidate.forEach(async (candidate) => {
+    //     await deleteDoc(candidate.ref);
+    //   });
+    //   const qer = query(collection(cRefReceiver, "caller"));
+    //   const callerCandidate = await getDocs(qer);
+    //   callerCandidate.forEach(async (candidate) => {
+    //     await deleteDoc(candidate.ref);
+    //   });
+    //   deleteDoc(cRefReceiver);
+    // }
   }
 
   async function collectIceCandidates(cRef, localName, remoteName) {
     // console.log("collectIceCandidates");
+    console.log("localName", localName, callId);
     const candidateCollection = collection(cRef, localName);
 
     if (pc.current) {
@@ -343,7 +374,7 @@ export default function DrawerNavigator({ navigation }) {
     }
 
     // Get the ICE candidate added to firestore and update the local PC
-    console.log("remoteName", remoteName, auth.currentUser.uid);
+
     const q = query(collection(cRef, remoteName));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       snapshot.docChanges().forEach((change) => {

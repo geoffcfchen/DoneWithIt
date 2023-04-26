@@ -36,8 +36,8 @@ const GlobalContext = React.createContext({
   followersOfUser: [],
   setFollowersOfUser: () => {},
 
-  callReceiverID: [],
-  setCallReceiverID: () => {},
+  userBId: [],
+  setUserBId: () => {},
 });
 
 export default GlobalContext;
