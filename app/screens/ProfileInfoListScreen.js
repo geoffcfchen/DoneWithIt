@@ -64,7 +64,6 @@ function ProfileInfoListScreen({ create }) {
 
   const route = useRoute();
   const userB = route.params.ProfileUser;
-  console.log("userB", userB);
 
   const upToDateUserBData = useGetSingleCustomerInfo(userB.uid);
 
