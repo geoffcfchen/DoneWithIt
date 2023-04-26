@@ -60,7 +60,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 const HEADER_HEIGHT = 300;
 
 function ProfileInfoListScreen({ create }) {
-  const { userData, setUserBId } = useContext(GlobalContext);
+  const { userData, setCalleeB } = useContext(GlobalContext);
 
   const route = useRoute();
   const userB = route.params.ProfileUser;
@@ -73,7 +73,7 @@ function ProfileInfoListScreen({ create }) {
   );
 
   useEffect(() => {
-    setUserBId(userB);
+    setCalleeB(userB);
   }, []);
 
   function Header() {

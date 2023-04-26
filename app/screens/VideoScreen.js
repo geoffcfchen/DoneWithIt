@@ -50,7 +50,12 @@ function ButtonContainer({ hangup }) {
   );
 }
 
-export default function VideoScreen({ hangup, localStream, remoteStream }) {
+export default function VideoScreen({
+  calleeB,
+  hangup,
+  localStream,
+  remoteStream,
+}) {
   // On call we will just display the local stream
   if (localStream && !remoteStream) {
     // console.log("localStream && !remoteStream");
@@ -62,8 +67,8 @@ export default function VideoScreen({ hangup, localStream, remoteStream }) {
           style={styles.video}
         ></RTCView>
         <View style={styles.cameraPreview}>
-          <Text style={styles.name}>test</Text>
-          <Text style={styles.phoneNumber}>test</Text>
+          <Text style={styles.name}>{calleeB.displayName}</Text>
+          <Text style={styles.phoneNumber}>calling...</Text>
         </View>
         <ButtonContainer hangup={hangup}></ButtonContainer>
       </View>
@@ -122,7 +127,7 @@ const styles = StyleSheet.create({
   cameraPreview: {
     flex: 1,
     alignItems: "center",
-    paddingTop: 10,
+    paddingTop: 40,
     paddingHorizontal: 10,
   },
   name: {

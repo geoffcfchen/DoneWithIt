@@ -93,7 +93,7 @@ export default function DrawerNavigator({ navigation }) {
   const connecting = useRef(false);
   let pc = useRef(false);
 
-  const { userBId } = useContext(GlobalContext);
+  const { calleeB } = useContext(GlobalContext);
 
   const meetCollection = collection(db, "meet");
 
@@ -172,16 +172,16 @@ export default function DrawerNavigator({ navigation }) {
 
   async function create() {
     // Document for the call
-    const cRef = doc(db, "meet", userBId.uid);
+    const cRef = doc(db, "meet", calleeB.uid);
 
-    // check if someone is already calling userB
+    // check if someone is already calling calleeB
     const userBSnapshot = await getDoc(cRef);
     if (userBSnapshot.exists()) {
       console.log("is calling!");
-      Alert.alert(userBId.displayName + " is on a phone call!");
+      Alert.alert(calleeB.displayName + " is on a phone call!");
       return;
     }
-    setCallReceiverID(userBId.uid);
+    setCallReceiverID(calleeB.uid);
     connecting.current = true;
 
     // setUp webrtc
@@ -379,6 +379,7 @@ export default function DrawerNavigator({ navigation }) {
   if (localStream) {
     return (
       <VideoScreen
+        calleeB={calleeB}
         hangup={hangup}
         localStream={localStream}
         remoteStream={remoteStream}
@@ -495,12 +496,6 @@ function CustomDrawerContent(props) {
           onPress={() => props.navigation.navigate("Help")}
         >
           <Text style={styles.optionText}>Help and Centre</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{ padding: 10, paddingLeft: 15 }}
-          onPress={() => props.navigation.navigate("IncomingCall")}
-        >
-          <Text style={styles.optionText}>IncomingCall</Text>
         </TouchableOpacity>
       </DrawerContentScrollView>
       <View style={styles.bottomContainer}>
