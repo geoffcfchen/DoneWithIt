@@ -11,6 +11,7 @@ import AccountNavigator from "./AccountNavigator";
 
 import FeedNavigator from "./FeedNavigator";
 import {
+  Alert,
   Button,
   Image,
   StyleSheet,
@@ -63,6 +64,7 @@ import CallingScreen from "../screens/CallingScreen";
 import IncomingCallScreen from "../screens/IncomingCallScreen";
 import GettingCallScreen from "../screens/GettingCallScreen";
 import VideoScreen from "../screens/VideoScreen";
+import { RotationGestureHandler } from "react-native-gesture-handler";
 
 const Drawer = createDrawerNavigator();
 
@@ -103,7 +105,6 @@ export default function DrawerNavigator({ navigation }) {
         (change.doc.id === callReceiverID ||
           change.doc.id === auth.currentUser.uid)
       ) {
-        // console.log("Added document ID:", change.doc.id, auth.currentUser.uid);
         setCallId(change.doc.id);
       }
     });
@@ -116,13 +117,11 @@ export default function DrawerNavigator({ navigation }) {
 
       // On answer start the call
       if (pc.current && !pc.current.remoteDescription && data && data.answer) {
-        console.log("setRemoteDescription inside useEffect");
         pc.current.setRemoteDescription(new RTCSessionDescription(data.answer));
       }
 
       // if there is offer for chatId set the getting call flag
       if (data && data.offer && !connecting.current) {
-        console.log("setGettingCall inside useEffect");
         setGettingCall(true);
         // navigation.navigate("IncomingCall");
       }
@@ -167,22 +166,26 @@ export default function DrawerNavigator({ navigation }) {
     }
     // Get the remote stream once it is available
     pc.current.onaddstream = (event) => {
-      console.log("event inside setupWebrtc");
       setRemoteStream(event.stream);
     };
   }
 
   async function create() {
-    setCallReceiverID(userBId);
+    // Document for the call
+    const cRef = doc(db, "meet", userBId.uid);
+
+    // check if someone is already calling userB
+    const userBSnapshot = await getDoc(cRef);
+    if (userBSnapshot.exists()) {
+      console.log("is calling!");
+      Alert.alert(userBId.displayName + " is on a phone call!");
+      return;
+    }
+    setCallReceiverID(userBId.uid);
     connecting.current = true;
 
     // setUp webrtc
     await setupWebrtc();
-
-    // Document for the call
-    console.log("callReceiverID in create", userBId);
-    const cRef = doc(db, "meet", userBId);
-    // await setDoc(cRef, {});
 
     // Exchange the ICE candidates between the caller and callee
     collectIceCandidates(cRef, "caller", "callee");
@@ -260,7 +263,6 @@ export default function DrawerNavigator({ navigation }) {
    **/
 
   async function hangup() {
-    // console.log("hangup");
     setGettingCall(false);
     connecting.current = false;
     streamCleanUp();
@@ -270,7 +272,7 @@ export default function DrawerNavigator({ navigation }) {
       pc.current = null;
     }
     setCallId(auth.currentUser.uid);
-    setCallReceiverID("empty");
+    setCallReceiverID("");
   }
 
   // Helper function
@@ -340,7 +342,6 @@ export default function DrawerNavigator({ navigation }) {
   }
 
   async function collectIceCandidates(cRef, localName, remoteName) {
-    console.log("localName", localName, callId);
     const candidateCollection = collection(cRef, localName);
 
     if (pc.current) {
@@ -399,8 +400,6 @@ export default function DrawerNavigator({ navigation }) {
           // component={AppNavigator}
           children={() => <AppNavigator create={create}></AppNavigator>}
         />
-        {/* <Drawer.Screen name="Calling" component={CallingScreen} /> */}
-        {/* <Drawer.Screen name="IncomingCall" component={IncomingCallScreen} /> */}
       </Drawer.Group>
       <Drawer.Group
         screenOptions={{

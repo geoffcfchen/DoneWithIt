@@ -17,9 +17,7 @@ export default function ContextWrapper(props) {
     []
   );
   const [followersOfUser, setFollowersOfUser] = useState([]);
-  const [userBId, setUserBId] = useState("empty"); //empty so that we do not
-  // get the following error [Unhandled promise rejection: FirebaseError: Invalid document reference.
-  // Document references must have an even number of segments, but meet has 1.]
+  const [userBId, setUserBId] = useState({});
   return (
     <Context.Provider
       value={{
