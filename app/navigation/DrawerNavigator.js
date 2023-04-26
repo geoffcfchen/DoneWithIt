@@ -92,10 +92,6 @@ export default function DrawerNavigator({ navigation }) {
   let pc = useRef(false);
 
   const { userBId } = useContext(GlobalContext);
-  // console.log("pc.curret render", pc.current);
-
-  // console.log("Recever_id", callReceiverID);
-  // console.log("auth_id", auth.currentUser.uid);
 
   const meetCollection = collection(db, "meet");
 
@@ -112,18 +108,14 @@ export default function DrawerNavigator({ navigation }) {
       }
     });
   });
-  console.log("callId", callId, auth.currentUser.uid);
 
   useEffect(() => {
     console.log("userBId", userBId);
   }, [userBId]);
 
   useEffect(() => {
-    // console.log("user", user?.uid);
-    // console.log("auth_id", auth.currentUser.uid);
     console.log("callId inside useEffect", callId, auth.currentUser.uid);
     const cRef = doc(db, "meet", callId);
-    // console.log(cRef);
     const subscribe = onSnapshot(cRef, (snapshot) => {
       const data = snapshot.data();
 
@@ -169,17 +161,13 @@ export default function DrawerNavigator({ navigation }) {
 
   async function setupWebrtc() {
     pc.current = new RTCPeerConnection(peerConstraints);
-    // pc.current = new RTCPeerConnection();
-    // pc.current.setConfiguration(peerConstraints);
 
     // Get the audio and video stream for the call
     const stream = await getStream();
 
     if (stream) {
-      // console.log("stream", stream);
-      // console.log("test");
       setLocalStream(stream);
-      // console.log("localSteam", localStream);
+
       pc.current.addStream(stream);
     }
     // Get the remote stream once it is available
@@ -190,7 +178,6 @@ export default function DrawerNavigator({ navigation }) {
   }
 
   async function create() {
-    // console.log(userB_uid);
     setCallReceiverID(userBId);
     connecting.current = true;
 
@@ -208,7 +195,6 @@ export default function DrawerNavigator({ navigation }) {
     if (pc.current) {
       // Create the offer for the call
       // Store the offer under the document
-      // console.log("create");
       try {
         let sessionConstraints = {
           mandatory: {
@@ -318,7 +304,6 @@ export default function DrawerNavigator({ navigation }) {
   }
 
   async function streamCleanUp() {
-    // console.log("streamCleanUp");
     if (localStream) {
       localStream.getTracks().forEach((t) => t.stop());
       localStream.release();
@@ -328,7 +313,6 @@ export default function DrawerNavigator({ navigation }) {
   }
 
   async function firebaseCleanUp() {
-    // console.log("firebaseCleanUp");
     const cRef = doc(db, "meet", callId);
     if (cRef) {
       const qee = query(collection(cRef, "callee"));
@@ -361,7 +345,6 @@ export default function DrawerNavigator({ navigation }) {
   }
 
   async function collectIceCandidates(cRef, localName, remoteName) {
-    // console.log("collectIceCandidates");
     console.log("localName", localName, callId);
     const candidateCollection = collection(cRef, localName);
 
@@ -390,15 +373,8 @@ export default function DrawerNavigator({ navigation }) {
     });
   }
 
-  // console.log("localStream", localStream, auth.currentUser.uid);
-  // console.log("remoteStream", remoteStream, auth.currentUser.uid);
-  // console.log("gettingCall", gettingCall, auth.currentUser.uid);
-  // console.log("pc.current", pc.current, auth.currentUser.uid);
-  // console.log("finish");
-
   // Displays the gettingCall Component
   if (gettingCall) {
-    // console.log("gettingCall");
     return <GettingCallScreen hangup={hangup} join={join}></GettingCallScreen>;
   }
 
