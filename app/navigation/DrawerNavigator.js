@@ -110,11 +110,6 @@ export default function DrawerNavigator({ navigation }) {
   });
 
   useEffect(() => {
-    console.log("userBId", userBId);
-  }, [userBId]);
-
-  useEffect(() => {
-    console.log("callId inside useEffect", callId, auth.currentUser.uid);
     const cRef = doc(db, "meet", callId);
     const subscribe = onSnapshot(cRef, (snapshot) => {
       const data = snapshot.data();
