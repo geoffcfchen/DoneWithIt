@@ -59,19 +59,10 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 
 const HEADER_HEIGHT = 300;
 
-const peerConstraints = {
-  iceServers: [
-    {
-      urls: "stun:stun.l.google.com:19302",
-    },
-  ],
-};
-
 function ProfileInfoListScreen({ create }) {
   const { userData, setUserBId } = useContext(GlobalContext);
 
   const route = useRoute();
-  // console.log(route.params);
   const userB = route.params.ProfileUser;
 
   const upToDateUserBData = useGetSingleCustomerInfo(userB.uid);
@@ -80,8 +71,6 @@ function ProfileInfoListScreen({ create }) {
     0,
     upToDateUserBData?.email.indexOf("@")
   );
-
-  const navigation = useNavigation();
 
   useEffect(() => {
     setUserBId(userB.uid);
