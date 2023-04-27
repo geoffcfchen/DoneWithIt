@@ -90,10 +90,11 @@ export default function DrawerNavigator({ navigation }) {
   const [gettingCall, setGettingCall] = useState(false);
   const [callId, setCallId] = useState(auth.currentUser.uid);
   const [callReceiverID, setCallReceiverID] = useState("");
+  const [callerA, setCallerA] = useState({});
   const connecting = useRef(false);
   let pc = useRef(false);
 
-  const { calleeB } = useContext(GlobalContext);
+  const { calleeB, userData } = useContext(GlobalContext);
 
   const meetCollection = collection(db, "meet");
 
@@ -106,9 +107,13 @@ export default function DrawerNavigator({ navigation }) {
           change.doc.id === auth.currentUser.uid)
       ) {
         setCallId(change.doc.id);
+        // setCallerA(change.doc.data());
+        setCallerA(change.doc.data().callerA.displayName);
       }
     });
   });
+
+  // console.log(callerA);
 
   useEffect(() => {
     const cRef = doc(db, "meet", callId);
@@ -207,6 +212,7 @@ export default function DrawerNavigator({ navigation }) {
         await pc.current.setLocalDescription(offerDescription);
 
         const cWithOffer = {
+          callerA: userData,
           offer: {
             type: offerDescription.type,
             sdp: offerDescription.sdp,
@@ -371,7 +377,13 @@ export default function DrawerNavigator({ navigation }) {
 
   // Displays the gettingCall Component
   if (gettingCall) {
-    return <GettingCallScreen hangup={hangup} join={join}></GettingCallScreen>;
+    return (
+      <GettingCallScreen
+        hangup={hangup}
+        join={join}
+        caller={callerA}
+      ></GettingCallScreen>
+    );
   }
 
   // Displays local stream on calling
