@@ -14,26 +14,6 @@ import Feather from "react-native-vector-icons/Feather";
 
 export default function GettingCallScreen({ join, hangup, caller }) {
   return (
-    // <View style={styles.container}>
-    //   <Image
-    //     source={{ uri: "https://picsum.photos/200/300" }}
-    //     style={styles.image}
-    //   ></Image>
-    //   <View style={styles.bContainer}>
-    //     <CallButton
-    //       iconName="phone"
-    //       backgroundColor="green"
-    //       onPress={join}
-    //       style={{ marginRight: 30 }}
-    //     ></CallButton>
-    //     <CallButton
-    //       iconName="phone"
-    //       backgroundColor="red"
-    //       onPress={hangup}
-    //       style={{ marginLeft: 30 }}
-    //     ></CallButton>
-    //   </View>
-    // </View>
     <ImageBackground source={bg} style={styles.bg} resizeMode="cover">
       <Text style={styles.name}>{caller}</Text>
       {/* <Text style={styles.phoneNumber}>Ringing +31 343 3434 3434</Text> */}
@@ -76,17 +56,6 @@ export default function GettingCallScreen({ join, hangup, caller }) {
 }
 
 const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  //   justifyContent: "flex-end",
-  //   alignItems: "center",
-  // },
-  // image: {
-  //   position: "absolute",
-  //   width: "100%",
-  //   height: "100%",
-  // },
-  // bContainer: { flexDirection: "row", bottom: 30 },
   name: {
     fontSize: 30,
     fontWeight: "bold",
