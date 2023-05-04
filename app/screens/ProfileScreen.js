@@ -93,7 +93,6 @@ function ProfileScreen() {
       console.log(error);
     }
     // navigation.reset("DrawerNavigator");
-    // navigation.navigate("DrawerNavigator");
     navigation.reset({ routes: [{ name: "DrawerNavigator" }], index: 0 });
   };
 
