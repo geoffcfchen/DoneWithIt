@@ -25,6 +25,7 @@ import FormProfileImagePicker from "../components/forms/FormProfileImagePicker";
 import { signUp, auth, db } from "../../firebase";
 import { uploadImage } from "../utility/uploadImage";
 import CategoryPickerItem from "../components/CategoryPickerItem";
+import { useNavigation } from "@react-navigation/native";
 
 const roles = [
   {
@@ -56,32 +57,10 @@ const validationSchema = Yup.object().shape({
   image: Yup.array().required("Profile Image is required").min(1),
 });
 
-function ProfileScreen({ navigation }) {
+function ProfileScreen() {
   const { user, setUser } = useContext(AuthContext);
-  // const registerApi = useApi(usersApi.register);
-  // const loginApi = useApi(authApi.login);
-
-  // const auth = useAuth();
-  const [error, setError] = useState();
-
-  // const handleSubmit = async (userInfo) => {
-  //   const result = await registerApi.request(userInfo);
-
-  //   if (!result.ok) {
-  //     if (result.data) setError(result.data.error);
-  //     else {
-  //       setError("An unexpected error occurred.");
-  //       logger.log(result);
-  //     }
-  //     return;
-  //   }
-
-  //   const { data: authToken } = await loginApi.request(
-  //     userInfo.email,
-  //     userInfo.password
-  //   );
-  //   auth.logIn(authToken);
-  // };
+  const { error, setError } = useState();
+  const navigation = useNavigation();
 
   const handleSubmitFirebase = async (userInfo) => {
     const userID = user.uid;
@@ -113,7 +92,9 @@ function ProfileScreen({ navigation }) {
     } catch (error) {
       console.log(error);
     }
-    navigation.reset("DrawerNavigator");
+    // navigation.reset("DrawerNavigator");
+    // navigation.navigate("DrawerNavigator");
+    navigation.reset({ routes: [{ name: "DrawerNavigator" }], index: 0 });
   };
 
   return (

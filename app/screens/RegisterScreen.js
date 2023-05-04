@@ -57,7 +57,7 @@ function RegisterScreen({ navigation }) {
   // const loginApi = useApi(authApi.login);
 
   // const auth = useAuth();
-  const [error, setError] = useState();
+  const { error, setError } = useState();
 
   // const handleSubmit = async (userInfo) => {
   //   const result = await registerApi.request(userInfo);
