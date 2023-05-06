@@ -19,6 +19,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import GlobalContext from "../context/Context";
+import { getFunctions, httpsCallable } from "@firebase/functions";
 
 function BalanceScreen2(props) {
   const { userData } = useContext(GlobalContext);
@@ -53,25 +54,34 @@ function BalanceScreen2(props) {
   }, []);
 
   async function loadCheckout(priceId) {
-    const paymentIntentRef = doc(collection(db, "payment_intents"));
-    const { error } = await initPaymentSheet({
-      paymentIntentClientSecret: paymentIntentRef.id,
-      customFlow: true,
-      merchantDisplayName: "Your Merchant Name",
-      style: "alwaysDark",
-    });
+    const functions = getFunctions();
+    const createPaymentIntent = httpsCallable(functions, "createPaymentIntent");
 
-    if (error) {
-      console.log(error.message);
-    } else {
-      const { error: presentError } = await presentPaymentSheet();
+    try {
+      const {
+        data: { clientSecret },
+      } = await createPaymentIntent({ priceId });
 
-      if (presentError) {
-        console.log(presentError.message);
+      const { error } = await initPaymentSheet({
+        paymentIntentClientSecret: clientSecret,
+        customFlow: true,
+        merchantDisplayName: "Your Merchant Name",
+        style: "alwaysDark",
+      });
+
+      if (error) {
+        console.log(error.message);
       } else {
-        console.log("Payment successful!");
-        await updateDoc(paymentIntentRef, { status: "succeeded" });
+        const { error: presentError } = await presentPaymentSheet();
+
+        if (presentError) {
+          console.log(presentError.message);
+        } else {
+          console.log("Payment successful!");
+        }
       }
+    } catch (error) {
+      console.error("Error calling createPaymentIntent:", error);
     }
   }
 

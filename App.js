@@ -110,9 +110,14 @@ import DrawerNavigator from "./app/navigation/DrawerNavigator";
 
 function Main() {
   return (
-    <ContextWrapper>
-      <App></App>
-    </ContextWrapper>
+    <StripeProvider
+      publishableKey="pk_test_51Lhf4GDsOD7fAAq8BAQLfXxnP69pNkOgwcX8CbYx5YEsqzQWHEVFbKoAIjetsXCyQzq46U73S4fEQBOeJLo6inea00vzpGOQet"
+      merchantIdentifier="merchant.com.vetcation"
+    >
+      <ContextWrapper>
+        <App></App>
+      </ContextWrapper>
+    </StripeProvider>
   );
 }
 
