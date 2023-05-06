@@ -7,7 +7,6 @@ import AccountScreen from "../screens/AccountScreen";
 import MessagesScreen from "../screens/MessagesScreen";
 import MessagesDetailsScreen from "../screens/MessagesDetailScreen.js";
 import ContactsScreen from "../screens/ContactsScreen";
-import BalanceScreen from "../screens/BalanceScreen";
 import ProfilePicture from "../components/ProfilePicture";
 import colors from "../config/colors";
 import ProfileInfoScreen from "../screens/ProfileInfoScreen";
@@ -16,7 +15,7 @@ import { auth } from "../../firebase";
 import FollowScreen from "../screens/FollowScreen";
 import ProfileInfoAnimatedScreen from "../screens/ProfileInfoAnimatedScreen";
 import ProfileInfoListScreen from "../screens/ProfileInfoListScreen";
-import BalanceScreen2 from "../screens/BalaceScreen2";
+import BalanceScreen from "../screens/BalaceScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -78,7 +77,7 @@ function AccountNavigator() {
           ),
         }}
       >
-        <Stack.Screen name="Balance" component={BalanceScreen2}></Stack.Screen>
+        <Stack.Screen name="Balance" component={BalanceScreen}></Stack.Screen>
         <Stack.Screen name="Messages" component={MessagesScreen}></Stack.Screen>
         <Stack.Screen
           name="MessagesDetail"

@@ -21,7 +21,7 @@ import { db } from "../../firebase";
 import GlobalContext from "../context/Context";
 import { getFunctions, httpsCallable } from "@firebase/functions";
 
-function BalanceScreen2(props) {
+function BalanceScreen(props) {
   const { userData } = useContext(GlobalContext);
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [productsPrice, setProductsPrice] = useState([]);
@@ -128,4 +128,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BalanceScreen2;
+export default BalanceScreen;
