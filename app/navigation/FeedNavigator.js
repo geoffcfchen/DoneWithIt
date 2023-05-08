@@ -13,6 +13,7 @@ import { auth } from "../../firebase";
 import FollowScreen from "../screens/FollowScreen";
 import ProfileInfoAnimatedScreen from "../screens/ProfileInfoAnimatedScreen";
 import ProfileInfoListScreen from "../screens/ProfileInfoListScreen";
+import SubscriptionScreen from "../screens/SubscriptionScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -90,6 +91,11 @@ function FeedNavigator() {
           options={{ headerShown: true, title: auth.currentUser.displayName }}
           name="FollowScreen"
           component={FollowScreen}
+        ></Stack.Screen>
+        <Stack.Screen
+          options={{ headerShown: true }}
+          name="Subscription"
+          component={SubscriptionScreen}
         ></Stack.Screen>
       </Stack.Group>
     </Stack.Navigator>

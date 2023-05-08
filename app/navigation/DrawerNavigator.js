@@ -35,7 +35,11 @@ import {
 } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import GlobalContext from "../context/Context";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import {
+  useNavigation,
+  useRoute,
+  DrawerActions,
+} from "@react-navigation/native";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -65,6 +69,7 @@ import IncomingCallScreen from "../screens/IncomingCallScreen";
 import GettingCallScreen from "../screens/GettingCallScreen";
 import VideoScreen from "../screens/VideoScreen";
 import { RotationGestureHandler } from "react-native-gesture-handler";
+import SubscriptionScreen from "../screens/SubscriptionScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -427,7 +432,7 @@ export default function DrawerNavigator({ navigation }) {
               name="arrow-left"
               color={"black"}
               size={24}
-              onPress={() => navigation.navigate("AppNavigator")}
+              // onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
             />
           ),
         }}
@@ -492,8 +497,23 @@ function CustomDrawerContent(props) {
         />
         <DrawerItem
           label={() => <Text style={styles.label}>Wallets</Text>}
-          onPress={() => props.navigation.navigate("Lists")}
+          onPress={() => props.navigation.navigate("Wallets")}
           icon={() => <Ionicons name="wallet" size={22} color="#898f93" />}
+        />
+        <DrawerItem
+          label={() => <Text style={styles.label}>Vetcation</Text>}
+          onPress={() =>
+            props.navigation.navigate("AppNavigator", {
+              screen: whereTab,
+              params: {
+                screen: "Subscription",
+                params: { ProfileUser: userData },
+              },
+            })
+          }
+          icon={() => (
+            <MaterialIcons name="pets" size={22} color="dodgerblue" />
+          )}
         />
 
         <View style={{ height: 0.2, backgroundColor: "#2b353c" }} />
@@ -599,6 +619,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 18,
+    fontWeight: "700",
     // color: "#fff",
   },
   optionText: {

@@ -13,6 +13,7 @@ import ProfileInfoAnimatedScreen from "../screens/ProfileInfoAnimatedScreen";
 import ProfileInfoListScreen from "../screens/ProfileInfoListScreen";
 import ProfileInfoScreen from "../screens/ProfileInfoScreen";
 import SearchScreen from "../screens/SearchScreen";
+import SubscriptionScreen from "../screens/SubscriptionScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -88,6 +89,11 @@ function SearchNavigator() {
           options={{ headerShown: true, title: auth.currentUser.displayName }}
           name="FollowScreen"
           component={FollowScreen}
+        ></Stack.Screen>
+        <Stack.Screen
+          options={{ headerShown: true }}
+          name="Subscription"
+          component={SubscriptionScreen}
         ></Stack.Screen>
       </Stack.Group>
     </Stack.Navigator>
