@@ -1,147 +1,108 @@
-import React, { useContext, useEffect, useState } from "react";
+import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
+import React, { useEffect, useState } from "react";
 import {
-  View,
-  StyleSheet,
-  StatusBar,
-  FlatList,
-  Text,
-  Button,
-} from "react-native";
-import { useStripe } from "@stripe/stripe-react-native";
-import {
-  collection,
-  doc,
-  addDoc,
-  getDocs,
-  onSnapshot,
-  query,
-  where,
-  updateDoc,
-} from "firebase/firestore";
-import { db } from "../../firebase";
-import GlobalContext from "../context/Context";
-import { getFunctions, httpsCallable } from "@firebase/functions";
+  CardField,
+  useConfirmPayment,
+  usePaymentSheet,
+} from "@stripe/stripe-react-native";
+import { auth } from "../../firebase";
 
-function SubscriptionScreen(props) {
-  const { userData } = useContext(GlobalContext);
-  const { initPaymentSheet, presentPaymentSheet } = useStripe();
-  const [productsPrice, setProductsPrice] = useState([]);
+// const API_URL =
+//   "https://c0b6-2603-8000-a200-c18f-51f-e4f4-6b33-ee22.ngrok-free.app";
+// const API_URL = "http://localhost:3000";
+const API_URL =
+  "https://us-central1-wp-clone-256aa.cloudfunctions.net/paymentSheet";
+
+function SubscriptionScreen() {
+  // const { confirmPayment, loading } = useConfirmPayment();
+  const [ready, setReady] = useState(false);
+  const { initPaymentSheet, presentPaymentSheet, loading } = usePaymentSheet();
 
   useEffect(() => {
-    const q = query(collection(db, "products"), where("active", "==", true));
-    const unsub = onSnapshot(q, async (querySnapshot) => {
-      const products = {};
-      for (const productDoc of querySnapshot.docs) {
-        products[productDoc.id] = productDoc.data();
-        const priceSnap = await getDocs(collection(productDoc.ref, "prices"));
-        for (const price of priceSnap.docs) {
-          products[productDoc.id].price = {
-            priceId: price.id,
-            priceData: price.data(),
-          };
-        }
-      }
-      const productsPrice = Object.entries(products).map(
-        ([productId, productData]) => {
-          return {
-            productId: productId,
-            productData: productData,
-          };
-        }
-      );
-      setProductsPrice(productsPrice);
-    });
-    return () => unsub();
+    initialisePaymentSheet();
   }, []);
+  const fetchPaymentSheetParams = async () => {
+    const response = await fetch(`${API_URL}/paymentSheet`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ uid: auth.currentUser.uid }), // Send uid in the request body
+    });
+    // const { clientSecret, error } = await response.json();
+    const { paymentIntent, ephemeralKey, customer } = await response.json();
+    console.log("customer", customer);
+    return {
+      paymentIntent,
+      ephemeralKey,
+      customer,
+    };
+  };
 
-  async function loadCheckout(priceId) {
-    const functions = getFunctions();
-    const createPaymentIntent = httpsCallable(functions, "createPaymentIntent");
+  const initialisePaymentSheet = async () => {
+    const { paymentIntent, ephemeralKey, customer } =
+      await fetchPaymentSheetParams();
 
-    try {
-      const {
-        data: { clientSecret },
-      } = await createPaymentIntent({ priceId });
+    const { error } = await initPaymentSheet({
+      customerId: customer,
+      customerEphemeralKeySecret: ephemeralKey,
+      paymentIntentClientSecret: paymentIntent,
+      merchantDisplayName: "Vetcation Inc.",
+      allowDelayedPaymentMethods: true,
+      returnURL: "stripe-example://stripe-redirect",
+      applePay: {
+        merchantCountryCode: "US",
+      },
+      googlePay: {
+        merchantCountryCode: "US",
+        testEnv: true,
+        currencyCode: "usd",
+      },
+    });
+    if (error) {
+      Alert.alert(`Error code: ${error.code}`, error.message);
+    } else {
+      setReady(true);
+    }
+  };
 
-      const { error } = await initPaymentSheet({
-        paymentIntentClientSecret: clientSecret,
-        customFlow: true,
-        merchantDisplayName: "Vetcation Inc.",
-        style: "automatic",
-      });
-
-      if (error) {
-        console.log(error.message);
-      } else {
-        const { error: presentError } = await presentPaymentSheet();
-
-        if (presentError) {
-          console.log(presentError.message);
-        } else {
-          console.log("Payment successful!");
-
-          // Extract paymentIntentId from the clientSecret
-          const paymentIntentId = clientSecret.split("_secret")[0];
-
-          // Update the customer's document in the 'customers' collection
-          const customerRef = doc(db, "customers", userData.uid);
-          await updateDoc(customerRef, {
-            paymentInfo: {
-              priceId: priceId,
-              paymentIntentId: paymentIntentId,
-              lastPaymentDate: new Date(),
-            },
-          });
-          console.log(
-            "Payment information saved to the customer's document in Firestore"
-          );
-        }
-      }
-    } catch (error) {
-      console.error("Error calling createPaymentIntent:", error);
+  async function buy() {
+    const { error } = await presentPaymentSheet();
+    if (error) {
+      Alert.alert(`Error code: ${error.code}`, error.message);
+    } else {
+      Alert.alert("Success", "The payment was confirmed successfully");
+      setReady(false);
     }
   }
 
-  const Item = ({ title, priceId }) => (
-    <View style={[styles.container, { flexDirection: "row" }]}>
-      <Text style={styles.title}>{title}</Text>
-      <Button title="Subscribe" onPress={() => loadCheckout(priceId)}></Button>
-    </View>
-  );
-
-  const renderItem = ({ item }) => (
-    <Item
-      title={item.productData.name}
-      priceId={item.productData.price.priceId}
-    />
-  );
-
   return (
-    <View>
-      <FlatList
-        data={productsPrice}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.productId}
-      />
+    <View style={styles.container}>
+      <Button onPress={buy} title="Pay" disabled={loading || !ready}></Button>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
-    alignItems: "center",
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
+    backgroundColor: "#fff",
+    margin: 20,
+    justifyContent: "center",
   },
-  item: {
-    backgroundColor: "#f9c2ff",
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+  input: {
+    backgroundColor: "#efefefef",
+    borderRadius: 8,
+    fontSize: 20,
+    height: 50,
+    padding: 10,
   },
-  title: {
-    fontSize: 32,
+  card: {
+    backgroundColor: "#efefefef",
+  },
+  cardContainer: {
+    height: 50,
+    marginVertical: 30,
   },
 });
 

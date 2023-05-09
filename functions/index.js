@@ -1,4 +1,6 @@
 const functions = require("firebase-functions");
+const { db } = require("./shared/firebase-shared");
+// const { collection, getDocs } = require("firebase/firestore");
 
 // // Create and deploy your first functions
 // // https://firebase.google.com/docs/functions/get-started
@@ -8,27 +10,56 @@ const functions = require("firebase-functions");
 //   response.send("Hello from Firebase!");
 // });
 
-const admin = require("firebase-admin");
-const stripe = require("stripe")(functions.config().stripe.secret);
+const Stripe = require("stripe");
 
-admin.initializeApp();
+const PUBLISHABLE_KEY =
+  "pk_test_51Lhf4GDsOD7fAAq8BAQLfXxnP69pNkOgwcX8CbYx5YEsqzQWHEVFbKoAIjetsXCyQzq46U73S4fEQBOeJLo6inea00vzpGOQet";
+const SECRET_KEY =
+  "sk_test_51Lhf4GDsOD7fAAq83nxSFjarrAwHnVoQFvmgGu3xcTEY4PPFye5gbA5JJWzO63EUqe9hRJo4TrKq0oYk18N0tPSy0040UXN5du";
 
-exports.createPaymentIntent = functions.https.onCall(async (data, context) => {
-  const priceId = data.priceId;
+const stripe = new Stripe(SECRET_KEY, {
+  apiVersion: "2022-08-01",
+  typescript: true,
+});
 
-  try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: 1000, // replace with the desired amount
-      currency: "usd",
-      metadata: { integration_check: "accept_a_payment" },
-    });
-
-    return { clientSecret: paymentIntent.client_secret };
-  } catch (error) {
-    console.error("Error creating payment intent:", error);
-    throw new functions.https.HttpsError(
-      "internal",
-      "Error creating payment intent"
-    );
+exports.paymentSheet = functions.https.onRequest(async (req, res) => {
+  if (req.method !== "POST") {
+    res.status(405).send("Method Not Allowed");
+    return;
   }
+
+  // Get the uid from the request body
+  const uid = req.body.uid;
+
+  //   const customers = await stripe.customers.list();
+  const customerSnapshot = await db
+    .collection("customers")
+    .where("uid", "==", uid)
+    .get();
+  const customers = customerSnapshot.docs.map((doc) => doc.data());
+  //   console.log("customers", customers);
+  const customer = customers[0];
+
+  if (!customer) {
+    return res.send({
+      error: "You have no customer created",
+    });
+  }
+
+  const ephemeralKey = await stripe.ephemeralKeys.create(
+    { customer: customer.stripeId },
+    { apiVersion: "2022-08-01" }
+  );
+
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: 5099,
+    currency: "usd",
+    payment_method_types: ["card", "link", "us_bank_account"],
+  });
+
+  return res.json({
+    paymentIntent: paymentIntent.client_secret,
+    ephemeralKey: ephemeralKey.secret,
+    customer: customer.stripeId,
+  });
 });
